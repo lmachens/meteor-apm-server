@@ -12,7 +12,8 @@ npm install
 Add correct configurations to `../init-shell.sh`. Then apply these commands:
 
 ```sh
-. ../init-shell
+chmod +x run.sh
+source ../init-shell.sh
 sh run.sh
 ```
 

@@ -20,6 +20,6 @@ Then apply these commands:
 
 ```sh
 chmod +x run.sh
-. ../init-shell.sh
+source ../init-shell.sh
 sh run.sh
 ```

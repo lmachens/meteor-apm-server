@@ -17,7 +17,7 @@ Make sure to set fresh DB configurations before getting started.
 
 Make the script executable.
 ```sh
-chmod +x ../init-shell.sh
+chmod +x init-shell.sh
 ```
 
 Then run following three components by visiting their directories:
