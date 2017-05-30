@@ -19,6 +19,7 @@ Configure `settings.json` as needed.
 Then apply these commands:
 
 ```sh
+chmod +x run.sh
 . ../init-shell.sh
 sh run.sh
 ```
