@@ -38,34 +38,51 @@ if(ENV.SUBSHARD_COUNT) {
 }
 
 var config = appDb.mapReduceProfileConfig.findOne(profileConfigQuery);
-if(config){
-  var lastTime = config.lastTime.getTime();
+if (!config) {
+  const now = new Date();
+  const values = [
+    {profile:'1min', provider:'methods', shard:"one"},
+    {profile:'1min', provider:'errors', shard:"one"},
+    {profile:'1min', provider:'pubsub', shard:"one"},
+    {profile:'1min', provider:'system', shard:"one"},
+    {profile:'3hour', provider:'methods', shard:"one"},
+    {profile:'3hour', provider:'errors', shard:"one"},
+    {profile:'3hour', provider:'pubsub', shard:"one"},
+    {profile:'3hour', provider:'system', shard:"one"},
+    {profile:'30min', provider:'methods', shard:"one"},
+    {profile:'30min', provider:'errors', shard:"one"},
+    {profile:'30min', provider:'pubsub', shard:"one"},
+    {profile:'30min', provider:'system', shard:"one"}
+  ];
+  values.forEach((value) => {
+    appDb.mapReduceProfileConfig.insert({lastTime: now, _id: value})
+  });
+}
 
-  // selecting the subSharding time
-  if(subShardSegmentId) {
-    if(config.subShardTimes && config.subShardTimes[subShardSegmentId]) {
-      lastTime = config.subShardTimes[subShardSegmentId];
-    }
+var lastTime = config.lastTime.getTime();
 
-    // time range exceeds, so set it to a fresh time
-    if((Date.now() - lastTime) > PROFILE.maxAllowedRange) {
-      lastTime = config.lastTime.getTime();
-      print(' too long range to aggregate. resetting to: ' + config.lastTime);
-    }
+// selecting the subSharding time
+if(subShardSegmentId) {
+  if(config.subShardTimes && config.subShardTimes[subShardSegmentId]) {
+    lastTime = config.subShardTimes[subShardSegmentId];
   }
 
-  // We must normalize the time. Otherwise, we'll be loading values for half of
-  // single time range. It will leads for wrong counts.
-  // That will lead to wrong rates. This will fix it. 
-  var begin = timeRound(lastTime - PROFILE.reverseMillis, PROFILE);
-
-  query['value.startTime'] = {
-    $gte: new Date(begin),
-    $lt: Log.startedAt
-  };
-} else {
-  print('NO CONFIG DEFINED!');
+  // time range exceeds, so set it to a fresh time
+  if((Date.now() - lastTime) > PROFILE.maxAllowedRange) {
+    lastTime = config.lastTime.getTime();
+    print(' too long range to aggregate. resetting to: ' + config.lastTime);
+  }
 }
+
+// We must normalize the time. Otherwise, we'll be loading values for half of
+// single time range. It will leads for wrong counts.
+// That will lead to wrong rates. This will fix it. 
+var begin = timeRound(lastTime - PROFILE.reverseMillis, PROFILE);
+
+query['value.startTime'] = {
+  $gte: new Date(begin),
+  $lt: Log.startedAt
+};
 
 //applying map reduce
 var options = {
