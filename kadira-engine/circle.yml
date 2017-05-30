@@ -9,7 +9,6 @@ dependencies:
     - if [[ ! -d mongodb-linux-x86_64-2.6.4 ]]; then wget http://downloads.mongodb.org/linux/mongodb-linux-x86_64-2.6.4.tgz && tar xvzf mongodb-linux-x86_64-2.6.4.tgz; fi
     - sudo sudo service mongodb stop
     - sudo cp mongodb-linux-x86_64-2.6.4/bin/* /usr/bin
-    - npm install -g pick-mongo-primary
 
 database:
   override:

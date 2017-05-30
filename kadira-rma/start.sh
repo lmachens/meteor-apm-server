@@ -30,8 +30,7 @@ fi
 ENV_FILE_NAME="env-$PROFILE-$PROVIDER.js"
 
 dumpEnvVarsTo() {
-  # getting primary from the appUrl
-  MONGO_APP_CONN=$(pick-mongo-primary $MONGO_URL)
+  MONGO_APP_CONN=$MONGO_URL
   # using this ugly ~~~ to replace spaces which cause some
   # issues with our env vars exposing script
   export MONGO_APP_CONN=${MONGO_APP_CONN// /"~~~"}
@@ -50,9 +49,9 @@ while [[ true ]]; do
   dumpEnvVarsTo $ENV_FILE_NAME
   set -x;
   if [ -z ${START_TIME+x} ] || [ -z ${END_TIME+x} ]; then
-      mongo $(pick-mongo-primary $MONGO_METRICS_URL) profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js incremental-aggregation.js;
+      mongo $MONGO_METRICS_URL profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js incremental-aggregation.js;
   else
-      mongo $(pick-mongo-primary $MONGO_METRICS_URL) profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js batch-aggregation.js;
+      mongo $MONGO_METRICS_URL profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js batch-aggregation.js;
   fi
   set +x;
   completedAt=$(date +%s)
