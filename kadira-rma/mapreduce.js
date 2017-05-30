@@ -1,4 +1,28 @@
+function addConfig(db) {
+  const now = new Date();
+  const values = [
+    {profile:'1min', provider:'methods', shard:"one"},
+    {profile:'1min', provider:'errors', shard:"one"},
+    {profile:'1min', provider:'pubsub', shard:"one"},
+    {profile:'1min', provider:'system', shard:"one"},
+    {profile:'3hour', provider:'methods', shard:"one"},
+    {profile:'3hour', provider:'errors', shard:"one"},
+    {profile:'3hour', provider:'pubsub', shard:"one"},
+    {profile:'3hour', provider:'system', shard:"one"},
+    {profile:'30min', provider:'methods', shard:"one"},
+    {profile:'30min', provider:'errors', shard:"one"},
+    {profile:'30min', provider:'pubsub', shard:"one"},
+    {profile:'30min', provider:'system', shard:"one"}
+  ];
+  values.forEach((value) => {
+    db.mapReduceProfileConfig.insert({lastTime: now, _id: value})
+  });
+}
+
 MapReduce = function (db, sourceColl, outCollection, map, reduce, options) {
+  if (!db.mapReduceProfileConfig.find().count() === 0) {
+    addConfig(db);
+  }
   var finalize = options.finalize;
   var query = options.query;
   var mrContext = options.scope || {};
