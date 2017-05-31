@@ -125,10 +125,10 @@ component.state.summary = function() {
 
   var percentiles = HistoUtils.getPercentiles(histogram, [50, 90, 95, 99]);
   var summary = {
-    median: percentiles["50"].toFixed(0),
-    p90: percentiles["90"].toFixed(0),
-    p95: percentiles["95"].toFixed(0),
-    p99: percentiles["99"].toFixed(0)
+    median: percentiles["50"] ? percentiles["50"].toFixed(0) : 0,
+    p90: percentiles["90"] ? percentiles["90"].toFixed(0) : 0,
+    p95: percentiles["95"] ?percentiles["95"].toFixed(0) : 0,
+    p99: percentiles["99"] ? percentiles["99"].toFixed(0) : 0
   };
 
   return summary;
