@@ -1,19 +1,9 @@
-# TODO use a stable version of alpine linux when
-#      the mongodb package becomes available
-#
-# FROM alpine:3.2
-#
-# RUN \
-#   apk upgrade --update && \
-#   apk add --no-cache ca-certificates nodejs mongodb
-#
-
-FROM alpine:edge
+FROM alpine:3.6
 
 RUN \
- echo 'http://dl-3.alpinelinux.org/alpine/edge/testing' >> /etc/apk/repositories && \
  apk upgrade --update && \
- apk add --no-cache ca-certificates nodejs mongodb
+ apk add --no-cache ca-certificates mongodb nodejs nodejs-npm && \
+ npm install npm@latest -g
 
 WORKDIR /app
 
