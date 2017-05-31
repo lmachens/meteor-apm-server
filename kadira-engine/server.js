@@ -1,12 +1,14 @@
 var connect = require ('connect');
+var query = require('connect-query');
 var http = require ('http');
 var mongodb = require('mongodb');
 var MongoCluster = require('mongo-sharded-cluster');
+var bodyParser = require('body-parser')
 
 var app = connect ();
 
-app.use(connect.query());
-app.use(connect.json({limit: '5mb'}));
+app.use(query());
+app.use(bodyParser.json({limit: '5mb'}));
 
 if(process.env.FORWARD_URL) {
   console.log('>>> ', process.env.FORWARD_URL);

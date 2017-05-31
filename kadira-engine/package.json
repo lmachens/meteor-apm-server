@@ -1,16 +1,18 @@
 {
   "name": "kadira-engine",
   "dependencies": {
-    "mongodb": "2.2.x",
-    "connect": "3.x",
-    "underscore": "1.8.x",
-    "connect-ntp": "0.1.x",
-    "uuid": "3.0.x",
-    "librato-metrics": "0.0.x",
     "async": "2.4.1",
-    "request": "2.81.x",
+    "body-parser": "^1.17.2",
+    "connect": "^3.6.2",
+    "connect-ntp": "0.1.x",
+    "connect-query": "^1.0.0",
+    "evloop-monitor": "0.1.x",
+    "librato-metrics": "0.0.x",
     "mongo-sharded-cluster": "2.x.x",
-    "evloop-monitor": "0.1.x"
+    "mongodb": "2.2.x",
+    "request": "2.81.x",
+    "underscore": "1.8.x",
+    "uuid": "3.0.x"
   },
   "devDependencies": {
     "mocha": "*",
