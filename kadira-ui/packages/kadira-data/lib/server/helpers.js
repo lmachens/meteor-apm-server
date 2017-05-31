@@ -50,16 +50,6 @@ KadiraData._authorize = function(userId, dataKey, args) {
       }
     });
   }
-
-  if(Utils.isAdmin(user)){
-    return;
-  }
-
-  args.appId.forEach(function(appId) {
-    if(!PermissionsMananger.roles.isAllowed('data_access', appId, userId)) {
-      throw new Meteor.Error("400", "This appId is not yours");
-    }
-  });
 };
 
 KadiraData._ResolutionToMillis = function(resolution) {
