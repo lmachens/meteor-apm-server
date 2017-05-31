@@ -1,20 +1,20 @@
 {
   "name": "kadira-engine",
   "dependencies": {
-    "mongodb": "1.4.x",
-    "connect":"2.x",
-    "underscore":"1.5.x",
+    "mongodb": "2.2.x",
+    "connect": "3.x",
+    "underscore": "1.8.x",
     "connect-ntp": "0.1.x",
-    "uuid": "1.4.x",
+    "uuid": "3.0.x",
     "librato-metrics": "0.0.x",
-    "async": "0.8.0",
-    "request": "2.27.x",
-    "mongo-sharded-cluster": "1.x.x",
+    "async": "2.4.1",
+    "request": "2.81.x",
+    "mongo-sharded-cluster": "2.x.x",
     "evloop-monitor": "0.1.x"
   },
   "devDependencies": {
     "mocha": "*",
-    "mocha-mongo":"0.2.x"
+    "mocha-mongo": "1.0.x"
   },
   "scripts": {
     "start": "node server.js",
