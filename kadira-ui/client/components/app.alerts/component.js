@@ -20,17 +20,7 @@ component.action.closeDialog = function() {
 
 component.action.showEditor = function(mode, alertId) {
   if(mode === "create") {
-    var appId = FlowRouter.getParam("appId");
-    var plan = Utils.getPlanForTheApp(appId);
-    var alertsLimit = PlansManager.getConfig("alertsPerApp", plan);
-    var alertsCount = Alerts.find({"meta.appId": appId}).count();
-
-    if(alertsLimit <= alertsCount) {
-      this.closeDialog();
-      FlowRouter.setQueryParams({denied: "createNewAlert"});
-    } else {
-      FlowRouter.setQueryParams({mode: mode});
-    }
+    FlowRouter.setQueryParams({mode: mode});
   } else if(mode === "update") {
     FlowRouter.setQueryParams({
       mode: mode,

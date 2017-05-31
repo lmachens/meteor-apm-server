@@ -123,9 +123,7 @@ strings.share = {
   "app_not_found": "App Not found",
   "already_owner": "you are already the owner of this application",
   "remove_pending_user_denied": "You are not authorized to remove pending users",
-  "resending_invite_defenied": "You are not authorized to reinvite users",
-  "upgrade_to_add_collaborators": "Please upgrade your plan to manage collaborators",
-  "only_paid_users_can_accept_apps": "Please upgrade your plan to accept this app ownership"
+  "resending_invite_defenied": "You are not authorized to reinvite users"
 };
 
 strings.tools = {
@@ -236,7 +234,6 @@ strings.emails = {
 };
 
 strings.profiler = {
-  "profiler_denied_msg": "Update your plan to profile the <a href=\"{$1}\">CPU remotely</a>",
   "profiler_delete_denied_msg": "You are not authorized to delete this profile",
   "not_authorized": "You are not authorized to view this CPU profile"
 };

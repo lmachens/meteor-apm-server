@@ -54,16 +54,6 @@ component.state.jobsList = function() {
   return Jobs.find(appId);
 };
 
-component.state.isAllowed = function() {
-  if(this.isSharedProfileView()){
-    return true;
-  } else {
-    var appId = FlowRouter.getParam("appId");
-    var plan = Utils.getPlanForTheApp(appId);
-    return PlansManager.allowFeature("profiler", plan);
-  }
-};
-
 component.state.prettifyCpuTime = function(date) {
   return this.prettifyCpuTime(date);
 };
@@ -73,13 +63,7 @@ component.state.prettifyDate = function(date) {
 };
 
 component.action.create = function() {
-  var appId = FlowRouter.getParam("appId");
-  var plan = Utils.getPlanForTheApp(appId);
-  if(PlansManager.allowFeature("remoteProfiling", plan)) {
-    FlowRouter.setQueryParams({"action": "create"});
-  } else {
-    FlowRouter.setQueryParams({"denied": "remoteProfiling"});
-  }
+  FlowRouter.setQueryParams({"action": "create"});
 };
 
 component.action.deleteJob = function(jobId) {
@@ -215,4 +199,3 @@ component.prototype.loadRemoteProfile = function(id) {
 
 // ---end viewRemoteProfile
 
-component.extend(Mixins.upgradeNotifier);

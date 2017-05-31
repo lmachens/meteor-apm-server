@@ -33,22 +33,9 @@ KadiraData._authorize = function(userId, dataKey, args) {
     throw new Meteor.Error("400", "Unauthorized Access");
   }
 
-  var user = Meteor.users.findOne({_id: userId}, {plan: 1});
+  var user = Meteor.users.findOne({_id: userId});
   if(!user) {
     throw new Meteor.Error("500", "Coundn't find the user");
-  }
-
-  // check date range
-  if(!args.realtime && args.time) {
-    var requestedRange = Date.now() - args.time.getTime();
-
-    args.appId.forEach(function(appId) {
-      var plan = Utils.getPlanForTheApp(appId);
-      var allowedRange = PlansManager.getConfig("allowedRange", plan);
-      if(requestedRange > allowedRange) {
-        throw new Meteor.Error("400", "Cannot access this date range");
-      }
-    });
   }
 };
 

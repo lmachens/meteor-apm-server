@@ -4,8 +4,6 @@
       <h2>{{i18n "apps.create_app_form_title"}}</h2>
       <div class="form-group">
         <input type="text" class="form-control" id="app-name" placeholder="{{i18n 'apps.app_name'}}"/>
-        <br/>
-        {{> render component="app.setPlan"}}
       </div>
       {{#if state$error}}
         <div class="alert alert-danger">{{state$error}}</div>

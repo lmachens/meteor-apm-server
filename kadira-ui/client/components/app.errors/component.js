@@ -38,15 +38,6 @@ var component = FlowComponents.define("app.errors", function(props) {
     $(window).off("resize", this.fixHeightHandler);
   });
 
-  this.autorun(function() {
-    // check for permissions if user is using status feature
-    var showIgnored = this.get("showIgnored");
-    var status = FlowRouter.getQueryParam("status");
-    if(showIgnored || status) {
-      this.checkPermissionsForStatus();
-    }
-  });
-
   // Invoking subscriptions for the error messages
   // We need to do this seperate from the hBar data fetching logic
   // If we do it we'll have somekind of loops
@@ -270,12 +261,10 @@ component.state.currentStatus = function() {
 };
 
 component.action.showIgnoredErrors = function(showIgnoredErrors) {
-  var canUseErrorStatus = this.checkPermissionsForStatus();
-  if(canUseErrorStatus){
-    FlowRouter.setQueryParams({showIgnored: showIgnoredErrors});
-  }
+  FlowRouter.setQueryParams({showIgnored: showIgnoredErrors});
+  
   return new Promise(function(resolve) {
-    resolve(canUseErrorStatus);
+    resolve(true);
   });
   
 };
@@ -305,26 +294,11 @@ component.action.changeCurrentErrorStatus = function(status) {
       FlowRouter.setQueryParams({selection: errorName});
     }
   };
-  var canUseErrorStatus = this.checkPermissionsForStatus();
-  if(canUseErrorStatus){
-    Meteor.call(
-      "errorsMeta.changeState", appId, errorName, 
-      errorType, status, afterChanged
-    );
-  }
-};
 
-component.prototype.checkPermissionsForStatus = function() {
-  var appId = FlowRouter.getParam("appId");
-  var plan = Utils.getPlanForTheApp(appId);
-  var hasPermissions = PlansManager.allowFeature("errorStatus", plan);
-  if(hasPermissions){
-    return true;
-  } else {
-    var params = {"denied": "errorStatus", showIgnored: null, status: null};
-    FlowRouter.setQueryParams(params);
-    return false;
-  }
+  Meteor.call(
+    "errorsMeta.changeState", appId, errorName, 
+    errorType, status, afterChanged
+  );
 };
 
 component.prototype.resetSelection = function() {

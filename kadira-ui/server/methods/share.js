@@ -40,11 +40,6 @@ Meteor.methods({
       throw new Meteor.Error(403, i18n("share.add_collaborator_not_permitted"));
     }
 
-    var plan = Utils.getPlanForTheApp(appId);
-    if(!PlansManager.allowFeature("shareApps", plan)) {
-      throw new Meteor.Error(403, i18n("share.upgrade_to_add_collaborators"));
-    }
-
     var isAlreadyInvited = PendingUsers.findOne({app: appId, email: email});
     if(isAlreadyInvited) {
       var errorStr = i18n("share.pending_collaborator_already_invited", email);
@@ -82,14 +77,6 @@ Meteor.methods({
 
       var result;
       if(pendingUser.type === "owner"){
-        // to accept a owner invited user should be a paid user
-        var plan = Utils.getPlanFromUser(Meteor.user());
-        var isAllowed = PlansManager.allowFeature("shareApps", plan);
-        if(!isAllowed) {
-          var errorMsg = i18n("share.only_paid_users_can_accept_apps");
-          throw new Meteor.Error(403, errorMsg);
-        }
-
         //make current owner a collaborator
         var ownerUpdateFields = {$addToSet: {apps: app._id}};
         Meteor.users.update({_id: app.owner}, ownerUpdateFields);
@@ -101,7 +88,6 @@ Meteor.methods({
         var appUpdateFields = {$set: {owner: this.userId}};
 
         result = Apps.update({_id: pendingUser.app}, appUpdateFields);
-        KadiraAccounts.updateAppPlan(this.userId, plan);
       } else {
         var role = pendingUser.type;
         var collabUpdateFields = {

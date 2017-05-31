@@ -75,7 +75,6 @@ FlowRouter.route("/apps/:appId/:section/:subSection", {
   triggersEnter: [
     legacyUrlRedirects,
     redirectToNewProfiler,
-    checkQueryParam,
     resoultionsToRanges,
     UrlStateManager.triggers.saveGlobalQueryParams,
     UrlStateManager.triggers.saveSubSection,
@@ -192,44 +191,6 @@ FlowRouter.notFound = {
     }
   }
 };
-
-function checkQueryParam(context) {
-  var appId = context.params.appId;
-  var section = context.params.section || "dashboard";
-  var subSection = context.params.subSection || "overview";
-  var params = {
-    "appId": appId,
-    "section": section,
-    "subSection": subSection
-  };
-  var path = FlowRouter.path("app", params);
-
-  var redirectPath = (Meteor.userId()) ? path : null;
-  var plan = Utils.getPlanForTheApp(context.params.appId);
-
-  // resoultions
-  if(context.queryParams) {
-    var range = parseInt(context.queryParams.range) || 60 * 60 * 1000;
-    var maxRange = PlansManager.getConfig("maxRange", plan);
-
-    if(range > maxRange){
-      FlowRouter.redirect(redirectPath);
-    }
-  }
-
-  // timejump
-  if(context.queryParams && context.queryParams.date) {
-    var allowedRange = PlansManager.getConfig("allowedRange", plan);
-    var date = context.queryParams.date;
-
-    var today = moment().valueOf();
-    var limit = today - allowedRange;
-
-    if(date < limit) {
-      FlowRouter.redirect(redirectPath);
-    }
-  }
-}
 
 function legacyUrlRedirects(context, redirect) {
   const { section, subSection } = context.params;

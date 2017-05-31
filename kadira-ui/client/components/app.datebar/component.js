@@ -102,20 +102,12 @@ function setDateQueryParam(date, range, appId) {
 
   date = mDate.valueOf();
 
-  var plan = Utils.getPlanForTheApp(appId);
-  var allowedRange = PlansManager.getConfig("allowedRange", plan);
   var today = moment().valueOf();
-  var limit = today - allowedRange;
 
-  if(date > limit ) {
-    if(today < date) {
-      FlowRouter.setQueryParams({date: null});
-    } else {
-      FlowRouter.setQueryParams({date: date});
-    }
-  } else {
+  if(today < date) {
     FlowRouter.setQueryParams({date: null});
-    FlowRouter.setQueryParams({"denied": "date"});
+  } else {
+    FlowRouter.setQueryParams({date: date});
   }
 }
 

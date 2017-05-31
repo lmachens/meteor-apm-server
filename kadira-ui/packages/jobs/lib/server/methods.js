@@ -29,14 +29,6 @@ function _deleteJob(jobId){
     throw new Meteor.Error(403, 'jobId ' + jobId + ' not found');
   }
 
-  var userId = Meteor.userId();
-  var isAllowed = PermissionsMananger.roles.isAllowed("profiler", job.appId, userId);
-  var isAdmin = Utils.isAdmin(Meteor.user());
-
-  if(!isAllowed && !isAdmin){
-    throw new Meteor.Error(403, i18n('permissions.profiler_delete_denied_msg'));
-  }
-
   JobsCollection.remove(jobId);
 }
 
@@ -52,23 +44,7 @@ function _createOrUpdateJob (jobId, jobInfo) {
   if(!isValidName){
     throw new Meteor.Error(403, i18n('alerts.invalid_job_name'));
   }
-
-  var appId = jobInfo.appId;
-  var app = Apps.findOne({_id: appId});
-  app = app || {};
-
-  var plan = Utils.getPlanForTheApp(jobInfo.appId);
-  if(!PlansManager.allowFeature('profiler', plan)){
-    throw new Meteor.Error(403, i18n('profiler.profiler_denied_msg'));
-  }
-
-  var userId = Meteor.userId();
-  var isAllowed = PermissionsMananger.roles.isAllowed('profiler', jobInfo.appId, userId);
-  var isAdmin = Utils.isAdmin(Meteor.user());
-  if(!isAllowed && !isAdmin){
-    throw new Meteor.Error(403, i18n('profiler.not_authorized'));
-  }
-
+ 
   var createdAt = new Date();
   jobInfo.updatedAt = new Date();
 

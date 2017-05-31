@@ -64,7 +64,6 @@ local:debug-store@0.0.0
 local:jobs@0.0.0
 local:kadira-data@0.0.0
 local:permissions-manager@0.0.0
-local:plans-manager@0.0.0
 local:state-manager@0.0.0
 local:url-state-manager@0.0.0
 local:user-events@0.0.0

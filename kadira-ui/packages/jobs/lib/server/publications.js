@@ -4,18 +4,6 @@ Meteor.publish('jobsList', function (appId, query, options) {
   check(options, Match.Optional(Object));
   this.unblock();
 
-  var plan = Utils.getPlanForTheApp(appId);
-  if(!PlansManager.allowFeature('profiler', plan)){
-    throw new Meteor.Error(403, i18n('profiler.profiler_denied_msg'));
-  }
-
-  var isAllowed = PermissionsMananger.roles.isAllowed('profiler', appId, this.userId);
-  var user = Meteor.users.findOne({_id: this.userId}, {fields: {_id: 1, admin: 1}});
-  var isAdmin = Utils.isAdmin(user);
-  if(!isAllowed && !isAdmin){
-    throw new Meteor.Error(403, i18n('profiler.not_authorized'));
-  }
-
   options = _.pick(options, ['limit'])  || {};
 
   check(options.limit, Match.Integer);

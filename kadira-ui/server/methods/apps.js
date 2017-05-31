@@ -1,8 +1,7 @@
 /*eslint-disable new-cap*/
 Meteor.methods({
-  "apps.create": function(appName, pricingType) {
+  "apps.create": function(appName) {
     check(appName, String);
-    check(pricingType, Match.OneOf("free", "paid"));
     Validations.checkAppName(appName);
 
     if(!this.userId){
@@ -19,8 +18,7 @@ Meteor.methods({
       secret: Meteor.uuid(),
       plan: "business",
       shard: shard,
-      subShard: subShard,
-      pricingType: pricingType
+      subShard: subShard
     };
 
     return Apps.insert(app);
@@ -41,38 +39,4 @@ Meteor.methods({
     Apps.remove({_id:appId, owner: this.userId});
     Alerts.remove({"meta.appId": appId});
   },
-  "apps.updatePricingType": function(appId, pricingType){
-    check(pricingType, Match.OneOf("free", "paid"));
-    check(appId, String);
-    var currentUserId = Meteor.userId();
-    if(!currentUserId){
-      throw new Meteor.Error(403, "You must login to update pricing");
-    }
-
-    var app = Apps.findOne({_id: appId}, {owner: 1, plan: 1}) || {};
-
-    if(pricingType === "free" && app.plan !== "free") {
-      KadiraAccounts.checkIsAppDowngradable(app, "free");
-    }
-
-    if(currentUserId !== app.owner){
-      throw new Meteor.Error(403, "Only app owner can do that");
-    }
-
-    var plan = getPlanForApp(pricingType);
-    var fields = {pricingType: pricingType, plan: plan};
-
-    Apps.update({_id: appId}, {$set: fields});
-  }
 });
-
-function getPlanForApp(pricingType) {
-  switch (pricingType) {
-  case "free":
-    return "free";
-  case "paid":
-    return Utils.getPlanFromUser(Meteor.user());
-  default:
-    throw new Error("unknown pricing type");
-  }
-}

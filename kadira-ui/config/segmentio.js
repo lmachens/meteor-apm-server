@@ -21,8 +21,7 @@ function configureSegmentIoOnClient() {
       prevUser = user._id;
 
       analytics.identify(user._id, {
-        email: AccountsHelpers.getUserEmail(user),
-        plan: Utils.getPlanFromUser(user)
+        email: AccountsHelpers.getUserEmail(user)
       });
       analytics.track("user-cameback");
     } else if(FlowRouter.current().route.name === "debug") {

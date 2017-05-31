@@ -24,7 +24,6 @@ FlowComponents.define("restimeDistribution", function(props) {
 component.extend(KadiraData.FlowMixin);
 component.extend(Mixins.traceExplorer);
 component.extend(Mixins.UiHelpers);
-component.extend(Mixins.upgradeNotifier);
 
 component.prototype.loadTraces = function(selectedTime, extraArgs) {
   extraArgs = extraArgs || {};
@@ -110,15 +109,3 @@ component.action.loadTracesForBin = function(bin) {
   extraArgs.from = bin[0];
   this.loadTraces(selectedTime, extraArgs);
 };
-
-component.prototype.isResTimeDistributionAllowed = function() {
-  var appId = this.appIdFn();
-  var plan = Utils.getPlanForTheApp(appId);
-  return PlansManager.allowFeature("resTimeDistribution", plan);
-};
-
-component.state.isResTimeDistributionAllowed = function() {
-  return this.isResTimeDistributionAllowed();
-};
-
-component.extend(Mixins.upgradeNotifier);

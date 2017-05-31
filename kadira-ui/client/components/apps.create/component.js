@@ -16,8 +16,7 @@ component.action.create = function(appName) {
       $("#app-name").focus();
     } else {
       self.resetView();
-      var pricingType = $("input[name=app-pricing-type]:checked").val();
-      Meteor.call("apps.create", appName, pricingType, function(error, appId) {
+      Meteor.call("apps.create", appName, function(error, appId) {
         if(error) {
           self.set("error", error.reason);
         } else {

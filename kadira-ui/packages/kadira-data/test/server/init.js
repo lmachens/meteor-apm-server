@@ -1,12 +1,3 @@
-// configurations for the allowRange
-PlansManager.setConfig("allowedRange", {
-  free: 1000 * 3600 * 38, // 38 hours
-  solo: 1000 * 3600 * 38, // 38 hours
-  startup: 1000 * 3600 * 27 * 15, //15 days
-  pro: 1000 * 3600 * 27 * 95, // 95 days
-  business: 1000 * 3600 * 27 * 95 // 95 days
-});
-
 PermissionsMananger.defineAction("data_access", [
   "collaborator", "owner", "admin"
 ]);
@@ -17,7 +8,6 @@ Apps.remove({});
 // create the root user
 Meteor.users.remove({});
 RootUserId = Accounts.createUser({username: "root", password: "toor"});
-Meteor.users.update({_id: RootUserId}, {$set: {plan: "business"}});
 
 createAppForUser(RootUserId, 'appId');
 
@@ -31,13 +21,6 @@ GetClient = function() {
   Meteor.wrapAsync(client.call, client)('login', loginInfo);
   return client;
 };
-
-CreateUserWithPlan = function(plan) {
-  var userId = Random.id();
-  Meteor.users.insert({_id: userId, plan: plan});
-
-  return userId;
-}
 
 function createAppForUser(userId, appId) {
   appId = appId || Random.id();
@@ -73,9 +56,3 @@ KadiraData.defineTraces('browser-traces', mongoBrowserDataColl.collectionName, f
   Meteor._sleepForMs(200);
   return [{$match: {}}];
 });
-
-Utils = {
-  isAdmin: function(){
-    return false;
-  }
-};

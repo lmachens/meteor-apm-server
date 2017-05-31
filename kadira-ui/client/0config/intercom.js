@@ -5,7 +5,6 @@ IntercomSettings.userInfo = function(user, info) {
 
   info.email = AccountsHelpers.getUserEmail(user);
   info.name = AccountsHelpers.getName(user);
-  info.plan = user.plan || "free";
 
   // Track activations
   // We assume, FastRender already sent data

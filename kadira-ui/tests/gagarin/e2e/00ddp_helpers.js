@@ -5,7 +5,6 @@ DdpHelpers.createUser = function(server, fields) {
   return userId;
 };
 
-DdpHelpers.createApp = function(appName, pricingType) {
-  pricingType = pricingType || "free"
-  return this.call("apps.create", [appName, pricingType]);
+DdpHelpers.createApp = function(appName) {
+  return this.call("apps.create", [appName]);
 };

@@ -85,9 +85,6 @@ component.state.ranges = function() {
 
 component.state.selectedRange = function() {
   var range = this.getRange();
-  if(!range || !this.isAllowedRange(range)){
-    range = this.getMaxRange();
-  }
   return range;
 };
 
@@ -108,29 +105,7 @@ component.state.canShowHostSelector = function() {
 };
 
 component.action.setRangeQueryParam = function(range) {
-  if(this.isAllowedRange(range)){
-    FlowRouter.setQueryParams({"range": range});
-  } else {
-    var _1hourRange = KadiraData.Ranges.getValue("1hour");
-    FlowRouter.withReplaceState(function() {
-      FlowRouter.setQueryParams({"range": undefined});
-      FlowRouter.setQueryParams({"range": _1hourRange});
-      FlowRouter.setQueryParams({"denied": "range"});
-    });
-  }
-};
-
-component.prototype.isAllowedRange = function(range) {
-  var maxRange = this.getMaxRange();
-  return range <= maxRange;
-};
-
-
-component.prototype.getMaxRange = function() {
-  var appId = FlowRouter.getParam("appId");
-  var plan = Utils.getPlanForTheApp(appId);
-  var maxRange = PlansManager.getConfig("maxRange", plan);
-  return maxRange;
+  FlowRouter.setQueryParams({"range": range});
 };
 
 component.extend(Mixins.Params);

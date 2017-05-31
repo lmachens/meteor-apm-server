@@ -10,7 +10,6 @@
         <div id="wrapper" class="col-md-12">
           {{>render component=state$content options=state$options}}
         </div>
-        {{>render component="upgradeNotifier"}}
       {{else}}
         {{#unless state$isLogginIn}}
           <div class="alert alert-danger col-md-4 col-md-offset-4" id="sign-in-message">

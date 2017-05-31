@@ -7,23 +7,8 @@ Meteor.methods({
 
     alertInfo.meta.created = new Date();
     alertInfo.meta.createdBy = this.userId;
-
-    var appId = alertInfo.meta.appId;
-    var plan = Utils.getPlanForTheApp(appId);
-
-    var alertsLimit = PlansManager.getConfig("alertsPerApp", plan);
-    var alertsCount = Alerts.find({"meta.appId": appId}).count();
-
-    // duration must be less than 60mins
-    if(alertInfo.rule.duration > 3600000) {
-      alertInfo.rule.duration = 3600000;
-    }
-
-    if(alertsLimit <= alertsCount) {
-      throw new Meteor.Error(403, "Not allowed to create new alerts");
-    } else {
-      Alerts.insert(alertInfo);
-    }
+    
+    Alerts.insert(alertInfo);
   }
 });
 

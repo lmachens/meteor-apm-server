@@ -1,18 +1,14 @@
 <template name="app.tools.cpu">
   <div class="row">
     <div class="col-md-12">
-      {{#if state$isAllowed}}
-        {{#if state$createRemote}}
-          {{> remoteProfileCreate}}
-        {{/if}}
-
-        {{#if state$listJobs}}
-          {{> jobsList}}
-        {{/if}}
-      {{else}}
-        {{> profilerDenied}}
+      {{#if state$createRemote}}
+        {{> remoteProfileCreate}}
       {{/if}}
-      
+
+      {{#if state$listJobs}}
+        {{> jobsList}}
+      {{/if}}
+   
       {{#if state$analyse}}
         {{#render component="loading" isLoadingFn=stateFn$isLoadingJobs}}
           {{>render component="app.tools.cpu.analyse"

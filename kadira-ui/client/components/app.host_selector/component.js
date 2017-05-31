@@ -19,22 +19,20 @@ component.state.selectedHost = function() {
 component.state.hosts = function() {
   var data = this.kdMetrics(this.nameForMetric).fetch() || [];
 
-  if(this.isAllowedFeature()) {
-    var retObj = [{
-      label: "All Hosts",
-      value: "All Hosts"
-    }];
+  var retObj = [{
+    label: "All Hosts",
+    value: "All Hosts"
+  }];
 
-    data.forEach(function(d) {
-      var obj = {
-        label: d._id,
-        value: d._id
-      };
-      retObj.push(obj);
-    });
+  data.forEach(function(d) {
+    var obj = {
+      label: d._id,
+      value: d._id
+    };
+    retObj.push(obj);
+  });
 
-    return retObj;
-  }
+  return retObj;
 };
 
 component.state.isSelected = function(value) {
@@ -55,29 +53,11 @@ component.state.selectedLabel = function() {
 };
 
 component.action.selectItem = function(selectedValue) {
-  if(this.isAllowedFeature()) {
-    this.set("selected", selectedValue);
+  this.set("selected", selectedValue);
 
-    if(selectedValue === "All Hosts") {
-      FlowRouter.setQueryParams({host: null});
-    } else {
-      FlowRouter.setQueryParams({host: selectedValue});
-    }
+  if(selectedValue === "All Hosts") {
+    FlowRouter.setQueryParams({host: null});
   } else {
-    FlowRouter.setQueryParams({"denied": "hostInfo"});
+    FlowRouter.setQueryParams({host: selectedValue});
   }
-};
-
-component.action.checkAllowedFeature = function() {
-  var appId = FlowRouter.getParam("appId");
-  var plan = Utils.getPlanForTheApp(appId);
-  if(! PlansManager.allowFeature("hostInfo", plan)) {
-    FlowRouter.setQueryParams({"denied": "hostInfo"});
-  }
-};
-
-component.prototype.isAllowedFeature = function() {
-  var appId = FlowRouter.getParam("appId");
-  var plan = Utils.getPlanForTheApp(appId);
-  return PlansManager.allowFeature("hostInfo", plan);
 };

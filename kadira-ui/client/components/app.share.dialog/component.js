@@ -34,14 +34,6 @@ component.state.isOwnerOrSelf = function(user) {
   return user._id === Meteor.userId() || !!this.owner();
 };
 
-component.state.isOwnerAndFreePlan = function() {
-  var isOwner = this.get("isOwner");
-  var appId = FlowRouter.getParam("appId");
-  var app = Apps.findOne(appId) || {};
-  var plan = app.plan || "free";
-  return isOwner && plan === "free";
-};
-
 component.state.pendingOwner = function() {
   var appId = FlowRouter.getParam("appId");
   return PendingUsers.findOne({app: appId, type: "owner"});
@@ -146,4 +138,3 @@ component.action.resendInvite = function(inviteId) {
   });
 };
 
-component.extend(Mixins.upgradeNotifier);

@@ -177,14 +177,9 @@ component.state.isGroupByHost = function() {
 component.action.toggleHosts = function() {
   var groupByHost = this.get("groupByHost");
   var appId = FlowRouter.getParam("appId");
-  var plan = Utils.getPlanForTheApp(appId);
 
-  if(!PlansManager.allowFeature("hostInfo", plan)) {
-    FlowRouter.setQueryParams({"denied": "hostInfo"});
-  } else {
-    this.set("groupByHost", !groupByHost);
-    this.setPersistentHostState(!groupByHost);
-  }
+  this.set("groupByHost", !groupByHost);
+  this.setPersistentHostState(!groupByHost);
 };
 
 component.action.setFullScreenStatus = function(status) {

@@ -61,18 +61,6 @@ export KADIRA_APP_SECRET={{state$currentAppSecret}}</code></pre>
     <button class="btn btn-default btn-sm" id="regenerate-confirm-cancel">{{i18n "settings.cancel_btn_text"}}</button>
 
   </div>
-  {{#if state$isOwner}}
-    <div class="app-pricing">
-      <legend>{{i18n "settings.pricing"}}</legend>
-      {{> render
-        component="app.setPlan"
-        currentPricingType=state$pricingType
-      }}
-      <br/>
-      <button class="btn btn-sm btn-primary" id="save-pricing-type">{{i18n "common.save"}}</button>
-      <br/>
-    </div>
-  {{/if}}
   <div id="app-del" class="app-settings">
     <br/>
     <legend>{{i18n "settings.delete_the_app"}}</legend>

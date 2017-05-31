@@ -41,62 +41,53 @@
   <hr>
   {{/with}}
 
-  {{#if state$isOwnerAndFreePlan}}
-    <div class="feature-preview-inline">
-      <div class="desc">Please upgrade your plan to share this app with collaborators</div>
-      <img src="/images/share.gif" class="img-responsive" />
-      <br/>
-      <a href="#" class="btn btn-sm btn-lg btn-info upgrade">Upgrade</a>
+  {{#if state$isOwner}}
+  <form id="form-add-collaborator">
+    <div class="input-group col-md-7 col-xs-7">
+      <input type="email" class="form-control input-sm" autocomplete="off" placeholder="collaborator's email" id="collaborator">
+      <span class="input-group-btn">
+        <button class="btn btn-default btn-sm" id="add-collaborator" type="submit"><span class="glyphicon glyphicon-plus"> </span> {{i18n "common.add"}}</button>
+      </span>
     </div>
-  {{else}}
-    {{#if state$isOwner}}
-    <form id="form-add-collaborator">
-      <div class="input-group col-md-7 col-xs-7">
-        <input type="email" class="form-control input-sm" autocomplete="off" placeholder="collaborator's email" id="collaborator">
-        <span class="input-group-btn">
-          <button class="btn btn-default btn-sm" id="add-collaborator" type="submit"><span class="glyphicon glyphicon-plus"> </span> {{i18n "common.add"}}</button>
-        </span>
-      </div>
-    </form>
-    {{/if}}
-    <legend>{{i18n "share.collaborators"}}</legend>
-    <ul class="media-list shared-user-list clearfix collaborators">
-      {{#each state$collaborators}}
+  </form>
+  {{/if}}
+  <legend>{{i18n "share.collaborators"}}</legend>
+  <ul class="media-list shared-user-list clearfix collaborators">
+    {{#each state$collaborators}}
+      <li class="media">
+        <a class="pull-left" href="#">
+          {{#with state$collaboratorEmail this}}
+          <img src="{{state$gravatar this 30}}" class="user-small-pic">
+          {{/with}}
+        </a>
+        <div class="col-md-7 col-xs-7 email">
+          {{state$collaboratorUsername this}}
+        </div>
+        {{#if state$isOwnerOrSelf this}}
+        <button type="button" class="close remove-collaborator pull-left" aria-hidden="true">×</button>
+        <a href="#" class="btn btn-danger btn-sm collaborator-delete-confirm hidden">Confirm</a>
+        {{/if}}
+      </li>
+      <div class="clearfix"></div>
+    {{/each}}
+  </ul>
+  {{#if state$isOwner}}
+    <legend>{{i18n "share.pending_collaborators"}}</legend>
+    <ul class="media-list shared-user-list pending-collaborators">
+      {{#each state$pendingUsers}}
         <li class="media">
           <a class="pull-left" href="#">
-            {{#with state$collaboratorEmail this}}
-            <img src="{{state$gravatar this 30}}" class="user-small-pic">
-            {{/with}}
+            <img src="{{state$gravatar email 30}}" class="user-small-pic">
           </a>
           <div class="col-md-7 col-xs-7 email">
-            {{state$collaboratorUsername this}}
+            {{email}}
           </div>
-          {{#if state$isOwnerOrSelf this}}
-          <button type="button" class="close remove-collaborator pull-left" aria-hidden="true">×</button>
-          <a href="#" class="btn btn-danger btn-sm collaborator-delete-confirm hidden">Confirm</a>
-          {{/if}}
+          <button type="button" class="close remove-pending-user pull-left" aria-hidden="true">×</button>
+          <a class="btn btn-default btn-sm resend-invite">{{i18n 'common.resend'}}</a>
         </li>
         <div class="clearfix"></div>
       {{/each}}
     </ul>
-    {{#if state$isOwner}}
-      <legend>{{i18n "share.pending_collaborators"}}</legend>
-      <ul class="media-list shared-user-list pending-collaborators">
-        {{#each state$pendingUsers}}
-          <li class="media">
-            <a class="pull-left" href="#">
-              <img src="{{state$gravatar email 30}}" class="user-small-pic">
-            </a>
-            <div class="col-md-7 col-xs-7 email">
-              {{email}}
-            </div>
-            <button type="button" class="close remove-pending-user pull-left" aria-hidden="true">×</button>
-            <a class="btn btn-default btn-sm resend-invite">{{i18n 'common.resend'}}</a>
-          </li>
-          <div class="clearfix"></div>
-        {{/each}}
-      </ul>
-    {{/if}}
   {{/if}}
   <div class="modal-footer">
     <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">{{i18n "common.close"}}</button>
