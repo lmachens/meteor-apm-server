@@ -9,7 +9,6 @@ Meteor.methods({
       throw new Meteor.Error(403, "user must login to create app");
     }
     // set users plan to app
-    var plan = getPlanForApp(pricingType);
     var shard = KadiraData.mongoCluster.pickShard();
     var subShard = Math.floor(Math.random() * 128);
 
@@ -18,7 +17,7 @@ Meteor.methods({
       created: new Date(),
       owner: this.userId,
       secret: Meteor.uuid(),
-      plan: plan,
+      plan: "business",
       shard: shard,
       subShard: subShard,
       pricingType: pricingType
