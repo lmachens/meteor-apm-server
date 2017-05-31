@@ -66,7 +66,7 @@ KadiraData.getMetrics = function(dataKey, args, resolution, range) {
 
 KadiraData.getConnectionForApp = function(appId) {
   //XXX: use findFaster for this
-  var app = Apps.findOne(appId);
+  var app = KadiraData.Apps.findOne(appId);
   if(!app) {
     throw new Error("No such app: " + appId);
   }
