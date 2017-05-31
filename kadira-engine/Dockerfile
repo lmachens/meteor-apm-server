@@ -1,8 +1,9 @@
-FROM alpine:3.2
+FROM alpine:3.6
 
 RUN \
  apk upgrade --update && \
- apk add --no-cache ca-certificates nodejs
+ apk add --no-cache ca-certificates mongodb nodejs nodejs-npm && \
+ npm install npm@latest -g
 
 WORKDIR /app
 
