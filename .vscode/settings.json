@@ -1,0 +1,14 @@
+// Platzieren Sie Ihre Einstellungen in dieser Datei, um Standard- und Benutzereinstellungen zu überschreiben.
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.meteor/local": true
+    },
+    "files.watcherExclude": {
+        "**/.git/objects/**": true,
+        "**/.git/subtree-cache/**": true,
+        "**/node_modules": true,
+        "**/bower_components": true,
+        "**/.meteor/local": true
+    }
+}
