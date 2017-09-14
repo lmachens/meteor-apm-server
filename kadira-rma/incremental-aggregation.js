@@ -2,12 +2,11 @@ if(typeof PROFILE == 'undefined') {
   throw new Error('PROFILE expected');
 }
 
-//connect to appDB
-var appDb = connectAppDb();
+var appDb = db;
 
 var Log = {profile: PROFILE.name};
 
-var sourceCollection = (PROFILE.resolution)? PROVIDER.collection: PROVIDER.rawCollection;
+var sourceCollection = PROFILE.resolution ? PROVIDER.collection: PROVIDER.rawCollection;
 var destCollection = PROVIDER.collection;
 var scope = PROVIDER.scope;
 scope.PROFILE = PROFILE;
@@ -28,13 +27,6 @@ var profileConfigQuery = {
     provider: PROVIDER.name
   }
 };
-
-if(ENV.SUBSHARD_COUNT) {
-  var subShardSegmentId = ENV.SUBSHARD_COUNT + ":" + ENV.SUBSHARD_SEGMENT;
-  print(' processing subShard: ' + subShardSegmentId);
-  // setting the subSharding modulus selector in the query
-  query['value.subShard'] = {$mod: [parseInt(ENV.SUBSHARD_COUNT), parseInt(ENV.SUBSHARD_SEGMENT)]};
-}
 
 var config = appDb.mapReduceProfileConfig.findOne(profileConfigQuery);
 if (!config) {
@@ -59,19 +51,6 @@ if (!config) {
 }
 
 var lastTime = config.lastTime.getTime();
-
-// selecting the subSharding time
-if(subShardSegmentId) {
-  if(config.subShardTimes && config.subShardTimes[subShardSegmentId]) {
-    lastTime = config.subShardTimes[subShardSegmentId];
-  }
-
-  // time range exceeds, so set it to a fresh time
-  if((Date.now() - lastTime) > PROFILE.maxAllowedRange) {
-    lastTime = config.lastTime.getTime();
-    print(' too long range to aggregate. resetting to: ' + config.lastTime);
-  }
-}
 
 // We must normalize the time. Otherwise, we'll be loading values for half of
 // single time range. It will leads for wrong counts.
@@ -119,13 +98,9 @@ if(entries[0]){
     }
   };
 
-  if(subShardSegmentId) {
-    modifier['$set']['subShardTimes.' + subShardSegmentId] = startFrom;
-  }
-
   var options = {upsert:true};
   appDb.mapReduceProfileConfig.update(selector, modifier, options);
   appDb.rmaLogs.insert(Log);
 } else {
-  print('very strange! - no entries found')
+  print('very strange! - no entries found');
 }

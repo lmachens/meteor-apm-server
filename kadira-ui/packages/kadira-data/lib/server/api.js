@@ -55,7 +55,7 @@ KadiraData.getMetrics = function(dataKey, args, resolution, range) {
   const db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
   var coll = db.collection(definition.collection);
   var data = Meteor.wrapAsync(coll.aggregate, coll)(pipes);
-
+  console.log(definition.collection, data, pipes);
   // apply filters
   definition.filters.forEach(function(filter) {
     data = filter(_.clone(data), newArgs);

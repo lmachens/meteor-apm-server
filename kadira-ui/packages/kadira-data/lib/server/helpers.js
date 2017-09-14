@@ -83,21 +83,6 @@ KadiraData._CalulateRealtimeDateRange = function(resolution, range) {
   };
 };
 
-var TraceCollectionMap = {
-  method: 'methodTraces',
-  pub: 'pubTraces',
-  errors: 'errorTraces'
-};
-
-KadiraData._getTraceCollectionName = function(type) {
-  var collectionName = TraceCollectionMap[type];
-  if(!collectionName) {
-    var message = 'Do not allow types other than method & pubsub, errors';
-    throw new Meteor.Error(400, message);
-  }
-  return collectionName;
-};
-
 KadiraData._CalculateResolutionForRange = function(rangeValue) {
   var range = KadiraData.Ranges.getRange(rangeValue);
   return KadiraData.Ranges.getResolution(range);
