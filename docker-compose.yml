@@ -40,7 +40,6 @@ services:
     environment:
       - PORT=80
       - MONGO_URL=mongodb://mongodb:27017/kadira
-      - MONGO_SHARD_URL_one=mongodb://mongodb:27017/kadira
       - VIRTUAL_HOST=apm-engine.example.com
       - LETSENCRYPT_HOST=apm-engine.example.com
       - LETSENCRYPT_EMAIL=info@example.com
@@ -69,7 +68,6 @@ services:
       - PORT=80
       - ROOT_URL=https://apm.example.com
       - MONGO_URL=mongodb://mongodb:27017/kadira
-      - MONGO_SHARD_URL_one=mongodb://mongodb:27017/kadira
       - VIRTUAL_HOST=apm.example.com
       - LETSENCRYPT_HOST=apm.example.com
       - LETSENCRYPT_EMAIL=info@example.com
