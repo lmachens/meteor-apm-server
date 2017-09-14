@@ -20,7 +20,7 @@ KadiraDataHelpers.safeMultiply = function (a, b) {
 
 KadiraDataHelpers.removeExpireFlag = function (collection, appId, traceId) {
   var appId = (appId) ? appId[0] : null;
-  var coll = Meteor.Collection.get(collection);
+  var coll = new Meteor.Collection(collection);
   coll.update({_id: traceId}, {$unset: {_expires: 1}}, function() {
   });
 };
