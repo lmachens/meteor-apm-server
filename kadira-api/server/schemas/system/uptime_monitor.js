@@ -1,4 +1,5 @@
 import Promise from 'bluebird';
+
 var LRU = require('lru-cache');
 const logger = console;
 
@@ -16,15 +17,14 @@ export default class UpTimeMonitor {
     this._waitPeriod = waitPeriod || 1000 * 60 * 5;
   }
 
-  async getStatus(shard, collectionName, res, timestamp) {
-    const cacheKey = this.getCacheKey(shard, collectionName, res, timestamp);
+  async getStatus(appDb, collectionName, res, timestamp) {
+    const cacheKey = this.getCacheKey(collectionName, res, timestamp);
     const cached = this._cache.get(cacheKey);
     if (cached) {
       return Promise.resolve(cached);
     }
 
-    const conn = this._mongoCluster.getConnection(shard);
-    const coll = conn.collection(collectionName);
+    const coll = appDb.collection(collectionName);
     const selector = {
       'value.startTime': new Date(timestamp),
       'value.res': '1min'
@@ -55,7 +55,7 @@ export default class UpTimeMonitor {
     return null;
   }
 
-  getCacheKey(shard, collection, res, timestamp) {
-    return shard + collection + res + timestamp;
+  getCacheKey(collection, res, timestamp) {
+    return collection + res + timestamp;
   }
 }

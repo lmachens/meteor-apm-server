@@ -1,6 +1,5 @@
 KadiraData._metricDefinitions = {};
 KadiraData._traceDefinitions = {};
-KadiraData.mongoCluster = KadiraData._initMongoCluster();
 
 KadiraData._metricsPollInterval = {
   "1min": 1000 * 30,
@@ -53,8 +52,8 @@ KadiraData.getMetrics = function(dataKey, args, resolution, range) {
 
   var newArgs = _.extend(_.clone(args), {query: query});
   var pipes = definition.pipeHandler(newArgs);
-  var dbConn = KadiraData.getConnectionForApp(args.appId[0]);
-  var coll = dbConn.collection(definition.collection);
+  const db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
+  var coll = db.collection(definition.collection);
   var data = Meteor.wrapAsync(coll.aggregate, coll)(pipes);
 
   // apply filters
@@ -64,13 +63,3 @@ KadiraData.getMetrics = function(dataKey, args, resolution, range) {
   return data;
 };
 
-KadiraData.getConnectionForApp = function(appId) {
-  //XXX: use findFaster for this
-  var app = KadiraData.Apps.findOne(appId);
-  if(!app) {
-    throw new Error("No such app: " + appId);
-  }
-
-  var connection = KadiraData.mongoCluster.getConnection(app.shard);
-  return connection;
-};

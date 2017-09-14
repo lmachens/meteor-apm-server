@@ -1,35 +1,23 @@
 import UpTimeMonitor from './uptime_monitor';
-import _ from 'lodash';
 
 export default class Logic {
   constructor(config) {
-    this.mongoCluster = config.mongoCluster;
-    this.shards = [];
-    _.forEach(this.mongoCluster._shardMap, shard => {
-      this.shards.push({
-        name: shard.name
-      });
-    });
-
+    this.appDb = config.appDb;
     this.upTimeMonitor = new UpTimeMonitor(config);
   }
 
-  getStatuses(shard, collection, res, start, end) {
+  getStatuses(collection, res, start, end) {
     let t = normalizeToMin(start);
     const minute = 1000 * 60;
     let resultPromises = [];
 
     while (t < end) {
-      const promise = this.upTimeMonitor.getStatus(shard, collection, res, t);
+      const promise = this.upTimeMonitor.getStatus(this.appDb, collection, res, t);
       resultPromises.push(promise);
       t += minute;
     }
 
     return Promise.all(resultPromises);
-  }
-
-  getShardList() {
-    return this.shards;
   }
 }
 

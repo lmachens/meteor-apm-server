@@ -7,14 +7,8 @@ clean = mongo.cleanCollections(['collName']);
 suite('collection persister', function() {
   test('normal persist', clean(function(db, done) {
     var data = {_id: 'coolio', aa: 200};
-    var mongoCluster = {
-      getConnection: function (shard) {
-        assert.equal(shard, "one");
-        return db;
-      }
-    };
-
-    var partial = collection('collName', mongoCluster);
+  
+    var partial = collection('collName', db);
     var app = {shard: "one"};
     partial(app, data, function() {
       db.collection('collName').findOne({_id: data._id}, afterFound)

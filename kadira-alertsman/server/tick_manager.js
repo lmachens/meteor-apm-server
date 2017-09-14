@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import _ from 'lodash';
+
 const debug = require('debug')('alertsman:tickManager');
 const { warn } = console;
 

@@ -18,15 +18,6 @@ if [[ -z $MONGO_URL ]]; then
   MONGO_URL="mongodb://localhost/apm"
 fi
 
-if [[ -z $MONGO_METRICS_URL ]]; then
-  MONGO_METRICS_URL=$MONGO_URL
-fi
-
-if [[ -z $MONGO_SHARD ]]; then
-  echo "MONGO_SHARD env var is required!"
-  exit 1
-fi
-
 ENV_FILE_NAME="env-$PROFILE-$PROVIDER.js"
 
 dumpEnvVarsTo() {
@@ -49,9 +40,9 @@ while [[ true ]]; do
   dumpEnvVarsTo $ENV_FILE_NAME
   set -x;
   if [ -z ${START_TIME+x} ] || [ -z ${END_TIME+x} ]; then
-      mongo $MONGO_METRICS_URL profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js incremental-aggregation.js;
+      mongo $MONGO_URL profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js incremental-aggregation.js;
   else
-      mongo $MONGO_METRICS_URL profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js batch-aggregation.js;
+      mongo $MONGO_URL profiles/$PROFILE.js providers/$PROVIDER.js $ENV_FILE_NAME lib.js mapreduce.js batch-aggregation.js;
   fi
   set +x;
   completedAt=$(date +%s)

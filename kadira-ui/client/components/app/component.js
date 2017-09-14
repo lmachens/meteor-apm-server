@@ -8,11 +8,6 @@ var mainNavigation = [{
   label: "Errors",
   component: "app.errors",
   defaultSubNav: "overview"
-}, {
-  section: "tools",
-  label: "Tools",
-  component: "app.tools",
-  defaultSubNav: "cpu-profiler"
 }];
 
 var component = FlowComponents.define("app", function() {

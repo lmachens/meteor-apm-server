@@ -2,12 +2,11 @@ if(typeof PROFILE == 'undefined') {
   throw new Error('PROFILE expected');
 }
 
-//connect to appDB
-var appDb = connectAppDb();
+var appDb = db;
 
 var Log = {profile: PROFILE.name};
 
-var sourceCollection = (PROFILE.resolution)? PROVIDER.collection: PROVIDER.rawCollection;
+var sourceCollection = PROFILE.resolution ? PROVIDER.collection: PROVIDER.rawCollection;
 var destCollection = PROVIDER.collection;
 var scope = PROVIDER.scope;
 scope.PROFILE = PROFILE;
@@ -25,34 +24,26 @@ Log.startedAt = new Date();
 var profileConfigQuery = {
   _id: {
     profile: PROFILE.name,
-    provider: PROVIDER.name,
-    shard: ENV.MONGO_SHARD
+    provider: PROVIDER.name
   }
 };
-
-if(ENV.SUBSHARD_COUNT) {
-  var subShardSegmentId = ENV.SUBSHARD_COUNT + ":" + ENV.SUBSHARD_SEGMENT;
-  print(' processing subShard: ' + subShardSegmentId);
-  // setting the subSharding modulus selector in the query
-  query['value.subShard'] = {$mod: [parseInt(ENV.SUBSHARD_COUNT), parseInt(ENV.SUBSHARD_SEGMENT)]};
-}
 
 var config = appDb.mapReduceProfileConfig.findOne(profileConfigQuery);
 if (!config) {
   const now = new Date();
   const values = [
-    {profile:'1min', provider:'methods', shard:"one"},
-    {profile:'1min', provider:'errors', shard:"one"},
-    {profile:'1min', provider:'pubsub', shard:"one"},
-    {profile:'1min', provider:'system', shard:"one"},
-    {profile:'3hour', provider:'methods', shard:"one"},
-    {profile:'3hour', provider:'errors', shard:"one"},
-    {profile:'3hour', provider:'pubsub', shard:"one"},
-    {profile:'3hour', provider:'system', shard:"one"},
-    {profile:'30min', provider:'methods', shard:"one"},
-    {profile:'30min', provider:'errors', shard:"one"},
-    {profile:'30min', provider:'pubsub', shard:"one"},
-    {profile:'30min', provider:'system', shard:"one"}
+    {profile:'1min', provider:'methods'},
+    {profile:'1min', provider:'errors'},
+    {profile:'1min', provider:'pubsub'},
+    {profile:'1min', provider:'system'},
+    {profile:'3hour', provider:'methods'},
+    {profile:'3hour', provider:'errors'},
+    {profile:'3hour', provider:'pubsub'},
+    {profile:'3hour', provider:'system'},
+    {profile:'30min', provider:'methods'},
+    {profile:'30min', provider:'errors'},
+    {profile:'30min', provider:'pubsub'},
+    {profile:'30min', provider:'system'}
   ];
   values.forEach((value) => {
     appDb.mapReduceProfileConfig.insert({lastTime: now, _id: value})
@@ -60,19 +51,6 @@ if (!config) {
 }
 
 var lastTime = config.lastTime.getTime();
-
-// selecting the subSharding time
-if(subShardSegmentId) {
-  if(config.subShardTimes && config.subShardTimes[subShardSegmentId]) {
-    lastTime = config.subShardTimes[subShardSegmentId];
-  }
-
-  // time range exceeds, so set it to a fresh time
-  if((Date.now() - lastTime) > PROFILE.maxAllowedRange) {
-    lastTime = config.lastTime.getTime();
-    print(' too long range to aggregate. resetting to: ' + config.lastTime);
-  }
-}
 
 // We must normalize the time. Otherwise, we'll be loading values for half of
 // single time range. It will leads for wrong counts.
@@ -120,13 +98,9 @@ if(entries[0]){
     }
   };
 
-  if(subShardSegmentId) {
-    modifier['$set']['subShardTimes.' + subShardSegmentId] = startFrom;
-  }
-
   var options = {upsert:true};
   appDb.mapReduceProfileConfig.update(selector, modifier, options);
   appDb.rmaLogs.insert(Log);
 } else {
-  print('very strange! - no entries found')
+  print('very strange! - no entries found');
 }

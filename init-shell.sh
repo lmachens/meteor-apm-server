@@ -11,8 +11,3 @@ export ENGINE_PORT=11011
 export UI_PORT=4000
 export UI_URL="http://localhost:$UI_PORT"
 
-# Monitoring Setup
-
-#export LIBRATO_EMAIL
-#export LIBRATO_TOKEN
-

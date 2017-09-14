@@ -22,15 +22,8 @@ suite('controller',function(){
       }
     };
 
-    var mongoCluster = {
-      getConnection: function (shard) {
-        assert.equal(shard, "one");
-        return dbMock;
-      }
-    };
-
     var app = createMockApp();
-    controller(app, null, mongoCluster);
+    controller(app, null, dbMock);
     var server = http.createServer(app).listen(8967, function() {
       timestamp = Date.now();
       var postData = {

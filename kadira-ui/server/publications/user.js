@@ -9,7 +9,6 @@ Meteor.publish("user.userInfo", function() {
       createdAt: 1,
       introVideoSeen: 1,
       billingInfo: 1,
-      stripe: 1,
       "services.meteor-developer.emails": 1
     };
     return Meteor.users.find({_id: this.userId}, {fields: userFields});

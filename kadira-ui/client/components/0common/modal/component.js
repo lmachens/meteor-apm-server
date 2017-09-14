@@ -23,22 +23,12 @@ var component = FlowComponents.define("modal", function(props) {
 component.prototype.show = function() {
   var canShow = this.get("canShow") || false;
   if(canShow){
-    this.hideOtherWindowObjects();
     $("#" + this.modalId).modal("show");
   } else {
     $("#" + this.modalId).modal("hide");
-    this.resetOtherWindowObjects();
   }
 };
 
 component.prototype.onHide = function() {
   this.onClose();
-};
-
-component.prototype.hideOtherWindowObjects = function() {
-  $("#intercom-container").hide();
-};
-
-component.prototype.resetOtherWindowObjects = function() {
-  $("#intercom-container").show();
 };

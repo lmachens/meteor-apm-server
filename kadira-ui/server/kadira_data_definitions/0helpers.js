@@ -20,13 +20,8 @@ KadiraDataHelpers.safeMultiply = function (a, b) {
 
 KadiraDataHelpers.removeExpireFlag = function (collection, appId, traceId) {
   var appId = (appId) ? appId[0] : null;
-  var dbConn;
-  if(!appId) {
-    dbConn = KadiraData.mongoCluster.getConnection("one");
-  } else {
-    dbConn = KadiraData.getConnectionForApp(appId);
-  }
-  var coll = dbConn.collection(collection);
+  const db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
+  var coll = db.collection(collection);
   coll.update({_id: traceId}, {$unset: {_expires: 1}}, function() {
   });
 };

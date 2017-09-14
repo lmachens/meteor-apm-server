@@ -52,7 +52,7 @@ export default class RulesEngine {
   check(alert, streamsMap) {
     const checkedStreamsMap = {};
     const predicates = alert.getPredicates();
-
+    
     _.each(streamsMap, (stream, host) => {
       const validatedSteam = this._normalizePoints(alert, stream);
       const checkedPointsStream = validatedSteam

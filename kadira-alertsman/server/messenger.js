@@ -1,13 +1,13 @@
 /* eslint max-len:0 */
+
 import Promise from 'bluebird';
-import nodemailer from 'nodemailer';
-import smtpTransport from 'nodemailer-smtp-transport';
 import { fromString } from 'html-to-text';
-import request from 'request';
+import { isSlackUrl } from './utils';
+import nodemailer from 'nodemailer';
 import { parse } from 'url';
 import promiseRetry from 'promise-retry';
-import librato from 'librato-node';
-import { isSlackUrl } from './utils';
+import request from 'request';
+import smtpTransport from 'nodemailer-smtp-transport';
 
 const debug = require('debug')('alertsman:messenger');
 const { error, info } = console;
@@ -117,9 +117,6 @@ export default class Messenger {
     }, retryOptions);
 
     return retryPromise
-    .then(() => {
-      librato.increment('emails_sent');
-    })
     .catch(err => {
       error(`Sending email failed: ${err.stack}`);
     });
@@ -137,13 +134,6 @@ export default class Messenger {
     }, retryOptions);
 
     let promise = retryPromise
-    .then(() => {
-      if (isSlackUrl(uri)) {
-        librato.increment('slack_webhooks_called');
-      } else {
-        librato.increment('ordinary_webhooks_called');
-      }
-    })
     .catch(err => {
       error(`Calling webhook failed: ${err.stack}`);
     });

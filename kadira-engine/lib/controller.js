@@ -8,52 +8,52 @@ var persisters = {
   trace: require('./persisters/trace')
 };
 
-module.exports = function(app, appDb, metricsCluster) {
+module.exports = function(app, db) {
   var parsers = [
     {
       type: 'appStats',
       parser: require('./parsers/appStats'),
-      persister: persisters.collection("appStats", metricsCluster)
+      persister: persisters.collection("appStats", db)
     },
     {
       type: 'methodRequests',
       parser: tracerParser('methodRequests'),
-      persister: persisters.trace("methodTraces", metricsCluster)
+      persister: persisters.trace("methodTraces", db)
     },
     {
       type: 'pubRequests',
       parser: tracerParser('pubRequests'),
-      persister: persisters.trace("pubTraces", metricsCluster)
+      persister: persisters.trace("pubTraces", db)
     },
     {
       type: 'errors',
       parser: require('./parsers/errorTraces'),
-      persister: persisters.trace("errorTraces", metricsCluster)
+      persister: persisters.trace("errorTraces", db)
     },
     {
       type: 'methodMetrics',
       parser: require('./parsers/methodMetrics'),
-      persister: persisters.collection("rawMethodsMetrics", metricsCluster)
+      persister: persisters.collection("rawMethodsMetrics", db)
     },
     {
       type: 'pubMetrics',
       parser: require('./parsers/pubMetrics'),
-      persister: persisters.collection("rawPubMetrics", metricsCluster)
+      persister: persisters.collection("rawPubMetrics", db)
     },
     {
       type: 'hotSubs',
       parser: require('./parsers/hotSubs'),
-      persister: persisters.collection("rawHotSubs", metricsCluster)
+      persister: persisters.collection("rawHotSubs", db)
     },
     {
       type: 'systemMetrics',
       parser: require('./parsers/systemMetrics'),
-      persister: persisters.collection("rawSystemMetrics", metricsCluster)
+      persister: persisters.collection("rawSystemMetrics", db)
     },
     {
       type: 'errorMetrics',
       parser: require('./parsers/errorMetrics'),
-      persister: persisters.collection("rawErrorMetrics", metricsCluster)
+      persister: persisters.collection("rawErrorMetrics", db)
     },
   ];
 
@@ -67,7 +67,7 @@ module.exports = function(app, appDb, metricsCluster) {
 
           if(parserInfo.type == 'errors') {
             // track initial state for errors;
-            stateManager.setState(appDb, req.app, 'initialErrorsReceived');
+            stateManager.setState(db, req.app, 'initialErrorsReceived');
           }
         }
       });

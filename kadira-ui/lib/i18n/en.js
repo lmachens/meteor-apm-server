@@ -62,7 +62,6 @@ strings.app = {
   "configure_your_app": "Configure Your App",
   "config_install_pkg": "Install our Smart Package",
   "config_connect_code": "Connect to Kadira using one of the following methods.",
-  "config_learn_more": "Your data will be available within one minute. For more info, please refer the <a href=\"https://kadira.io/academy/getting-started-with-kadira/\" class='link'>Getting Started Guide</a>.",
   "config_configurations": "Raw AppId and appSecret",
   "config_other_way": "If you need to configure your app in some other way",
   "app_id": "App ID",
@@ -128,7 +127,6 @@ strings.share = {
 
 strings.tools = {
   "take_remote_profile": "Take a Remote Profile",
-  "visit_kadira_debug_to_local_profiles": "Visit Kadira Debug to take local profiles",
   "install_kadira_profiler_msg": "Make sure you've installed <a href=\"https://github.com/meteorhacks/kadira-profiler\" target=\"_blank\"><b>Kadira Profiler package</b></a> into your app:<code>meteor add meteorhacks:kadira-profiler</code>",
   "duration": "Duration",
   "name": "Name",

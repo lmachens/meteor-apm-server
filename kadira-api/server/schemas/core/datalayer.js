@@ -18,8 +18,7 @@ export function initDataLayer(config) {
 }
 
 export class DataLayer {
-  constructor({mongoCluster, appDb}) {
-    this.mongoCluster = mongoCluster;
+  constructor({appDb}) {
     this.appDb = appDb;
     this.appColl = appDb.collection('apps');
 
@@ -42,14 +41,12 @@ export class DataLayer {
   }
 
   findOne(shard, collectionName, query) {
-    const conn = this.mongoCluster.getConnection(shard);
-    const coll = conn.collection(collectionName);
+    const coll = this.appDb.collection(collectionName);
     return Promise.promisify(coll.findOne.bind(coll))(query);
   }
 
   find(shard, collectionName, query, options) {
-    const conn = this.mongoCluster.getConnection(shard);
-    const coll = conn.collection(collectionName);
+    const coll = this.appDb.collection(collectionName);
     const cursor = coll.find(query, options);
     return Promise.promisify(cursor.toArray.bind(cursor))();
   }
@@ -61,8 +58,7 @@ export class DataLayer {
   }
 
   aggregate(shard, collectionName, pipes) {
-    const conn = this.mongoCluster.getConnection(shard);
-    const coll = conn.collection(collectionName);
+    const coll = this.appDb.collection(collectionName);
     return Promise.promisify(coll.aggregate.bind(coll))(pipes);
   }
 }

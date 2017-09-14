@@ -2,7 +2,6 @@ var connect = require ('connect');
 var query = require('connect-query');
 var http = require ('http');
 var mongodb = require('mongodb');
-var MongoCluster = require('mongo-sharded-cluster');
 var bodyParser = require('body-parser')
 
 var app = connect ();
@@ -31,26 +30,12 @@ console.info('starting apm-engine on port', port);
 http.createServer(app).listen(port);
 
 //connect to mongo
-var DBS = {};
-
-MongoCluster.initFromEnv(function(err, cluster) {
-  console.log('DDONE')
-  if(err) {
-    console.error('Error connecting to the Mongo Metrics Cluster');
-    throw err;
-  } else {
-    DBS.metricsCluster = cluster;
-    mongodb.MongoClient.connect(process.env.MONGO_URL, afterMongoURLConnected);
-  }
-
-});
+mongodb.MongoClient.connect(process.env.MONGO_URL, afterMongoURLConnected);
 
 function afterMongoURLConnected(err, db) {
   if (err) {
     throw err;
   } else {
-    DBS.app = db;
-
     // parse JSON data sent using XDR with has data type set to text/plain
     // do this before appinfo otherwise required data will not be available
     app.use('/errors', require('./lib/middlewares/plaintext-body'));
@@ -72,15 +57,14 @@ function afterMongoURLConnected(err, db) {
     // it should be used before using the authentication middleware
     var stateManager = require('./lib/stateManager');
     var errorManager = require('./lib/middlewares/error-manager');
-    app.use('/errors', errorManager(DBS.app, DBS.metricsCluster));
+    app.use('/errors', errorManager(db));
 
     // authenticare middleware
     // ping middleware must be used after the authentication middleware
-    app.use(require('./lib/middlewares/authenticate')(DBS.app));
+    app.use(require('./lib/middlewares/authenticate')(db));
     app.use(require('./lib/middlewares/ping')());
-    app.use(require('./lib/middlewares/logger')());
-    app.use('/jobs', require('./lib/middlewares/jobs')(DBS.app));
-    require('./lib/controller')(app, DBS.app, DBS.metricsCluster);
+    app.use('/jobs', require('./lib/middlewares/jobs')(db));
+    require('./lib/controller')(app, db);
 
     // error middleware
     app.use(require('./lib/middlewares/onerror')());
