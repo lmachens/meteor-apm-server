@@ -6,8 +6,5 @@ KADIRA_API_URL=http://root:secret@localhost:7007/core \
 MAIL_URL=$MAIL_URL \
 TICK_TRIGGER_INTERVAL=10000 \
 MESSENGER_LOGGING_ONLY=1 \
-LIBRATO_EMAIL=$LIBRATO_EMAIL \
-LIBRATO_TOKEN=$LIBRATO_TOKEN \
-LIBRATO_METRICS_PREFIX=alertsman. \
 NODE_ENV=production \
   ./node_modules/.bin/nodemon server.js

@@ -1,17 +1,15 @@
 /* eslint max-len:0 no-unused-expressions:0 */
-import { describe, it, before } from 'mocha';
-import { getTestAlertData } from './test_utils';
-import Messenger from '../messenger';
+
+import { before, describe, it } from 'mocha';
+
 import Alert from '../alert';
+import Messenger from '../messenger';
 import { expect } from 'chai';
-import librato from 'librato-node';
+import { getTestAlertData } from './test_utils';
+
 const mailUrl = 'smtp://testuser:testpass@smtp.test.host:465';
 
 describe('Messenger', () => {
-  before(() => {
-    librato.configure({});
-  });
-
   describe('initialization', () => {
     it('should set email options correctly', () => {
       const m = new Messenger(mailUrl);

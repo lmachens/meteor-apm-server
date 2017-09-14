@@ -78,7 +78,6 @@ function afterMongoURLConnected(err, db) {
     // ping middleware must be used after the authentication middleware
     app.use(require('./lib/middlewares/authenticate')(DBS.app));
     app.use(require('./lib/middlewares/ping')());
-    app.use(require('./lib/middlewares/logger')());
     app.use('/jobs', require('./lib/middlewares/jobs')(DBS.app));
     require('./lib/controller')(app, DBS.app, DBS.metricsCluster);
 

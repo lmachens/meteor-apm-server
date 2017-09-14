@@ -2199,13 +2199,6 @@ libqp@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/libqp/-/libqp-1.1.0.tgz#f5e6e06ad74b794fb5b5b66988bf728ef1dedbe8"
 
-librato-node@4.x.x:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/librato-node/-/librato-node-4.1.0.tgz#e696c31b88ac06253d37e5edae77a522739999fe"
-  dependencies:
-    lodash "^3.6.0"
-    request "^2.55.0"
-
 loader-utils@^0.2.16:
   version "0.2.17"
   resolved "https://registry.yarnpkg.com/loader-utils/-/loader-utils-0.2.17.tgz#f86e6374d43205a6e6c60e9196f17c0299bfb348"
