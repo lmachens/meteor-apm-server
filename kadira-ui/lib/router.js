@@ -9,7 +9,6 @@ FlowRouter.subscriptions = function() {
 };
 
 FlowRouter.triggers.enter([setTitles]);
-FlowRouter.triggers.enter([redirectOnKadiraDebug], {except: ["redirect"]});
 FlowRouter.triggers.exit([autourl.trackPreviousContext]);
 
 FlowRouter.route("/", {
@@ -99,18 +98,6 @@ FlowRouter.route("/apps/:appId/:section/:subSection", {
 FlowRouter.route("/invite/:inviteId", {
   action: function() {
     BlazeLayout.render("layout.main", {main: "app.share.invite"});
-  }
-});
-
-FlowRouter.route("/cpf/:jobId", {
-  name: "sharedCpuProfile",
-  action: function() {
-    var options = {
-      ignoreLoginCheck: true
-    };
-    BlazeLayout.render("layout.main", {
-      main: "app.tools.cpu", options: options
-    });
   }
 });
 
@@ -244,15 +231,4 @@ function resoultionsToRanges(context, redirect) {
 
 function setTitles() {
   document.title = "Kadira - Performance Monitoring for Meteor Apps";
-}
-
-// currently, this shows us the Kadira Debug app page and
-// then doing the redirect
-// With SSR. We'll have a better way to do this.
-function redirectOnKadiraDebug(context, redirect) {
-  var insideKadiraDebugUrl = /debug\.kadiraio\.com/.test(location.origin);
-  if(insideKadiraDebugUrl && context.route.name !== "debug") {
-    redirect("/redirect");
-    location.href = "https://ui.kadira.io" + context.path;
-  }
 }

@@ -127,7 +127,6 @@ strings.share = {
 
 strings.tools = {
   "take_remote_profile": "Take a Remote Profile",
-  "visit_kadira_debug_to_local_profiles": "Visit Kadira Debug to take local profiles",
   "install_kadira_profiler_msg": "Make sure you've installed <a href=\"https://github.com/meteorhacks/kadira-profiler\" target=\"_blank\"><b>Kadira Profiler package</b></a> into your app:<code>meteor add meteorhacks:kadira-profiler</code>",
   "duration": "Duration",
   "name": "Name",

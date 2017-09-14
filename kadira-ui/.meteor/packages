@@ -30,7 +30,6 @@ raix:eventemitter
 local:url-state-manager
 meteorhacks:customer-io
 kadira:login-state
-local:debug-store
 kadira:blaze-layout
 local:user-events
 react
