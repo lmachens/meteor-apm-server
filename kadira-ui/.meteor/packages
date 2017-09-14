@@ -25,7 +25,6 @@ http@1.2.12
 local:kadira-data
 reactive-var@1.0.11
 local:permissions-manager
-kadira:stripe-konnect
 minimongo@1.0.23
 percolatestudio:segment.io@=1.1.1_1
 raix:eventemitter
