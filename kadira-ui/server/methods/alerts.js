@@ -1,13 +1,6 @@
 Meteor.methods({
   "alerts.create": function(alertInfo) {
-    check(alertInfo, Match.ObjectIncluding({
-      meta: {
-        appId: String
-      },
-      rule: {
-        duration: Number
-      }
-    }));
+    check(alertInfo, Object);
 
     alertInfo.meta.enabled = true;
     setAppName(alertInfo);
