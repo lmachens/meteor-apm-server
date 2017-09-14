@@ -30,7 +30,6 @@ percolatestudio:segment.io@=1.1.1_1
 raix:eventemitter
 local:url-state-manager
 meteorhacks:customer-io
-meteorhacks:cluster
 kadira:login-state
 local:debug-store
 kadira:blaze-layout

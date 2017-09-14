@@ -261,7 +261,7 @@ function runMapReduce(db, callback, profileName, providerName) {
   providerName = providerName || 'methods';
 
   var command = util.format(
-    'ONLY_ONCE=1 MONGO_SHARD=one MONGO_URL=mongodb://localhost/%s PROFILE=%s PROVIDER=%s ./start.sh',
+    'ONLY_ONCE=1 MONGO_URL=mongodb://localhost/%s PROFILE=%s PROVIDER=%s ./start.sh',
     db.databaseName,
     profileName,
     providerName

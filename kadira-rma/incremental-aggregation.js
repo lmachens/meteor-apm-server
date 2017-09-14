@@ -25,8 +25,7 @@ Log.startedAt = new Date();
 var profileConfigQuery = {
   _id: {
     profile: PROFILE.name,
-    provider: PROVIDER.name,
-    shard: ENV.MONGO_SHARD
+    provider: PROVIDER.name
   }
 };
 
@@ -41,18 +40,18 @@ var config = appDb.mapReduceProfileConfig.findOne(profileConfigQuery);
 if (!config) {
   const now = new Date();
   const values = [
-    {profile:'1min', provider:'methods', shard:"one"},
-    {profile:'1min', provider:'errors', shard:"one"},
-    {profile:'1min', provider:'pubsub', shard:"one"},
-    {profile:'1min', provider:'system', shard:"one"},
-    {profile:'3hour', provider:'methods', shard:"one"},
-    {profile:'3hour', provider:'errors', shard:"one"},
-    {profile:'3hour', provider:'pubsub', shard:"one"},
-    {profile:'3hour', provider:'system', shard:"one"},
-    {profile:'30min', provider:'methods', shard:"one"},
-    {profile:'30min', provider:'errors', shard:"one"},
-    {profile:'30min', provider:'pubsub', shard:"one"},
-    {profile:'30min', provider:'system', shard:"one"}
+    {profile:'1min', provider:'methods'},
+    {profile:'1min', provider:'errors'},
+    {profile:'1min', provider:'pubsub'},
+    {profile:'1min', provider:'system'},
+    {profile:'3hour', provider:'methods'},
+    {profile:'3hour', provider:'errors'},
+    {profile:'3hour', provider:'pubsub'},
+    {profile:'3hour', provider:'system'},
+    {profile:'30min', provider:'methods'},
+    {profile:'30min', provider:'errors'},
+    {profile:'30min', provider:'pubsub'},
+    {profile:'30min', provider:'system'}
   ];
   values.forEach((value) => {
     appDb.mapReduceProfileConfig.insert({lastTime: now, _id: value})

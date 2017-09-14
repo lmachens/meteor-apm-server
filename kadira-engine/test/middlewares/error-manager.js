@@ -23,7 +23,7 @@ suite('middlewares/error-manager', function() {
     };
 
     var appDb = {collection: function() {}};
-    errorManagerMiddleware(appDb, null)(req, res, Function.prototype);
+    errorManagerMiddleware(appDb)(req, res, Function.prototype);
   }));
 
   test('POST request', clean(function(db, done) {
@@ -101,14 +101,7 @@ suite('middlewares/error-manager', function() {
       }
     };
 
-    var mongoCluster = {
-      getConnection: function (shard) {
-        assert.equal(shard, "one");
-        return metricDb;
-      }
-    };
-
-    errorManagerMiddleware(appDb, mongoCluster)(req, res, Function.prototype);
+    errorManagerMiddleware(appDb, metricDb)(req, res, Function.prototype);
   }));
 
 });

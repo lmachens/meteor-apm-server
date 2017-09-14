@@ -8,12 +8,12 @@ var persisters = {
   trace: require('../persisters/trace')
 };
 
-module.exports = function (appDb, metricsCluster) {
+module.exports = function (appDb) {
   var metricsParser = require('../parsers/errorMetrics');
-  var metricsPersister = persisters.collection('rawErrorMetrics', metricsCluster);
+  var metricsPersister = persisters.collection('rawErrorMetrics', appDb);
 
   var traceParser = require('../parsers/errorTraces');
-  var tracePersister = persisters.trace('errorTraces', metricsCluster);
+  var tracePersister = persisters.trace('errorTraces', appDb);
 
   var appsCollection = appDb.collection('apps');
 

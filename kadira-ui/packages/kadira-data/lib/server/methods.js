@@ -32,16 +32,7 @@ Meteor.methods({
 
     var newArgs = _.extend(_.clone(args), {query: query});
     var pipes = definition.pipeHandler(newArgs);
-    // For traces it's possible to have appId as null
-    // That's for the old traces. In this case, we should give them the
-    // first shard (which is one)
-    var appId = (args.appId)? args.appId[0] : null;
-    if(!appId) {
-      var dbConn = KadiraData.mongoCluster.getConnection("one");
-    } else {
-      var dbConn = KadiraData.getConnectionForApp(appId);
-    }
-    var coll = dbConn.collection(definition.collection);
+    var coll = Meteor.Collection.get(definition.collection);
     var data = Meteor.wrapAsync(coll.aggregate, coll)(pipes);
 
     definition.filters.forEach(function(filter) {

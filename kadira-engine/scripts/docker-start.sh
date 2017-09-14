@@ -7,7 +7,6 @@
 # node server.js
 
 cd /app/rma
-export MONGO_SHARD=one
 export MONGO_URL=$MONGO_URL
 export MONGO_METRICS_URL=$MONGO_METRICS_URL
 PROFILE=1min PROVIDER=system bash start.sh &

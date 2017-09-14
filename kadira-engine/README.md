@@ -5,7 +5,6 @@ This is the core service where we accept metrics from the client. This app's URL
 This app connects to multiple databases. They are:
 
 * App MongoDB (MONGO_URL) - Which has the user/app info
-* Data MongoDB Shard (MONGO_SHARD_URL_<shard-name>) - Accept any number of replica sets as the shard
 
 It's safe to run multiple instance of this for horizontal scaling.
 

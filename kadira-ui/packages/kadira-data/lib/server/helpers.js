@@ -102,13 +102,3 @@ KadiraData._CalculateResolutionForRange = function(rangeValue) {
   var range = KadiraData.Ranges.getRange(rangeValue);
   return KadiraData.Ranges.getResolution(range);
 };
-
-KadiraData._initMongoCluster = function() {
-  var MongoShardedCluster = Npm.require('mongo-sharded-cluster');
-  var mongoCluster = Meteor.wrapAsync(MongoShardedCluster.initFromEnv)();
-
-  Meteor.wrapAsync(mongoCluster.startDbSizeLookup, mongoCluster)();
-  console.log("Started MongoCluster DBSizeLookup");
-
-  return mongoCluster;
-};

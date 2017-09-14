@@ -9,13 +9,8 @@ suite('trace persister', function() {
   test('persist to mongo', clean(function(db, done) {
     var data = {_id: 'coolio', aa: 200, events: [{aa: 333}]};
     var app = {shard: "one"};
-    var mongoCluster = {
-      getConnection: function (shard) {
-        assert.equal(shard, "one");
-        return db;
-      }
-    };
-    var partial = tracePersister('methodTraces', mongoCluster);
+
+    var partial = tracePersister('methodTraces', db);
 
     partial(app, [data], function() {
       db.collection('methodTraces').findOne({_id: data._id}, afterFound)

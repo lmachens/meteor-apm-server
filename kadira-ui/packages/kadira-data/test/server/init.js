@@ -24,7 +24,7 @@ GetClient = function() {
 
 function createAppForUser(userId, appId) {
   appId = appId || Random.id();
-  Apps.insert({_id: appId, owner: userId, shard: "one"});
+  Apps.insert({_id: appId, owner: userId});
   return appId;
 }
 CreateAppForUser = createAppForUser;

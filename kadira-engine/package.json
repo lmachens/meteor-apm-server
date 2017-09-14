@@ -7,7 +7,6 @@
     "connect-ntp": "0.1.x",
     "connect-query": "^1.0.0",
     "evloop-monitor": "0.1.x",
-    "mongo-sharded-cluster": "2.x.x",
     "mongodb": "2.2.x",
     "request": "2.81.x",
     "underscore": "1.8.x",

@@ -22,11 +22,6 @@ if [[ -z $MONGO_METRICS_URL ]]; then
   MONGO_METRICS_URL=$MONGO_URL
 fi
 
-if [[ -z $MONGO_SHARD ]]; then
-  echo "MONGO_SHARD env var is required!"
-  exit 1
-fi
-
 ENV_FILE_NAME="env-$PROFILE-$PROVIDER.js"
 
 dumpEnvVarsTo() {

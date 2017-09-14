@@ -73,7 +73,6 @@ meteor@1.6.1
 meteor-base@1.0.4
 meteor-developer-config-ui@1.0.0
 meteor-developer-oauth@1.2.0
-meteorhacks:cluster@1.6.9
 meteorhacks:customer-io@1.1.0
 meteorhacks:flow-components@0.0.42
 meteorhacks:meteorx@1.4.1

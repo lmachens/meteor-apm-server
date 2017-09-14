@@ -6,8 +6,7 @@ var mupConfigString = fs.readFileSync(process.env.UI_SETTINGS, 'utf8').split('\n
 var mupConfig = JSON.parse(mupConfigString)["galaxy.meteor.com"];
 
 var removingEnvVars = [
-  'ROOT_URL', 'CLUSTER_SERVICE', 'CLUSTER_DISCOVERY_URL',
-  'KADIRA_APP_ID', 'KADIRA_APP_SECRET'
+  'ROOT_URL', 'KADIRA_APP_ID', 'KADIRA_APP_SECRET'
 ];
 
 removingEnvVars.forEach(function(e) {
