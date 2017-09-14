@@ -34,7 +34,6 @@ kadira:login-state
 local:debug-store
 kadira:blaze-layout
 local:user-events
-percolate:intercom
 react
 velocityjs:velocityjs
 fortawesome:fontawesome

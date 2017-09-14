@@ -1,6 +1,5 @@
 {
   "public": {
-    "intercom": {},
     "loginState": {
       "domain": "",
       "cookieName": "kadira-dev-login-state"

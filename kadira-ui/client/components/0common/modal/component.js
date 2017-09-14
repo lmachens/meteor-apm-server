@@ -34,11 +34,3 @@ component.prototype.show = function() {
 component.prototype.onHide = function() {
   this.onClose();
 };
-
-component.prototype.hideOtherWindowObjects = function() {
-  $("#intercom-container").hide();
-};
-
-component.prototype.resetOtherWindowObjects = function() {
-  $("#intercom-container").show();
-};
