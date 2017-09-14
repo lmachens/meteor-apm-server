@@ -1,14 +1,15 @@
 /* eslint max-len:0 */
 
-import http from 'http';
-import express from 'express';
-import MongoCluster from 'mongo-sharded-cluster';
+import {handleAuth, loadExplorer, sendPong} from './transports/http';
+
 import {MongoClient} from 'mongodb';
 import Promise from 'bluebird';
-import cors from 'cors';
-import {loadSchemas} from './schemas';
 import {configureAuth} from './authlayer';
-import {loadExplorer, sendPong, handleAuth} from './transports/http';
+import cors from 'cors';
+import express from 'express';
+import http from 'http';
+import {loadSchemas} from './schemas';
+
 const logger = console;
 
 (async () => {
@@ -18,12 +19,10 @@ const logger = console;
     } = process.env;
 
     const appDb = await Promise.promisify(MongoClient.connect)(process.env.MONGO_APP_URL);
-    const mongoCluster = await Promise.promisify(MongoCluster.initFromEnv)();
 
     const schemas = loadSchemas({
       appDb,
-      mailUrl: MAIL_URL,
-      mongoCluster
+      mailUrl: MAIL_URL
     });
 
     configureAuth({

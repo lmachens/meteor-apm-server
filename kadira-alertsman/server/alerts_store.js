@@ -1,7 +1,8 @@
-import Promise from 'bluebird';
-import { EventEmitter } from 'events';
 import Alert from './alert';
+import { EventEmitter } from 'events';
+import Promise from 'bluebird';
 import _ from 'lodash';
+
 const debug = require('debug')('alertsman:altersStore');
 
 export default class AlertsStore extends EventEmitter {
@@ -168,6 +169,7 @@ export default class AlertsStore extends EventEmitter {
       selecter,
       {$set: mutations}
     );
+    console.log(selecter, mutations);
 
     return promise;
   }

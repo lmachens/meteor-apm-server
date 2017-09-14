@@ -70,7 +70,39 @@ services:
       - VIRTUAL_HOST=apm.example.com
       - LETSENCRYPT_HOST=apm.example.com
       - LETSENCRYPT_EMAIL=info@example.com
-      - METEOR_SETTINGS={"public":{"intercom":{},"loginState":{"domain":"","cookieName":"kadira-dev-login-state"}},"kadirahq":{"apiKey":"sk_test_22QITCBPhqEaEKjHXK5BBwO8","publishableKey":"pk_test_Tc1iVNRP9p8o7zgYWoWjZnm4","appName":"KadiraHQ","appLogo":"https://kadira.io/favicon.ico"}}}
     restart: always
     depends_on:
       - mongodb
+  kadira-api:
+    build: ./kadira-api
+    container_name: ui
+    ports:
+      - "4000:80"
+    links:
+      - mongodb
+    environment:
+      - PORT=7007
+      - MONGO_APP_URL=mongodb://mongodb:27017/kadira
+      - MAIL_URL smtp://user:pass@smtp.mailgun.org:587
+      - JWT_SECRET=secret
+      - JWT_LIFETIME=1d
+      - AUTH_SECRET=secret
+    restart: always
+    depends_on:
+      - mongodb
+  kadira-alertsman:
+    build: ./kadira-alertsman
+    container_name: ui
+    ports:
+      - "4000:80"
+    links:
+      - mongodb
+    environment:
+      - APP_DB_URL=mongodb://mongodb:27017/kadira
+      - APP_DB_OPLOG_URL=mongodb://mongodb:27017/local
+      - KADIRA_API_URL=http://root:secret@kadira-api:7007/core
+      - MAIL_URL smtp://user:pass@smtp.mailgun.org:587
+    restart: always
+    depends_on:
+      - mongodb
+      - kadira-api
