@@ -1,6 +1,7 @@
 /* eslint max-len:0 */
 
 import { Email } from 'meteor/email'
+import Fiber from 'fibers';
 import Promise from 'bluebird';
 import { fromString } from 'html-to-text';
 import { isSlackUrl } from './utils';
@@ -109,9 +110,14 @@ export default class Messenger {
     };
 
     let retryPromise = promiseRetry(retry => {
-      return this.transport.sendMail(mailOptions)
-        .catch(retry);
-    }, retryOptions);
+      try {
+        Fiber(() => {
+          return Email.send(mailOptions);
+        }).run();
+        } catch(error) {
+          retry(error);
+        };
+      }, retryOptions);
 
     return retryPromise
     .catch(err => {

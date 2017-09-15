@@ -2,8 +2,8 @@ PROVIDERS = {};
 
 PROVIDERS['errors'] = {
   name: "errors",
-  collection: "errorMetrics",
-  rawCollection: "rawErrorMetrics",
+  collection: ErrorMetrics,
+  rawCollection: RawErrorMetrics,
   scope: {},
 
   map: function() {

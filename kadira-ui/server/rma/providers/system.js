@@ -1,7 +1,7 @@
 PROVIDERS['system'] = {
   name: "system",
-  collection: "systemMetrics",
-  rawCollection: "rawSystemMetrics",
+  collection: SystemMetrics,
+  rawCollection: RawSystemMetrics,
   scope: {
     // fixme: fields in AVERAGING_FIELDS must also appear in SUMMING_FIELDS
     SUMMING_FIELDS: [

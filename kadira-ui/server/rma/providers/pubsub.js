@@ -1,7 +1,7 @@
 PROVIDERS['pubsub'] = {
   name: "pubsub",
-  collection: "pubMetrics",
-  rawCollection: "rawPubMetrics",
+  collection: PubMetrics,
+  rawCollection: RawPubMetrics,
   scope: {
     FIELDS: [
       'subs', 'unsubs', 'resTime', 'activeSubs', 'activeDocs',

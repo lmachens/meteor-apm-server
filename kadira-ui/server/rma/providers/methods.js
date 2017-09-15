@@ -1,7 +1,7 @@
 PROVIDERS['methods'] = {
   name: "methods",
-  collection: "methodsMetrics",
-  rawCollection: "rawMethodsMetrics",
+  collection: MethodsMetrics,
+  rawCollection: RawMethodsMetrics,
   scope: {
     COUNTING_FIELDS: ['count', 'errors', 'fetchedDocSize', 'sentMsgSize'],
     AVERAGING_FIELDS: ['wait', 'db', 'http', 'email', 'async', 'compute', 'total'],

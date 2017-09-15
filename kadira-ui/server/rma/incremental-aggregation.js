@@ -1,10 +1,8 @@
-incrementalAggregation = async function(db, PROFILE, PROVIDER) {
-  var appDb = db;
-
+incrementalAggregation = function(PROFILE, PROVIDER) {
   var Log = { profile: PROFILE.name };
 
-  var sourceCollection = PROFILE.resolution ? PROVIDER.collection : PROVIDER.rawCollection;
-  var destCollection = PROVIDER.collection;
+  var SourceCollection = PROFILE.resolution ? PROVIDER.collection : PROVIDER.rawCollection;
+  var DestCollection = PROVIDER.collection;
   var scope = PROVIDER.scope;
   scope.PROFILE = PROFILE;
 
@@ -19,13 +17,11 @@ incrementalAggregation = async function(db, PROFILE, PROVIDER) {
   Log.startedAt = new Date();
 
   var profileConfigQuery = {
-    _id: {
-      profile: PROFILE.name,
-      provider: PROVIDER.name
-    }
+    profile: PROFILE.name,
+    provider: PROVIDER.name
   };
 
-  var config = await appDb.collection('mapReduceProfileConfig').findOne(profileConfigQuery);
+  var config = MapReduceProfileConfig.findOne(profileConfigQuery);
   if (!config) {
     const now = new Date();
     const values = [
@@ -43,8 +39,9 @@ incrementalAggregation = async function(db, PROFILE, PROVIDER) {
       { profile: '30min', provider: 'system' }
     ];
     values.forEach((value) => {
-      appDb.mapReduceProfileConfig.insert({ lastTime: now, _id: value })
+      MapReduceProfileConfig.insert({ lastTime: now, profile: value.profile, provider: value.provider })
     });
+    config = MapReduceProfileConfig.findOne(profileConfigQuery);
   }
 
   var lastTime = config.lastTime.getTime();
@@ -62,7 +59,7 @@ incrementalAggregation = async function(db, PROFILE, PROVIDER) {
   //applying map reduce
   var options = {
     query: query,
-    out: { 'merge': destCollection },
+    out: { 'merge': DestCollection._name },
     sort: {
       "value.res": 1,
       "value.startTime": 1
@@ -72,17 +69,16 @@ incrementalAggregation = async function(db, PROFILE, PROVIDER) {
     jsMode: true
   };
   //console.log("  Using local MR");
-  await MapReduce(db, sourceCollection, destCollection, PROVIDER.map, PROVIDER.reduce, options);
-
+  MapReduce(SourceCollection, DestCollection, PROVIDER.map, PROVIDER.reduce, options);
   Log.elapsedTime = Date.now() - Log.startedAt.getTime();
 
-  var entries = db[destCollection].find({
+  var entry = DestCollection.findOne({
     // we are using following query and sort because of the index we are utilizing
     "value.res": PROFILE.name,
-  }).limit(1).toArray();
+  });
 
   // this is debug check to see whether we can use this
-  if (entries[0]) {
+  if (entry) {
     var startFrom = normalizeToMin(Log.startedAt.getTime());
 
     var selector = profileConfigQuery;
@@ -93,8 +89,8 @@ incrementalAggregation = async function(db, PROFILE, PROVIDER) {
     };
 
     var options = { upsert: true };
-    appDb.mapReduceProfileConfig.update(selector, modifier, options);
-    appDb.rmaLogs.insert(Log);
+    MapReduceProfileConfig.update(selector, modifier, options);
+    RmaLogs.insert(Log);
   } else {
     console.log('very strange! - no entries found');
   }

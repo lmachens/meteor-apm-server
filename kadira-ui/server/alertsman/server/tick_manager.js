@@ -28,8 +28,10 @@ export default class TickManager extends EventEmitter {
     };
 
     timerInfo.init = setTimeout(() => {
-      fireAlert();
-      timerInfo.forever = setInterval(fireAlert, this.triggerInterval);
+      Fiber(() => {
+        fireAlert();
+        timerInfo.forever = setInterval(fireAlert, this.triggerInterval);
+      }).run();
     }, this.getRandomWait());
   }
 
