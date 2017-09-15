@@ -1,3 +1,0 @@
-MONGO_URL=$APP_MONGO_URL \
-PORT=$ENGINE_PORT \
-  node server.js
