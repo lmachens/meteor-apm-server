@@ -6,9 +6,13 @@
     "test": "tests"
   },
   "dependencies": {
+    "async": "^2.5.0",
     "babel-runtime": "^6.26.0",
     "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.1",
     "color-hash": "^1.0.3",
+    "connect-ntp": "^0.1.1",
+    "connect-query": "^1.0.0",
     "crc": "^3.4.4",
     "helmet": "^3.8.1",
     "histo-utils": "^0.2.0",
@@ -16,6 +20,7 @@
     "load-script": "^1.0.0",
     "lru-cache": "^4.1.1",
     "meteor-node-stubs": "^0.2.11",
+    "mongodb": "^2.2.31",
     "react": "^15.6.1",
     "react-addons-create-fragment": "^15.6.0",
     "react-addons-css-transition-group": "^15.6.0",
