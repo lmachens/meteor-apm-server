@@ -1,16 +1,16 @@
 {
   "name": "kadira-engine",
   "dependencies": {
-    "async": "2.4.1",
-    "body-parser": "^1.17.2",
-    "connect": "^3.6.2",
+    "async": "2.5.0",
+    "body-parser": "^1.18.1",
+    "connect": "^3.6.3",
     "connect-ntp": "0.1.x",
     "connect-query": "^1.0.0",
     "evloop-monitor": "0.1.x",
     "mongodb": "2.2.x",
     "request": "2.81.x",
     "underscore": "1.8.x",
-    "uuid": "3.0.x"
+    "uuid": "3.1.x"
   },
   "devDependencies": {
     "mocha": "*",

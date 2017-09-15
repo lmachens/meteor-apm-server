@@ -6,7 +6,7 @@ var appDb = db;
 
 var Log = {profile: PROFILE.name};
 
-var sourceCollection = PROFILE.resolution ? PROVIDER.collection: PROVIDER.rawCollection;
+var sourceCollection = PROFILE.resolution ? PROVIDER.collection : PROVIDER.rawCollection;
 var destCollection = PROVIDER.collection;
 var scope = PROVIDER.scope;
 scope.PROFILE = PROFILE;
