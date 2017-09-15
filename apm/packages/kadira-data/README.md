@@ -165,7 +165,6 @@ Likewise there are another two API called `kdFindTraces`and `kdTraces` to get tr
 * add an entry to `KadiraData.Ranges.all` in `kadira_data/ranges.js
 * add an entry to `strings.ranges` in `lib/i18n/en.js`
 * modify `maxRange` in `config/plans.js` if needed.
-* update "change resolutions range from dropdown menu on dashboard" test in`tests/gagarin/e2e/app.js`
 
 #### Read More
 

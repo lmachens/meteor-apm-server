@@ -4,7 +4,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-anti:gagarin@=0.4.12
 anti:i18n
 meteorhacks:flow-components@0.0.41
 accounts-meteor-developer@1.3.0
