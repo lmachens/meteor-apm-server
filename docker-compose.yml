@@ -75,7 +75,7 @@ services:
       - mongodb
   kadira-api:
     build: ./kadira-api
-    container_name: ui
+    container_name: api
     ports:
       - "4000:80"
     links:
@@ -92,7 +92,7 @@ services:
       - mongodb
   kadira-alertsman:
     build: ./kadira-alertsman
-    container_name: ui
+    container_name: alertsman
     ports:
       - "4000:80"
     links:
