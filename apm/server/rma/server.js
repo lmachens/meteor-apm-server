@@ -20,5 +20,5 @@ Meteor.startup(() => {
     }
 
     runAll();
-    setInterval(runAll, 10000);
+    setInterval(runAll, 60000);
 });
