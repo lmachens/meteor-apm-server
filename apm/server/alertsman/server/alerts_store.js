@@ -168,12 +168,12 @@ export default class AlertsStore extends EventEmitter {
     );
   }
 
-  updateLastCheckedDate(alert, lastCheckedDate = new Date()) {
+  async updateLastCheckedDate(alert, lastCheckedDate = new Date()) {
     if (!(lastCheckedDate instanceof Date)) {
       throw new Error('Expect lastChecked as a Date object');
     }
     
-    this.alertsCol.update(
+    await this.alertsCol.update(
       alert.getId(),
       {
         $set: {

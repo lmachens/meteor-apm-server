@@ -52,9 +52,7 @@ const {
     const now = Date.now();
     const diff = now % (1000 * 60);
     const lastCheckedMinute = new Date(now - diff);
-    Fiber(() => {
-      alertsStore.updateLastCheckedDate(alert, lastCheckedMinute);
-    }).run();
+    await alertsStore.updateLastCheckedDate(alert, lastCheckedMinute);
     
     debug(`tick firing success=${checkedResult.success} armed=${armed} id=${alertId}`);
 
@@ -62,19 +60,17 @@ const {
       // We don't need to wait until the trigger sends
       // to mark the alert as armed.
       messenger.sendTriggered(alert, checkedResult);
-      Fiber(async () => {
-        await alertsStore.setArmed(alert, true);
-      }).run();
+      await alertsStore.setArmed(alert, true);
+      console.log('snedTriggered');
       return;
     }
 
-    if (armed && !checkedResult.success) {
+    if (armed && !checkedResult.success) {            
       // We don't need to wait until the trigger sends
       // to mark the alert as cleared.
       messenger.sendCleared(alert, checkedResult);
-      Fiber(async () => {
-        await alertsStore.setArmed(alert, false);
-      }).run();
+      await alertsStore.setArmed(alert, false);
+      console.log('sendCleared');
       return;
     }
   };
