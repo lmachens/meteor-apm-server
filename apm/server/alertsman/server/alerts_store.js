@@ -19,18 +19,17 @@ export default class AlertsStore extends EventEmitter {
   load() {
     const promise = this.watchOplog()
       .then(() => {
-        Fiber(() => {    
-          this.reset();
+        Fiber(async () => {    
+          await this.reset();
           this._resetHandler = setInterval(this.reset, this.resetInterval);
         }).run();
     });
     return promise;
   }
 
-  reset() {
+  async reset() {
     const selector = {'meta.enabled': true};
-    const alerts = this.alertsCol.find(selector).fetch();
-    
+    const alerts = await this.alertsCol.find(selector).fetch();
     debug(`reset and load ${alerts.length} alerts`);
 
     // disable exisitng alerts
