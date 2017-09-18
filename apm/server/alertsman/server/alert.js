@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import moment from 'moment';
 import metricsInfoMap from './metrics/metrics_info';
+import moment from 'moment';
 import shorten from './url_shortener';
 
 export default class Alert {
@@ -140,7 +140,7 @@ export default class Alert {
     // That's why we need to remove 29 minutes from the time
     const midTime = time - 29 * 60 * 1000;
     /* eslint-disable max-len */
-    return `https://ui.kadira.io/apps/${appId}/${info.urlTab}/?range=3600000&date=${midTime}`;
+    return Meteor.absoluteUrl(`/apps/${appId}/${info.urlTab}/?range=3600000&date=${midTime}`);
     /* eslint-enable max-len */
   }
 
