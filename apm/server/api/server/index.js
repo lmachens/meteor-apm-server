@@ -15,9 +15,9 @@ const logger = console;
 (async () => {
   try {
     const {
-      API_PORT, AUTH_SECRET, MAIL_URL, JWT_SECRET, JWT_LIFETIME
+      API_PORT, MAIL_URL
     } = process.env;
-
+    const apiPort = API_PORT || 7007;
     const appDb = await Promise.promisify(MongoClient.connect)(process.env.MONGO_URL);
 
     const schemas = loadSchemas({
@@ -26,8 +26,8 @@ const logger = console;
     });
 
     configureAuth({
-      secret: JWT_SECRET,
-      lifetime: JWT_LIFETIME,
+      secret: 'secret',
+      lifetime: '1d',
     });
 
     const server = http.createServer();
@@ -42,10 +42,10 @@ const logger = console;
 
     app.use('/auth', handleAuth(appDb));
     app.use('/ping', sendPong());
-    app.use('/:schema?', loadExplorer(AUTH_SECRET, schemas));
+    app.use('/:schema?', loadExplorer('secret', schemas));
 
-    server.listen(API_PORT);
-    logger.log(`Fetchman started on port: ${API_PORT}`);
+    server.listen(apiPort);
+    logger.log(`Fetchman started on port: ${apiPort}`);
   } catch (ex) {
     console.log('EEEEEE', ex)
     setTimeout(() => {throw ex;});
