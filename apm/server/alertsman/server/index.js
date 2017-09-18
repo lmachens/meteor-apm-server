@@ -61,7 +61,7 @@ const {
       // to mark the alert as armed.
       messenger.sendTriggered(alert, checkedResult);
       await alertsStore.setArmed(alert, true);
-      console.log('snedTriggered');
+      console.log('sendTriggered');
       return;
     }
 

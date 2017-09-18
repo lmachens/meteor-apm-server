@@ -147,7 +147,6 @@ export default class AlertsStore extends EventEmitter {
   }
 
   async setArmed(alert, isArmed) {
-    const selecter = {_id: alert.getId()};
     const mutations = {};
 
     if (isArmed) {
@@ -163,8 +162,10 @@ export default class AlertsStore extends EventEmitter {
     }
 
     await this.alertsCol.update(
-      selecter,
-      {$set: mutations}
+      alert.getId(),
+      {
+        $set: mutations
+      }
     );
   }
 
