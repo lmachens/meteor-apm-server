@@ -55,7 +55,6 @@ const {
     await alertsStore.updateLastCheckedDate(alert, lastCheckedMinute);
     
     debug(`tick firing success=${checkedResult.success} armed=${armed} id=${alertId}`);
-
     if (!armed && checkedResult.success) {
       // We don't need to wait until the trigger sends
       // to mark the alert as armed.
@@ -76,20 +75,16 @@ const {
   };
 
   tickManager
-    .on('fire', alert => {
-      Fiber(async () => {          
-        await processAlone(alert, () => {
-          try {
-            Fiber(async () => {    
-              await handleFire(alert);
-            }).run();
-          } catch (ex) {
-            error(ex.message);
-          }
-        });
-      }).run();
+    .on('fire', async alert => {
+      await processAlone(alert, async () => {
+        try {
+          await handleFire(alert);
+        } catch (ex) {
+          error(ex.message);
+        }
+      });
     });
 
-  await alertsStore.load();
+  alertsStore.load();
   info('Kadira Alertsman started');
 })();

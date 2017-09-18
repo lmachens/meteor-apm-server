@@ -11,19 +11,15 @@ export default class AlertsStore extends EventEmitter {
     this.oplog = oplog;
     this.reset = this.reset.bind(this);
     this.alerts = {};
-    this.resetInterval = 1000 * 60 * 60;
+    this.resetInterval = 1000 * 60 * 60; // Reset alerts ever hour
 
     this.alertsCol = Alerts;
   }
 
   load() {
-    const promise = this.watchOplog()
-      .then(() => {
-        Fiber(async () => {    
-          await this.reset();
-          this._resetHandler = setInterval(this.reset, this.resetInterval);
-        }).run();
-    });
+    const promise = this.watchOplog();
+    this.reset();
+    this._resetHandler = setInterval(this.reset, this.resetInterval);
     return promise;
   }
 
@@ -52,59 +48,56 @@ export default class AlertsStore extends EventEmitter {
   watchOplog() {
     const promise = Promise.promisify(this.oplog.tail.bind(this.oplog))()
       .then(() => {
-        Fiber(() => {
-          this.oplog.on('op', data => {
-            let op = {};
+        this.oplog.on('op', data => {
+          let op = {};
 
-            if (data.op === 'i') {
-              op.alertId = data.o._id;
-              op.operation = 'insert';
-              op.newAlert = data.o;
+          if (data.op === 'i') {
+            op.alertId = data.o._id;
+            op.operation = 'insert';
+            op.newAlert = data.o;
 
-            } else if (data.op === 'd') {
-              op.alertId = data.o._id;
-              op.operation = 'delete';
+          } else if (data.op === 'd') {
+            op.alertId = data.o._id;
+            op.operation = 'delete';
 
-            } else if (data.op === 'u') {
-              op.alertId = data.o2._id;
-              const update = data.o;
+          } else if (data.op === 'u') {
+            op.alertId = data.o2._id;
+            const update = data.o;
 
-              for (let key in update) {
-                if (!update.hasOwnProperty(key)) {
-                  continue;
-                }
+            for (let key in update) {
+              if (!update.hasOwnProperty(key)) {
+                continue;
+              }
 
-                if (key === '$set') {
-                  for (let field in update[key]) {
+              if (key === '$set') {
+                for (let field in update[key]) {
 
-                    if (!update[key].hasOwnProperty(field)) {
-                      continue;
-                    }
-
-                    if (field === 'meta.enabled') {
-                      if (update[key][field] === true) {
-                        op.operation = 'setEnabled';
-                      } else {
-                        op.operation = 'setDisabled';
-                      }
-                    } else if (field === 'lastCheckedDate') {
-                      op.operation = 'updateLastCheckedDate';
-                      op.lastCheckedDate = update[key][field];
-                    } else {
-                      op.operation = 'other';
-                      break;
-                    }
+                  if (!update[key].hasOwnProperty(field)) {
+                    continue;
                   }
-                } else {
-                  op.operation = 'other';
-                  break;
+
+                  if (field === 'meta.enabled') {
+                    if (update[key][field] === true) {
+                      op.operation = 'setEnabled';
+                    } else {
+                      op.operation = 'setDisabled';
+                    }
+                  } else if (field === 'lastCheckedDate') {
+                    op.operation = 'updateLastCheckedDate';
+                    op.lastCheckedDate = update[key][field];
+                  } else {
+                    op.operation = 'other';
+                    break;
+                  }
                 }
+              } else {
+                op.operation = 'other';
+                break;
               }
             }
-
-            this.onOplogOp(op);
-          });
-        }).run();
+          }
+          this.onOplogOp(op);
+        });
       });
 
     return promise;
