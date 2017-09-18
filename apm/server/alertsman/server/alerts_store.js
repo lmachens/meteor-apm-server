@@ -146,7 +146,7 @@ export default class AlertsStore extends EventEmitter {
     }
   }
 
-  setArmed(alert, isArmed) {
+  async setArmed(alert, isArmed) {
     const selecter = {_id: alert.getId()};
     const mutations = {};
 
@@ -162,11 +162,10 @@ export default class AlertsStore extends EventEmitter {
       mutations.lastArmedClearedDate = new Date();
     }
 
-    this.alertsCol.update(
+    await this.alertsCol.update(
       selecter,
       {$set: mutations}
     );
-    console.log(selecter, mutations);
   }
 
   updateLastCheckedDate(alert, lastCheckedDate = new Date()) {

@@ -62,8 +62,8 @@ const {
       // We don't need to wait until the trigger sends
       // to mark the alert as armed.
       messenger.sendTriggered(alert, checkedResult);
-      Fiber(() => {
-        alertsStore.setArmed(alert, true);
+      Fiber(async () => {
+        await alertsStore.setArmed(alert, true);
       }).run();
       return;
     }
@@ -72,8 +72,8 @@ const {
       // We don't need to wait until the trigger sends
       // to mark the alert as cleared.
       messenger.sendCleared(alert, checkedResult);
-      Fiber(() => {
-        alertsStore.setArmed(alert, false);
+      Fiber(async () => {
+        await alertsStore.setArmed(alert, false);
       }).run();
       return;
     }
