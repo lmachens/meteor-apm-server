@@ -8,6 +8,7 @@ import MetricsStore from './metrics/store';
 import MongoOplog from 'mongo-oplog';
 import RuleEngine from './rules/engine';
 import TickManager from './tick_manager';
+import parseMongoUrl from 'parse-mongo-url';
 import { processAlone } from './utils';
 
 const debug = require('debug')('alertsman:index');
@@ -25,7 +26,8 @@ const {
 } = process.env;
 
 (async () => {
-  const oplogFilterNs = `kadira.alerts`;
+  const parsedUrl = parseMongoUrl(MONGO_URL);
+  const oplogFilterNs = `${parsedUrl.dbName}.alerts`;
   const oplogConn = new MongoOplog(MONGO_OPLOG_URL, {ns: oplogFilterNs});
   const alertsStore = new AlertsStore(oplogConn);
 
