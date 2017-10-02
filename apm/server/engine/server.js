@@ -46,11 +46,11 @@ function afterMongoURLConnected(err, db) {
     // rate limit all requests from this point
     // limit => 15 req/s, traces => 100 traces/request
     // Note: Drops all requests without an appId.
-    app.use(require('./lib/middlewares/ratelimit')({
+    /*app.use(require('./lib/middlewares/ratelimit')({
       limit: 30,
       resetInterval: 2000,
       limitTotalTraces: 200
-    }));
+    }));*/
 
     // error manager handles errors sent from client (GET and POST)
     // all requests sent to /errors are considered as client side errors
