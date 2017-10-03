@@ -10,5 +10,6 @@
         "**/node_modules": true,
         "**/bower_components": true,
         "**/.meteor/local": true
-    }
+    },
+    "editor.formatOnSave": true
 }
