@@ -20,55 +20,57 @@ SystemMetrics = new Mongo.Collection("systemMetrics");
 RawSystemMetrics = new Mongo.Collection("rawSystemMetrics");
 RmaLogs = new Mongo.Collection("rmaLogs");
 
-AppStats.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-SystemMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-RawMethodsMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-MethodsMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-RawPubMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-PubMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-RawSystemMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-RawErrorMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-ErrorMetrics.rawCollection().createIndex({
-  "value.appId": 1,
-  "value.host": 1,
-  "value.startTime": 1
-});
-ProdStats.rawCollection().createIndex({
-  appId: 1,
-  metric: 1
-});
+if (Meteor.isServer) {
+  AppStats.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  SystemMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
+  PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
+  ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
+  RawMethodsMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  MethodsMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  RawPubMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  PubMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  RawSystemMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  RawErrorMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  ErrorMetrics.rawCollection().createIndex({
+    "value.appId": 1,
+    "value.host": 1,
+    "value.startTime": 1
+  });
+  ProdStats.rawCollection().createIndex({
+    appId: 1,
+    metric: 1
+  });
+}
