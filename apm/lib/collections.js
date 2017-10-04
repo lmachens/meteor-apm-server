@@ -6,6 +6,7 @@ ErrorsMeta = new Mongo.Collection("errorsMeta");
 
 MapReduceProfileConfig = new Mongo.Collection("mapReduceProfileConfig");
 RawErrorMetrics = new Mongo.Collection("rawErrorMetrics");
+ErrorTraces = new Mongo.Collection("errorTraces");
 ErrorMetrics = new Mongo.Collection("errorMetrics");
 AppStats = new Mongo.Collection("appStats");
 ProdStats = new Mongo.Collection("prodStats");
