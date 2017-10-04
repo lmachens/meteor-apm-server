@@ -12,6 +12,7 @@ ProdStats = new Mongo.Collection("prodStats");
 MethodsMetrics = new Mongo.Collection("methodsMetrics");
 MethodTraces = new Mongo.Collection("methodsTraces");
 RawMethodsMetrics = new Mongo.Collection("rawMethodsMetrics");
+PubTraces = new Mongo.Collection("pubTraces");
 PubMetrics = new Mongo.Collection("pubMetrics");
 RawPubMetrics = new Mongo.Collection("rawPubMetrics");
 SystemMetrics = new Mongo.Collection("systemMetrics");
