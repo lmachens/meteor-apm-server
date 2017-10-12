@@ -1,8 +1,16 @@
 {
-  env: {
+  "env": {
     "es6": true,
     "meteor": true,
     "browser": true
+  },
+  "parserOptions": {
+    "allowImportExportEverywhere": true,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
   },
   "rules": {
     "camelcase": 2,
@@ -10,31 +18,22 @@
     "eqeqeq": 2,
     "no-extend-native": 2,
     "block-scoped-var": 2,
-    "indent": [
+    "indent": [2, 2],
+    "quotes": [2, "double"],
+    "max-depth": [2, 4],
+    "max-len": [2, 80],
+    "new-cap": [
       2,
-      2
+      {
+        "capIsNewExceptions": [
+          "CryptoJS",
+          "LoadScript",
+          "MD5",
+          "Match",
+          "Optional"
+        ]
+      }
     ],
-    "quotes": [
-        2,
-        "double"
-    ],
-    "max-depth": [
-      2,
-      4
-    ],
-    "max-len": [
-      2,
-      80
-    ],
-    "new-cap": [2, {
-      capIsNewExceptions: [
-        "CryptoJS",
-        "LoadScript",
-        "MD5",
-        "Match",
-        "Optional"
-      ],
-    }],
     "no-caller": 2,
     "no-unused-vars": 2,
     "no-debugger": 2,
