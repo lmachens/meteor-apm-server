@@ -1,7 +1,8 @@
-import { EventEmitter } from 'events';
-import _ from 'lodash';
+import { EventEmitter } from "events";
+import Fiber from "fibers";
+import _ from "lodash";
 
-const debug = require('debug')('alertsman:tickManager');
+const debug = require("debug")("alertsman:tickManager");
 const { warn } = console;
 
 export default class TickManager extends EventEmitter {
@@ -24,7 +25,7 @@ export default class TickManager extends EventEmitter {
     this.alertTimers[alert.getId()] = timerInfo;
 
     const fireAlert = () => {
-      this.emit('fire', alert);
+      this.emit("fire", alert);
     };
 
     timerInfo.init = setTimeout(() => {
