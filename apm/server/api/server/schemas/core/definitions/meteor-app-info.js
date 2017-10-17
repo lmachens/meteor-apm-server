@@ -1,6 +1,6 @@
-import {setDefinition} from './';
+import { setDefinition } from "./";
 
-setDefinition('meteor-app-info', async function(dl, args) {
+setDefinition("meteor-app-info", async function(dl, args) {
   const now = Date.now();
 
   // set default values for args
@@ -12,20 +12,19 @@ setDefinition('meteor-app-info', async function(dl, args) {
   }
 
   const query = {
-    'value.appId': String(args.appId),
-    'value.startTime': {
+    "value.appId": String(args.appId),
+    "value.startTime": {
       $gte: new Date(args.startTime),
-      $lt: new Date(args.endTime),
-    },
+      $lt: new Date(args.endTime)
+    }
   };
 
   // optional query parameters
   if (args.host !== undefined) {
-    query['value.host'] = String(args.host);
+    query["value.host"] = String(args.host);
   }
 
-  const shard = await dl.findShard(args.appId);
-  const options = {sort: [ [ 'value.startTime', 'desc' ] ]};
+  const options = { sort: [["value.startTime", "desc"]] };
 
-  return dl.findOne(shard, 'appStats', query, options);
+  return dl.findOne("appStats", query, options);
 });

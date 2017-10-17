@@ -1,9 +1,8 @@
-import Alert from './alert';
-import { EventEmitter } from 'events';
-import Promise from 'bluebird';
-import _ from 'lodash';
+import Alert from "./alert";
+import { EventEmitter } from "events";
+import _ from "lodash";
 
-const debug = require('debug')('alertsman:altersStore');
+const debug = require("debug")("alertsman:altersStore");
 
 export default class AlertsStore extends EventEmitter {
   constructor(oplog) {
@@ -24,20 +23,20 @@ export default class AlertsStore extends EventEmitter {
   }
 
   async reset() {
-    const selector = {'meta.enabled': true};
+    const selector = { "meta.enabled": true };
     const alerts = await this.alertsCol.find(selector).fetch();
     debug(`reset and load ${alerts.length} alerts`);
 
     // disable exisitng alerts
     _.each(this.alerts, alert => {
-      this.emit('disabled', new Alert(alert));
+      this.emit("disabled", new Alert(alert));
     });
     this.alerts = {};
 
     // enable loaded alerts
     for (let a of alerts) {
       this.alerts[a._id] = a;
-      this.emit('enabled', new Alert(a));
+      this.emit("enabled", new Alert(a));
     }
   }
 
@@ -46,59 +45,55 @@ export default class AlertsStore extends EventEmitter {
   }
 
   watchOplog() {
-    const promise = Promise.promisify(this.oplog.tail.bind(this.oplog))()
-      .then(() => {
-        this.oplog.on('op', data => {
-          let op = {};
+    const promise = this.oplog.tail().then(() => {
+      this.oplog.on("op", data => {
+        let op = {};
 
-          if (data.op === 'i') {
-            op.alertId = data.o._id;
-            op.operation = 'insert';
-            op.newAlert = data.o;
+        if (data.op === "i") {
+          op.alertId = data.o._id;
+          op.operation = "insert";
+          op.newAlert = data.o;
+        } else if (data.op === "d") {
+          op.alertId = data.o._id;
+          op.operation = "delete";
+        } else if (data.op === "u") {
+          op.alertId = data.o2._id;
+          const update = data.o;
 
-          } else if (data.op === 'd') {
-            op.alertId = data.o._id;
-            op.operation = 'delete';
+          for (let key in update) {
+            if (!update.hasOwnProperty(key)) {
+              continue;
+            }
 
-          } else if (data.op === 'u') {
-            op.alertId = data.o2._id;
-            const update = data.o;
-
-            for (let key in update) {
-              if (!update.hasOwnProperty(key)) {
-                continue;
-              }
-
-              if (key === '$set') {
-                for (let field in update[key]) {
-
-                  if (!update[key].hasOwnProperty(field)) {
-                    continue;
-                  }
-
-                  if (field === 'meta.enabled') {
-                    if (update[key][field] === true) {
-                      op.operation = 'setEnabled';
-                    } else {
-                      op.operation = 'setDisabled';
-                    }
-                  } else if (field === 'lastCheckedDate') {
-                    op.operation = 'updateLastCheckedDate';
-                    op.lastCheckedDate = update[key][field];
-                  } else {
-                    op.operation = 'other';
-                    break;
-                  }
+            if (key === "$set") {
+              for (let field in update[key]) {
+                if (!update[key].hasOwnProperty(field)) {
+                  continue;
                 }
-              } else {
-                op.operation = 'other';
-                break;
+
+                if (field === "meta.enabled") {
+                  if (update[key][field] === true) {
+                    op.operation = "setEnabled";
+                  } else {
+                    op.operation = "setDisabled";
+                  }
+                } else if (field === "lastCheckedDate") {
+                  op.operation = "updateLastCheckedDate";
+                  op.lastCheckedDate = update[key][field];
+                } else {
+                  op.operation = "other";
+                  break;
+                }
               }
+            } else {
+              op.operation = "other";
+              break;
             }
           }
-          this.onOplogOp(op);
-        });
+        }
+        this.onOplogOp(op);
       });
+    });
 
     return promise;
   }
@@ -106,22 +101,22 @@ export default class AlertsStore extends EventEmitter {
   async onOplogOp(op) {
     debug(`new alerts update type=${op.operation} id=${op.alertId}`);
     switch (op.operation) {
-      case 'updateLastCheckedDate':
+      case "updateLastCheckedDate":
         if (this.alerts[op.alertId]) {
           this.alerts[op.alertId].lastCheckedDate = op.lastCheckedDate;
-          this.emit('disabled', new Alert(this.alerts[op.alertId]));
-          this.emit('enabled', new Alert(this.alerts[op.alertId]));
+          this.emit("disabled", new Alert(this.alerts[op.alertId]));
+          this.emit("enabled", new Alert(this.alerts[op.alertId]));
         }
         break;
       default:
-        const selecter = {_id: op.alertId};
+        const selecter = { _id: op.alertId };
         const rawAlert = await this.alertsCol.findOne(selecter);
         const cachedAlert = this.alerts[op.alertId];
         // If the alert removed or disabled we need to branch it out.
         if (!rawAlert || !rawAlert.meta.enabled) {
           // If there is a cached alert already. Simply disable it
           if (cachedAlert) {
-            this.emit('disabled', new Alert(cachedAlert));
+            this.emit("disabled", new Alert(cachedAlert));
           }
           return;
         }
@@ -130,12 +125,12 @@ export default class AlertsStore extends EventEmitter {
 
         // If we've a cache, disable it
         if (cachedAlert) {
-          this.emit('disabled', new Alert(cachedAlert));
+          this.emit("disabled", new Alert(cachedAlert));
         }
 
         // Assign the new rawAlert to cache and enable it
         this.alerts[op.alertId] = rawAlert;
-        this.emit('enabled', new Alert(rawAlert));
+        this.emit("enabled", new Alert(rawAlert));
     }
   }
 
@@ -154,27 +149,21 @@ export default class AlertsStore extends EventEmitter {
       mutations.lastArmedClearedDate = new Date();
     }
 
-    await this.alertsCol.update(
-      alert.getId(),
-      {
-        $set: mutations
-      }
-    );
+    await this.alertsCol.update(alert.getId(), {
+      $set: mutations
+    });
   }
 
   async updateLastCheckedDate(alert, lastCheckedDate = new Date()) {
     if (!(lastCheckedDate instanceof Date)) {
-      throw new Error('Expect lastChecked as a Date object');
+      throw new Error("Expect lastChecked as a Date object");
     }
-    
-    await this.alertsCol.update(
-      alert.getId(),
-      {
-        $set: {
-          lastCheckedDate
-        }
+
+    await this.alertsCol.update(alert.getId(), {
+      $set: {
+        lastCheckedDate
       }
-    );
+    });
   }
 
   close() {

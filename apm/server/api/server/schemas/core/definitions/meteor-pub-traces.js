@@ -1,15 +1,13 @@
-import {setDefinition} from './';
-import {inflateEvents} from './utils/trace';
+import { inflateEvents } from "./utils/trace";
+import { setDefinition } from "./";
 
-import Promise from 'bluebird';
-
-setDefinition('meteor-pub-traces', async function(dl, args) {
+setDefinition("meteor-pub-traces", async function(dl, args) {
   const query = {
     appId: String(args.appId),
     startTime: {
       $gte: new Date(args.startTime),
-      $lt: new Date(args.endTime),
-    },
+      $lt: new Date(args.endTime)
+    }
   };
 
   // optional query parameters
@@ -21,20 +19,19 @@ setDefinition('meteor-pub-traces', async function(dl, args) {
   }
   if (args.minValue !== undefined) {
     query.totalValue = query.totalValue || {};
-    query.totalValue['$gte'] = Number(args.minValue);
+    query.totalValue["$gte"] = Number(args.minValue);
   }
   if (args.maxValue !== undefined) {
     query.totalValue = query.totalValue || {};
-    query.totalValue['$lte'] = Number(args.maxValue);
+    query.totalValue["$lte"] = Number(args.maxValue);
   }
 
   const options = {
-    sort: [ [ args.sortField, args.sortOrder ] ],
-    limit: args.limit,
+    sort: [[args.sortField, args.sortOrder]],
+    limit: args.limit
   };
 
-  const shard = await dl.findShard(args.appId);
-  const result = await dl.find(shard, 'pubTraces', query, options);
+  const result = await dl.find("pubTraces", query, options);
 
   if (!result) {
     return null;

@@ -29,7 +29,6 @@ var component = FlowComponents.define("app.errors", function(props) {
       self.fixHbarWidth();
       self.fixHbarHeight();
     });
-
   });
 
   this.onDestroyed(function() {
@@ -54,7 +53,7 @@ component.prototype.getHbarArgs = function(sorts) {
   // cannot use extraArgs state here,
   // because we create a dependancy for hbar selection.
   var args = this.getArgs(this.props);
-  
+
   var sortBy = this.getSortedMetric(sorts);
 
   this.set("hbarSortedItem", sortBy);
@@ -62,19 +61,19 @@ component.prototype.getHbarArgs = function(sorts) {
   args.sortBy = sortBy;
 
   var errorType = FlowRouter.getQueryParam("traceType");
-  if(errorType) {
+  if (errorType) {
     args.errorType = errorType;
   }
 
   var searchq = FlowRouter.getQueryParam("searchq");
-  if(searchq){
+  if (searchq) {
     args.searchq = searchq;
   }
 
   args.status = this.get("currentStatus");
 
   var showIgnored = FlowRouter.getQueryParam("showIgnored");
-  if(showIgnored && showIgnored === "true"){
+  if (showIgnored && showIgnored === "true") {
     args.showIgnored = true;
   } else {
     args.showIgnored = false;
@@ -92,12 +91,16 @@ component.prototype.hbarSortOptions = function() {
     {
       value: "count",
       label: i18n("dashboard.errors.count"),
-      formatter: function(value) { return value;}
+      formatter: function(value) {
+        return value;
+      }
     },
     {
       value: "lastSeenTime",
       label: i18n("dashboard.errors.last_seen"),
-      formatter: function(value) { return value;}
+      formatter: function(value) {
+        return value;
+      }
     }
   ];
   return BREAKDOWN_SORT_TYPES;
@@ -118,7 +121,7 @@ component.state.hbarChartData = function() {
   var isInLiveMode = this.get("isInLiveMode");
 
   var countMax = this.getMaxValue(data, "count");
-  data.forEach(function (d) {
+  data.forEach(function(d) {
     var obj = {
       id: CryptoJS.MD5(d._id.name + "-" + d.type).toString(),
       errorName: d._id.name,
@@ -127,8 +130,8 @@ component.state.hbarChartData = function() {
       pCount: self.getPct(d.count, countMax),
       status: d.status
     };
-    if(d.lastSeenTime) {
-      if(isInLiveMode){
+    if (d.lastSeenTime) {
+      if (isInLiveMode) {
         obj.lastSeenTime = moment(d.lastSeenTime).fromNow();
       } else {
         obj.lastSeenTime = moment(d.lastSeenTime).format("MMM Do HH:mm");
@@ -137,18 +140,18 @@ component.state.hbarChartData = function() {
 
     // get the status from ErrorMeta collection if all the subscriptions are
     // loaded
-    if(errorMetaLoaded) {
+    if (errorMetaLoaded) {
       obj.status = self.getStatus(obj);
     }
 
     // If the status became ignored via the subscription, we need to hide it.
-    if(!self.get("showIgnored") && obj.status === "ignored") {
+    if (!self.get("showIgnored") && obj.status === "ignored") {
       return;
     }
 
     // if the error's status changed, we need to remove it from hbar
     var currentStatus = self.get("currentStatus");
-    if(currentStatus !== "all" && obj.status !== currentStatus) {
+    if (currentStatus !== "all" && obj.status !== currentStatus) {
       return;
     }
 
@@ -161,20 +164,20 @@ component.state.hbarChartData = function() {
 };
 
 component.prototype.getMaxValue = function(data, key) {
-  var valueMax = _.max(data, function(obj){
+  var valueMax = _.max(data, function(obj) {
     return obj[key];
   });
   return valueMax[key];
 };
 
 component.prototype.getPct = function(value, maxValue) {
-  return (value / maxValue) * 100;
+  return value / maxValue * 100;
 };
 
 component.prototype.getStatus = function(obj) {
-  var query = {name: obj.errorName, type: obj.type};
+  var query = { name: obj.errorName, type: obj.type };
   var errorMeta = ErrorsMeta.findOne(query) || {};
-  // if error is not found in the collection it is because 
+  // if error is not found in the collection it is because
   // 1. client didnt receive it yet
   // 2. it is a new error
   // 1 is handled by checking for subscription ready
@@ -191,7 +194,7 @@ component.prototype.selectedErrorInfo = function() {
   var selection = FlowRouter.getQueryParam("selection");
   var selectionInfo;
   for (var i = hbarData.length - 1; i >= 0; i--) {
-    if(hbarData[i].id === selection){
+    if (hbarData[i].id === selection) {
       selectionInfo = hbarData[i];
       break;
     }
@@ -199,7 +202,7 @@ component.prototype.selectedErrorInfo = function() {
 
   // user has selected an error but
   // error info is not available during selecte time range
-  if(selection && !selectionInfo){
+  if (selection && !selectionInfo) {
     selectionInfo = {};
     selectionInfo.errorName = null;
   }
@@ -210,16 +213,16 @@ component.state.extraArgs = function() {
   var args = {};
   var selectionInfo = this.selectedErrorInfo() || {};
   // errorName can be "" or null
-  if(selectionInfo.errorName !== undefined){
+  if (selectionInfo.errorName !== undefined) {
     args.selection = selectionInfo.errorName;
   }
 
   var errorType = selectionInfo.type || FlowRouter.getQueryParam("traceType");
-  if(errorType){
+  if (errorType) {
     args.errorType = errorType;
   }
   var searchq = FlowRouter.getQueryParam("searchq");
-  if(searchq){
+  if (searchq) {
     args.searchq = searchq;
   }
 
@@ -241,13 +244,16 @@ component.state.isFilteredByStatus = function() {
 
 component.state.isErrorTrackingOn = function() {
   var appId = FlowRouter.getParam("appId");
-  var app = Apps.findOne({_id: appId, initialErrorsReceived: {$exists: true}});
+  var app = Apps.findOne({
+    _id: appId,
+    initialErrorsReceived: { $exists: true }
+  });
   return !!app;
 };
 
 component.state.showIgnored = function() {
   var status = FlowRouter.getQueryParam("status");
-  if(status === "ignored") {
+  if (status === "ignored") {
     return true;
   }
   var showIgnored = FlowRouter.getQueryParam("showIgnored");
@@ -261,12 +267,11 @@ component.state.currentStatus = function() {
 };
 
 component.action.showIgnoredErrors = function(showIgnoredErrors) {
-  FlowRouter.setQueryParams({showIgnored: showIgnoredErrors});
-  
+  FlowRouter.setQueryParams({ showIgnored: showIgnoredErrors });
+
   return new Promise(function(resolve) {
     resolve(true);
   });
-  
 };
 
 component.action.changeCurrentErrorStatus = function(status) {
@@ -278,34 +283,37 @@ component.action.changeCurrentErrorStatus = function(status) {
   var currentStatus = this.get("currentStatus");
   var showIgnored = this.get("showIgnored");
 
-  var removeSelection = 
-    !showIgnored && status === "ignored" ||
-    currentStatus !== "all";
+  var removeSelection =
+    (!showIgnored && status === "ignored") || currentStatus !== "all";
 
-  if(removeSelection) {
-    FlowRouter.setQueryParams({selection: null});
+  if (removeSelection) {
+    FlowRouter.setQueryParams({ selection: null });
   }
 
   var afterChanged = function(err) {
-    if(err) {
+    if (err) {
       var message = "Error changing status: " + (err.reason || err.message);
       growlAlert.error(message);
       // if there's an error, I need to bring back the selection again
-      FlowRouter.setQueryParams({selection: errorName});
+      FlowRouter.setQueryParams({ selection: errorName });
     }
   };
 
   Meteor.call(
-    "errorsMeta.changeState", appId, errorName, 
-    errorType, status, afterChanged
+    "errorsMeta.changeState",
+    appId,
+    errorName,
+    errorType,
+    status,
+    afterChanged
   );
 };
 
 component.prototype.resetSelection = function() {
-  FlowRouter.setQueryParams({selection: null});
+  FlowRouter.setQueryParams({ selection: null });
 };
 
-component.prototype.initAffix = function (){
+component.prototype.initAffix = function() {
   var fixWidth = this.fixHbarWidth.bind(this);
   this.fixWidthHandler = fixWidth;
   var fixHeight = this.fixHbarHeight.bind(this);
@@ -328,7 +336,9 @@ component.prototype.initAffix = function (){
 };
 
 component.prototype.fixHbarWidth = function() {
-  var width = this.$(".hbar-wrap").parent().width();
+  var width = this.$(".hbar-wrap")
+    .parent()
+    .width();
   this.$(".hbar-wrap").width(width);
 };
 

@@ -1,10 +1,8 @@
-import Promise from 'bluebird';
-
-var LRU = require('lru-cache');
+var LRU = require("lru-cache");
 const logger = console;
 
 export default class UpTimeMonitor {
-  constructor({mongoCluster, waitPeriod}) {
+  constructor({ mongoCluster, waitPeriod }) {
     const options = { max: 500, maxAge: 1000 * 60 * 10 };
     this._cache = LRU(options);
     this._mongoCluster = mongoCluster;
@@ -26,14 +24,14 @@ export default class UpTimeMonitor {
 
     const coll = appDb.collection(collectionName);
     const selector = {
-      'value.startTime': new Date(timestamp),
-      'value.res': '1min'
+      "value.startTime": new Date(timestamp),
+      "value.res": "1min"
     };
 
-    const cursor = coll.find(selector, {'value.startTime': 1}).limit(1);
+    const cursor = coll.find(selector, { "value.startTime": 1 }).limit(1);
     let count = 0;
     try {
-      count = await Promise.promisify(cursor.count.bind(cursor))();
+      count = cursor.count();
     } catch (e) {
       logger.log(e);
       return null;

@@ -1,6 +1,5 @@
-import LRU from 'lru-cache';
-import Promise from 'bluebird';
-import { UserError } from 'graphql-errors';
+import LRU from "lru-cache";
+import { UserError } from "graphql-errors";
 
 // global var!
 let datalayer;
@@ -18,47 +17,31 @@ export function initDataLayer(config) {
 }
 
 export class DataLayer {
-  constructor({appDb}) {
+  constructor({ appDb }) {
     this.appDb = appDb;
-    this.appColl = appDb.collection('apps');
-
-    const HOUR = 1000 * 60 * 60;
-    this._shardCache = new LRU({max: 5000, maxAge: HOUR});
+    this.appColl = appDb.collection("apps");
   }
 
-  async findShard(appId) {
-    if (this._shardCache.has(appId)) {
-      return this._shardCache.get(appId);
-    }
-
-    const app = await this.appColl.findOne({_id: appId});
-    if (!app) {
-      throw new UserError(`App does not exists: ${appId}`);
-    }
-
-    this._shardCache.set(appId, app.shard);
-    return app.shard;
-  }
-
-  findOne(shard, collectionName, query) {
+  async findOne(collectionName, query) {
     const coll = this.appDb.collection(collectionName);
-    return Promise.promisify(coll.findOne.bind(coll))(query);
+    return await coll.findOne(query);
   }
 
-  find(shard, collectionName, query, options) {
+  async find(collectionName, query, options) {
     const coll = this.appDb.collection(collectionName);
     const cursor = coll.find(query, options);
-    return Promise.promisify(cursor.toArray.bind(cursor))();
+    return await cursor.toArray();
   }
 
-  findOnAppDb(collectionName, query, options) {
+  async findOnAppDb(collectionName, query, options) {
     const coll = this.appDb.collection(collectionName);
     const cursor = coll.find(query, options);
-    return Promise.promisify(cursor.toArray.bind(cursor))();
+    return await cursor.toArray();
   }
 
-  aggregate(shard, collectionName, pipes) {
+  async aggregate(collectionName, pipes) {
     const coll = this.appDb.collection(collectionName);
-    return Promise.promisify(coll.aggregate.bind(coll))(pipes);
+    const cursor = coll.aggregate(pipes);
+    return await cursor.toArray();
   }
 }

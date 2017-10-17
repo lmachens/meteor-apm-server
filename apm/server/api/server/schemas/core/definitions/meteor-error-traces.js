@@ -1,27 +1,26 @@
-import _ from 'lodash';
-import {setDefinition, useDefinition} from './';
-import {inflateEvents, stringifyStacks} from './utils/trace';
+import { inflateEvents, stringifyStacks } from "./utils/trace";
+import { setDefinition, useDefinition } from "./";
 
-import Promise from 'bluebird';
+import _ from "lodash";
 
-setDefinition('meteor-error-traces', async function(dl, args) {
+setDefinition("meteor-error-traces", async function(dl, args) {
   const query = {
     appId: String(args.appId),
     startTime: {
       $gte: new Date(args.startTime),
-      $lt: new Date(args.endTime),
+      $lt: new Date(args.endTime)
     }
   };
   if (args.host !== undefined) {
-    query['host'] = String(args.host);
+    query["host"] = String(args.host);
   }
 
   // filtering out by error status
   var breakdownArgs = _.clone(args);
-  breakdownArgs.sortField = 'count';
+  breakdownArgs.sortField = "count";
   breakdownArgs.sortOrder = -1;
   const breakdowns =
-    await useDefinition('meteor-error-breakdown', breakdownArgs) || [];
+    (await useDefinition("meteor-error-breakdown", breakdownArgs)) || [];
 
   // If there are no breakdown data available, no need to query for
   // error metrics.
@@ -29,21 +28,20 @@ setDefinition('meteor-error-traces', async function(dl, args) {
     return [];
   }
 
-  query['$or'] = [];
+  query["$or"] = [];
   breakdowns.forEach(bd => {
-    query['$or'].push({$and: [ {name: bd.message}, {type: bd.type} ]});
+    query["$or"].push({ $and: [{ name: bd.message }, { type: bd.type }] });
   });
 
   if (args.message !== undefined) {
-    query['name'] = String(args.message);
+    query["name"] = String(args.message);
   }
 
   const sort = {};
   sort[args.sortField] = args.sortOrder;
-  const options = {limit: args.limit, sort};
+  const options = { limit: args.limit, sort };
 
-  const shard = await dl.findShard(args.appId);
-  const result = await dl.find(shard, 'errorTraces', query, options);
+  const result = await dl.find("errorTraces", query, options);
   const stacksStringifiedresult = result.map(stringifyStacks);
 
   const promises = stacksStringifiedresult.map(inflateEvents);

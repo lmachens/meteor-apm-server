@@ -1,15 +1,13 @@
 /* eslint max-len:0 */
 
-import { Email } from 'meteor/email'
-import Fiber from 'fibers';
-import Promise from 'bluebird';
-import { fromString } from 'html-to-text';
-import { isSlackUrl } from './utils';
-import { parse } from 'url';
-import promiseRetry from 'promise-retry';
-import request from 'request';
+import { Email } from "meteor/email";
+import Fiber from "fibers";
+import { fromString } from "html-to-text";
+import { isSlackUrl } from "./utils";
+import { parse } from "url";
+import promiseRetry from "promise-retry";
 
-const debug = require('debug')('alertsman:messenger');
+const debug = require("debug")("alertsman:messenger");
 const { error, info } = console;
 
 const retryOptions = {
@@ -21,50 +19,52 @@ const retryOptions = {
 
 export default class Messenger {
   constructor(mailUrl, options = {}) {
-    this.mailUrl = mailUrl || 'smtp://user:pass@smtp.host:465';
+    this.mailUrl = mailUrl || "smtp://user:pass@smtp.host:465";
     this.loggingOnly = options.loggingOnly;
 
-    const {
-      auth, port, hostname
-    } = parse(this.mailUrl);
+    const { auth, port, hostname } = parse(this.mailUrl);
 
     const smtpOptions = {
       host: hostname,
-      secure: port === '465',
+      secure: port === "465",
       port: port || 25,
-      auth: {user: auth.split(':')[0], pass: auth.split(':')[1]}
+      auth: { user: auth.split(":")[0], pass: auth.split(":")[1] }
     };
-
-    this.post = Promise.promisify(request.post);
   }
 
   sendTriggered(alert, checkedResult) {
     debug(`alert triggered: id=${alert.getId()}`);
-    const emailPayload =
-      alert.getEmailInfoForTriggered(checkedResult);
+    const emailPayload = alert.getEmailInfoForTriggered(checkedResult);
     const webHookPayload = alert.getInfo();
-    return alert.getSlackInfoForTriggered(checkedResult)
-      .then(slackPayload => {
-        webHookPayload.status = 'triggered';
-        webHookPayload.result = checkedResult;
-        webHookPayload.triggered = Date.now();
-        const triggers = alert.getTriggers();
-        return this._processTriggers(triggers, emailPayload, webHookPayload, slackPayload);
-      });
+    return alert.getSlackInfoForTriggered(checkedResult).then(slackPayload => {
+      webHookPayload.status = "triggered";
+      webHookPayload.result = checkedResult;
+      webHookPayload.triggered = Date.now();
+      const triggers = alert.getTriggers();
+      return this._processTriggers(
+        triggers,
+        emailPayload,
+        webHookPayload,
+        slackPayload
+      );
+    });
   }
 
   sendCleared(alert) {
     debug(`alert cleared: id=${alert.getId()}`);
-    const emailPayload =
-      alert.getEmailInfoForCleared();
+    const emailPayload = alert.getEmailInfoForCleared();
     const webHookPayload = alert.getInfo();
-    return alert.getSlackInfoForCleared()
-      .then(slackPayload => {
-        webHookPayload.status = 'cleared';
-        webHookPayload.triggered = Date.now();
-        const triggers = alert.getTriggers();
-        return this._processTriggers(triggers, emailPayload, webHookPayload, slackPayload);
-      });
+    return alert.getSlackInfoForCleared().then(slackPayload => {
+      webHookPayload.status = "cleared";
+      webHookPayload.triggered = Date.now();
+      const triggers = alert.getTriggers();
+      return this._processTriggers(
+        triggers,
+        emailPayload,
+        webHookPayload,
+        slackPayload
+      );
+    });
   }
 
   _processTriggers(triggers, emailPayload, webHookPayload, slackPayload) {
@@ -72,13 +72,13 @@ export default class Messenger {
 
     triggers.forEach(trigger => {
       switch (trigger.type) {
-        case 'email':
+        case "email":
           const { subject, body } = emailPayload;
           trigger.params.addresses.forEach(address => {
             triggerPromises.push(this._sendEmail(address, subject, body));
           });
           break;
-        case 'webhook':
+        case "webhook":
           trigger.params.urls.forEach(url => {
             let payload = webHookPayload;
             if (isSlackUrl(url)) {
@@ -102,7 +102,7 @@ export default class Messenger {
     }
 
     const mailOptions = {
-      from: 'Kadira Alerts <alerts-noreply@kadira.io>',
+      from: "Kadira Alerts <alerts-noreply@kadira.io>",
       to: address,
       subject,
       text: fromString(message),
@@ -114,13 +114,12 @@ export default class Messenger {
         Fiber(() => {
           return Email.send(mailOptions);
         }).run();
-        } catch(error) {
-          retry(error);
-        };
-      }, retryOptions);
+      } catch (error) {
+        retry(error);
+      }
+    }, retryOptions);
 
-    return retryPromise
-    .catch(err => {
+    return retryPromise.catch(err => {
       error(`Sending email failed: ${err.stack}`);
     });
   }
@@ -132,12 +131,10 @@ export default class Messenger {
     }
 
     let retryPromise = promiseRetry(retry => {
-      return this.post({uri, json: params})
-        .catch(retry);
+      return HTTP.post(uri, { uri, data: params }).catch(retry);
     }, retryOptions);
 
-    let promise = retryPromise
-    .catch(err => {
+    let promise = retryPromise.catch(err => {
       error(`Calling webhook failed: ${err.stack}`);
     });
 

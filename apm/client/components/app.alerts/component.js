@@ -7,11 +7,11 @@ var component = FlowComponents.define("app.alerts", function() {
 
 component.state.listingMode = function() {
   var mode = this.get("mode");
-  return (mode === "list");
+  return mode === "list";
 };
 
 component.action.showDialog = function() {
-  FlowRouter.setQueryParams({action: "alerts"});
+  FlowRouter.setQueryParams({ action: "alerts" });
 };
 
 component.action.closeDialog = function() {
@@ -19,9 +19,9 @@ component.action.closeDialog = function() {
 };
 
 component.action.showEditor = function(mode, alertId) {
-  if(mode === "create") {
-    FlowRouter.setQueryParams({mode: mode});
-  } else if(mode === "update") {
+  if (mode === "create") {
+    FlowRouter.setQueryParams({ mode: mode });
+  } else if (mode === "update") {
     FlowRouter.setQueryParams({
       mode: mode,
       alertId: alertId
@@ -30,7 +30,7 @@ component.action.showEditor = function(mode, alertId) {
 };
 
 component.action.showList = function() {
-  FlowRouter.setQueryParams({mode: "list", alertId: null});
+  FlowRouter.setQueryParams({ mode: "list", alertId: null });
 };
 
 component.action.toggleEnable = function(alertId) {
@@ -42,7 +42,7 @@ component.action.createAlert = function(alertInfo) {
   alertInfo.meta.appId = appId;
   return new Promise(function(resolve, reject) {
     Meteor.call("alerts.create", alertInfo, function(err) {
-      if(!err) {
+      if (!err) {
         growlAlert.success("Alert Created Successfully.");
         resolve();
       } else {
@@ -58,7 +58,7 @@ component.action.updateAlert = function(alertId, alertInfo) {
   alertInfo.meta.appId = appId;
   return new Promise(function(resolve, reject) {
     Meteor.call("alerts.update", appId, alertId, alertInfo, function(err) {
-      if(!err) {
+      if (!err) {
         growlAlert.success("Alert Updated Successfully.");
         resolve();
       } else {
@@ -71,7 +71,7 @@ component.action.updateAlert = function(alertId, alertInfo) {
 
 component.action.deleteAlert = function(alertId) {
   Meteor.call("alerts.delete", alertId, function(err) {
-    if(!err) {
+    if (!err) {
       growlAlert.success("Alert Deleted Successfully.");
     } else {
       growlAlert.error(err.reason);
@@ -80,29 +80,29 @@ component.action.deleteAlert = function(alertId) {
 };
 
 component.prototype.closeDialog = function() {
-  FlowRouter.setQueryParams({action: null, alert: null, mode: null});
+  FlowRouter.setQueryParams({ action: null, alert: null, mode: null });
 };
 
 component.prototype.handleForceCreateMode = function() {
   var canShow = this.get("canShow");
-  if(!canShow) {
+  if (!canShow) {
     return;
   }
 
   var appId = FlowRouter.getParam("appId");
-  var count = Alerts.find({"meta.appId": appId}).count();
-  if(count === 0) {
-    FlowRouter.setQueryParams({mode: "create"});
+  var count = Alerts.find({ "meta.appId": appId }).count();
+  if (count === 0) {
+    FlowRouter.setQueryParams({ mode: "create" });
     this.set("forceCreateMode", true);
   } else {
-    FlowRouter.setQueryParams({mode: "list"});
+    FlowRouter.setQueryParams({ mode: "list" });
     this.set("forceCreateMode", false);
   }
 };
 
 component.prototype.setModalVisibility = function() {
   var action = FlowRouter.getQueryParam("action");
-  if(action === "alerts") {
+  if (action === "alerts") {
     this.set("canShow", true);
   } else {
     this.set("canShow", false);
