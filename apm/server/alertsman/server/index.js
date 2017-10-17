@@ -59,7 +59,7 @@ const handleFire = async alert => {
   const lastCheckedMinute = new Date(now - diff);
   await alertsStore.updateLastCheckedDate(alert, lastCheckedMinute);
 
-  debug.log(
+  debug(
     `tick firing success=${checkedResult.success} armed=${armed} id=${alertId}`
   );
   if (!armed && checkedResult.success) {
