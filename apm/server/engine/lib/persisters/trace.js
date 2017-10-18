@@ -1,13 +1,13 @@
 var collectionPersister = require('./collection');
 var zlib = require('zlib');
 var mongo = require('mongodb');
-var _  = require('underscore');
+var _ = require('underscore');
 var async = require('async');
 
 module.exports = function tracerPersister(collName, mongoDb) {
   return function(app, traces, callback) {
     async.map(traces, deflateEvents, function(err, compressedTraces) {
-      if(err) {
+      if (err) {
         console.error('error when deflating events JSON:', err.message);
       } else {
         collectionPersister(collName, mongoDb)(app, compressedTraces, callback);
@@ -22,7 +22,7 @@ function deflateEvents(trace, callback) {
   // this is used to reduce the data usage for the events
   var eventsJsonString = JSON.stringify(trace.events || []);
   zlib.deflate(eventsJsonString, function(err, convertedJson) {
-    if(err) {
+    if (err) {
       callback(err);
     } else {
       trace.events = new mongo.Binary(convertedJson);

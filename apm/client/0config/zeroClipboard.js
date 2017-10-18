@@ -1,6 +1,6 @@
-import ZeroClipboard from 'zeroclipboard'
+import ZeroClipboard from 'zeroclipboard';
 
 ZeroClipboard.config({
-  swfPath: "/vendor/ZeroClipboard.swf",
-  moviePath: "/vendor/ZeroClipboard.swf"
+  swfPath: '/vendor/ZeroClipboard.swf',
+  moviePath: '/vendor/ZeroClipboard.swf'
 });

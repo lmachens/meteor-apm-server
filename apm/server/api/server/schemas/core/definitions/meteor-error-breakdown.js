@@ -1,18 +1,18 @@
-import { pickResolution } from "./utils/resolution";
-import { setDefinition } from "./";
+import { pickResolution } from './utils/resolution';
+import { setDefinition } from './';
 
-setDefinition("meteor-error-breakdown", async function(dl, args) {
+setDefinition('meteor-error-breakdown', async function(dl, args) {
   const resolution = pickResolution(args);
   const query = {
-    "value.appId": String(args.appId),
-    "value.res": resolution,
-    "value.startTime": {
+    'value.appId': String(args.appId),
+    'value.res': resolution,
+    'value.startTime': {
       $gte: new Date(args.startTime),
       $lt: new Date(args.endTime)
     }
   };
   if (args.type) {
-    query["value.type"] = args.type;
+    query['value.type'] = args.type;
   }
 
   const pipes = [];
@@ -20,19 +20,19 @@ setDefinition("meteor-error-breakdown", async function(dl, args) {
   const groupDef = {};
   const sortDef = { sortedValue: args.sortOrder };
 
-  groupDef._id = { name: "$value.name", type: "$value.type" };
-  projectDef.type = "$_id.type";
-  projectDef.message = "$_id.name";
+  groupDef._id = { name: '$value.name', type: '$value.type' };
+  projectDef.type = '$_id.type';
+  projectDef.message = '$_id.name';
 
-  groupDef.count = { $sum: "$value.count" };
-  projectDef.count = "$count";
-  groupDef.lastSeenTime = { $max: "$value.startTime" };
-  projectDef.lastSeenTime = "$lastSeenTime";
+  groupDef.count = { $sum: '$value.count' };
+  projectDef.count = '$count';
+  groupDef.lastSeenTime = { $max: '$value.startTime' };
+  projectDef.lastSeenTime = '$lastSeenTime';
 
   groupDef.sortedValue = {
-    $sum: "$value." + args.sortField
+    $sum: '$value.' + args.sortField
   };
-  projectDef.sortedValue = "$" + args.sortField;
+  projectDef.sortedValue = '$' + args.sortField;
 
   pipes.push({ $match: query });
   pipes.push({ $group: groupDef });
@@ -40,16 +40,16 @@ setDefinition("meteor-error-breakdown", async function(dl, args) {
   pipes.push({ $sort: sortDef });
   pipes.push({ $limit: 50 });
 
-  const breakdowns = await dl.aggregate("errorMetrics", pipes);
+  const breakdowns = await dl.aggregate('errorMetrics', pipes);
   const errorsMetaMap = await _getErrorsMeta(breakdowns, args.appId, dl);
 
   switch (args.status) {
-    case "all_without_ignored":
-      return _excludeByStatus(breakdowns, errorsMetaMap, "ignored");
-    case "new":
-    case "ignored":
-    case "fixing":
-    case "fixed":
+    case 'all_without_ignored':
+      return _excludeByStatus(breakdowns, errorsMetaMap, 'ignored');
+    case 'new':
+    case 'ignored':
+    case 'fixing':
+    case 'fixed':
       return _includeByStatus(breakdowns, errorsMetaMap, args.status);
     default:
       return _getAllErrors(breakdowns, errorsMetaMap);
@@ -63,13 +63,13 @@ async function _getErrorsMeta(data = [], appId, dl) {
 
   const query = { appId };
 
-  query["$or"] = [];
+  query['$or'] = [];
   data.forEach(function(d) {
-    query["$or"].push({ name: d.message, type: d.type });
+    query['$or'].push({ name: d.message, type: d.type });
   });
   const options = { fields: { name: 1, status: 1, type: 1 } };
 
-  const errorsMeta = await dl.findOnAppDb("errorsMeta", query, options);
+  const errorsMeta = await dl.findOnAppDb('errorsMeta', query, options);
 
   const filteredErrorsMetaMap = {};
   errorsMeta.forEach(function(m) {
@@ -116,7 +116,7 @@ function _setStatusForError(found, error) {
   if (found) {
     error.status = found.status;
   } else {
-    error.status = "new";
+    error.status = 'new';
   }
   return error;
 }

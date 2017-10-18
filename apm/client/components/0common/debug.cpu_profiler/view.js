@@ -1,35 +1,35 @@
-Template["debug.cpuProfiler"].events({
-  "change .pf-file-upload-btn": function(e) {
+Template['debug.cpuProfiler'].events({
+  'change .pf-file-upload-btn': function(e) {
     e.preventDefault();
-    FlowComponents.callAction("fetchProfile");
-  },
-  
-  "click button.reset-cpu-profiler": function(e) {
-    e.preventDefault();
-    FlowComponents.callAction("resetCpuProfiler");
+    FlowComponents.callAction('fetchProfile');
   },
 
-  "click .dropzone": function(e) {
+  'click button.reset-cpu-profiler': function(e) {
     e.preventDefault();
-    $(".pf-file-upload-btn").trigger("click");
+    FlowComponents.callAction('resetCpuProfiler');
   },
 
-  "dragenter .dropzone": function(e) {
+  'click .dropzone': function(e) {
+    e.preventDefault();
+    $('.pf-file-upload-btn').trigger('click');
+  },
+
+  'dragenter .dropzone': function(e) {
     e.stopPropagation();
     e.preventDefault();
-    $(".dropzone").addClass("dragenter");
+    $('.dropzone').addClass('dragenter');
   },
 
-  "dragover .dropzone": function(e) {
+  'dragover .dropzone': function(e) {
     e.stopPropagation();
     e.preventDefault();
-    $(".dropzone").addClass("dragover");
+    $('.dropzone').addClass('dragover');
   },
 
-  "drop .dropzone": function(e) {
+  'drop .dropzone': function(e) {
     e.stopPropagation();
     e.preventDefault();
     var files = e.originalEvent.dataTransfer.files;
-    FlowComponents.callAction("fetchProfile", files[0]);
+    FlowComponents.callAction('fetchProfile', files[0]);
   }
 });

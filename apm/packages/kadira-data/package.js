@@ -1,25 +1,26 @@
 Package.describe({
-  'summary': 'Fetch data from our Kadira Fetchman',
-  'name': 'local:kadira-data'
+  summary: 'Fetch data from our Kadira Fetchman',
+  name: 'local:kadira-data'
 });
 
 Npm.depends({
-  "lru-cache": "2.6.4"
+  'lru-cache': '2.6.4'
 });
 
 Package.onTest(function(api) {
   configurePackage(api);
 
-  api.addFiles([
-    'test/server/init.js',
-    'test/server/helpers.js',
-    'test/server/methods.js',
-    'test/server/publish.js',
-  ], ['server']);
+  api.addFiles(
+    [
+      'test/server/init.js',
+      'test/server/helpers.js',
+      'test/server/methods.js',
+      'test/server/publish.js'
+    ],
+    ['server']
+  );
 
-  api.addFiles([
-    'test/client/api.js'
-  ], ['client']);
+  api.addFiles(['test/client/api.js'], ['client']);
 
   api.use('tinytest');
   api.use('practicalmeteor:sinon@1.10.3_2');
@@ -48,21 +49,20 @@ function configurePackage(api) {
   api.use('local:permissions-manager');
   api.use('anti:i18n');
 
-  api.addFiles([
-    'lib/namespace.js',
-    'lib/ranges.js'
-  ]);
+  api.addFiles(['lib/namespace.js', 'lib/ranges.js']);
 
-  api.addFiles([
-    'lib/server/helpers.js',
-    'lib/server/api.js',
-    'lib/server/publish.js',
-    'lib/server/methods.js',
-  ], ['server']);
+  api.addFiles(
+    [
+      'lib/server/helpers.js',
+      'lib/server/api.js',
+      'lib/server/publish.js',
+      'lib/server/methods.js'
+    ],
+    ['server']
+  );
 
-  api.addFiles([
-    'client.browserify.js',
-    'lib/client/api.js',
-    'lib/client/flow_mixin.js'
-  ], ['client']);
+  api.addFiles(
+    ['client.browserify.js', 'lib/client/api.js', 'lib/client/flow_mixin.js'],
+    ['client']
+  );
 }

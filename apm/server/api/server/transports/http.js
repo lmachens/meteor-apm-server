@@ -1,4 +1,4 @@
-import {graphql} from 'graphql';
+import { graphql } from 'graphql';
 import auth from 'basic-auth';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -6,27 +6,24 @@ import LRU from 'lru-cache';
 import { renderGraphiQL } from 'express-graphql/dist/renderGraphiQL';
 import { getAdminToken, getAppToken, decodeToken } from '../authlayer';
 
-export const sendPong = function () {
-  return function (req, res) {
+export const sendPong = function() {
+  return function(req, res) {
     res.sendStatus(200);
   };
 };
 
-export const handleAuth = function (appDb) {
+export const handleAuth = function(appDb) {
   const apps = appDb.collection('apps');
 
   async function authenticate(req, res) {
-    if (!req.body ||
-        !req.body.appId ||
-        !req.body.appSecret ||
-        !req.body.schema) {
+    if (!req.body || !req.body.appId || !req.body.appSecret || !req.body.schema) {
       res.statusCode = 401;
       res.end('Missing appId, appSecret or schema');
       return;
     }
 
     // NOTE: using String(...) casting to avoid injections
-    const app = await apps.findOne({_id: String(req.body.appId)});
+    const app = await apps.findOne({ _id: String(req.body.appId) });
 
     if (!app || app.secret !== req.body.appSecret) {
       res.statusCode = 401;
@@ -41,13 +38,10 @@ export const handleAuth = function (appDb) {
     res.end(token);
   }
 
-  return [
-    bodyParser.json(),
-    authenticate,
-  ];
+  return [bodyParser.json(), authenticate];
 };
 
-export const loadExplorer = function (authSecret, schemas) {
+export const loadExplorer = function(authSecret, schemas) {
   const middlewares = [
     cookieParser(),
     bodyParser.json(),
@@ -58,13 +52,13 @@ export const loadExplorer = function (authSecret, schemas) {
   return middlewares;
 };
 
-export const authenticate = function (authSecret, schemas) {
+export const authenticate = function(authSecret, schemas) {
   const authTokens = new LRU({
     max: 1000,
     maxAge: 1000 * 60 * 60 // 1hour
   });
 
-  return function (req, res, next) {
+  return function(req, res, next) {
     if (!schemas[req.params.schema]) {
       res.statusCode = 401;
       return res.send('Schema not found!');
@@ -105,26 +99,29 @@ export const authenticate = function (authSecret, schemas) {
   };
 };
 
-export const loadGraphiQL = function (schemas) {
-  return function (req, res) {
-    const rootValue = {token: req.token};
+export const loadGraphiQL = function(schemas) {
+  return function(req, res) {
+    const rootValue = { token: req.token };
     const schemaName = req.params.schema;
     const schema = schemas[schemaName];
 
     if (req.method === 'GET') {
-      const {query} = req.query;
-      let variables = (req.query.variables) ? req.query.variables : '{}';
+      const { query } = req.query;
+      let variables = req.query.variables ? req.query.variables : '{}';
       variables = JSON.parse(variables);
 
       graphql(schema, query, rootValue, variables).then(result => {
-        const html = renderGraphiQL({query, variables, result});
-        res.status(200).type('html').send(html);
+        const html = renderGraphiQL({ query, variables, result });
+        res
+          .status(200)
+          .type('html')
+          .send(html);
       });
 
       return;
     }
 
-    const {query, variables} = req.body;
+    const { query, variables } = req.body;
     graphql(schema, query, rootValue, variables).then(result => {
       res.send(result);
     });

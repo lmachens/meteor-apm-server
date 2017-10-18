@@ -1,11 +1,11 @@
-import IsMobile from 'ismobilejs'
+import IsMobile from 'ismobilejs';
 
-var component = FlowComponents.define("signIn", function(params) {
+var component = FlowComponents.define('signIn', function(params) {
   var options = params.options || {};
-  this.set("isSignUpPage", !!options.isSignUpPage);
-  this.set("isSignInPage", !!options.isSignInPage);
-  if(!options.isSignUpPage && !options.isSignInPage) {
-    this.set("isSignInPage", true);
+  this.set('isSignUpPage', !!options.isSignUpPage);
+  this.set('isSignInPage', !!options.isSignInPage);
+  if (!options.isSignUpPage && !options.isSignInPage) {
+    this.set('isSignInPage', true);
   }
 });
 
@@ -21,8 +21,8 @@ component.action.signInWithEmail = function(email, password) {
 
 component.prototype.signInWithMeteor = function() {
   var options = {};
-  if(IsMobile.any) {
-    options.loginStyle = "redirect";
+  if (IsMobile.any) {
+    options.loginStyle = 'redirect';
   }
 
   Meteor.loginWithMeteorDeveloperAccount(options, this.showError.bind(this));
@@ -37,12 +37,12 @@ component.action.signUpWithMeteor = function() {
 };
 
 component.prototype.resetView = function() {
-  this.set("error", null);
+  this.set('error', null);
 };
 
 component.prototype.showError = function(error) {
-  if(error) {
-    this.set("error", error.reason);
+  if (error) {
+    this.set('error', error.reason);
   } else {
     this.resetView();
   }

@@ -1,4 +1,4 @@
-var component = FlowComponents.define("pieChart", function(params) {
+var component = FlowComponents.define('pieChart', function(params) {
   this.values = params.values;
   this.chartOptions = this.getChartOptions();
 
@@ -16,16 +16,16 @@ component.prototype.render = function() {
   });
 
   this.chartOptions.series[0].data = valueList;
-  this.$(".pie-chart").highcharts(this.chartOptions);
+  this.$('.pie-chart').highcharts(this.chartOptions);
 };
 
 component.prototype.getChartOptions = function() {
   var chartOptions = {
-    chart:{
+    chart: {
       backgroundColor: null
     },
     title: {
-      text: ""
+      text: ''
     },
     credits: {
       enabled: false
@@ -33,18 +33,20 @@ component.prototype.getChartOptions = function() {
     plotOptions: {
       pie: {
         allowPointSelect: true,
-        cursor: "pointer",
-        animation:false
-      },
+        cursor: 'pointer',
+        animation: false
+      }
     },
     tooltip: {
-      pointFormat: "<b>{point.y}</b>",
+      pointFormat: '<b>{point.y}</b>',
       hideDelay: 0
     },
-    series: [{
-      type: "pie",
-      data:[]
-    }]
+    series: [
+      {
+        type: 'pie',
+        data: []
+      }
+    ]
   };
 
   return chartOptions;

@@ -1,5 +1,4 @@
-var component =
-FlowComponents.define("restimeDistribution", function(props) {
+var component = FlowComponents.define('restimeDistribution', function(props) {
   this.traceListDataKey = props.traceListDataKey;
   this.histogramDataKey = props.histogramDataKey;
 
@@ -9,12 +8,12 @@ FlowComponents.define("restimeDistribution", function(props) {
   this.rangeFn = props.rangeFn;
   this.hostFn = props.hostFn;
   this.selectionFn = props.selectionFn;
-  this.set("traceType", props.traceType);
+  this.set('traceType', props.traceType);
 
   this.autorun(function() {
     var selectedTime = this.selectedTimeFn();
-    this.set("selectedTime", selectedTime);
-    if(selectedTime) {
+    this.set('selectedTime', selectedTime);
+    if (selectedTime) {
       this.loadTraces(selectedTime);
       this.loadResTimeDistribution(selectedTime);
     }
@@ -36,13 +35,13 @@ component.prototype.loadTraces = function(selectedTime, extraArgs) {
   };
   _.extend(args, extraArgs);
 
-  this.kdFindTraces("traceList", this.traceListDataKey, args);
+  this.kdFindTraces('traceList', this.traceListDataKey, args);
 };
 
 component.prototype.loadResTimeDistribution = function(selectedTime) {
   var appId = this.appIdFn();
   var range = this.rangeFn();
-  if(this.histogramDataKey) {
+  if (this.histogramDataKey) {
     var args = {
       time: new Date(selectedTime),
       host: this.hostFn(),
@@ -51,15 +50,15 @@ component.prototype.loadResTimeDistribution = function(selectedTime) {
       selection: this.selectionFn()
     };
 
-    this.kdFindMetrics("histogram", this.histogramDataKey, args);
+    this.kdFindMetrics('histogram', this.histogramDataKey, args);
   }
 };
 
 component.state.selectedTraces = function() {
-  var handle = this.kdTraces("traceList");
-  if(handle.error()) {
-    console.log("traceList error:", handle.error());
-  } else if(handle.ready()) {
+  var handle = this.kdTraces('traceList');
+  if (handle.error()) {
+    console.log('traceList error:', handle.error());
+  } else if (handle.ready()) {
     var traces = handle.fetch() || [];
     return traces;
   } else {
@@ -69,16 +68,16 @@ component.state.selectedTraces = function() {
 
 component.state.isTracesLoading = function() {
   var isSelectedTime = !!this.selectedTimeFn();
-  return isSelectedTime && !this.kdTraces("traceList").ready();
+  return isSelectedTime && !this.kdTraces('traceList').ready();
 };
 
-component.state.prettifiedTraceDate = function () {
+component.state.prettifiedTraceDate = function() {
   var traceDate = this.selectedTimeFn();
   return this.prettifyDate(traceDate);
 };
 
 component.state.isHistogramLoading = function() {
-  return !this.kdMetrics("histogram").ready();
+  return !this.kdMetrics('histogram').ready();
 };
 
 component.state.histogramData = function() {
@@ -89,9 +88,9 @@ component.state.histogramData = function() {
     binSize: 100
   };
 
-  var handle = this.kdMetrics("histogram");
+  var handle = this.kdMetrics('histogram');
 
-  if(handle.ready()) {
+  if (handle.ready()) {
     _.each(handle.fetch(), function(point) {
       histogram.bins.push([point._id, point.count]);
     });

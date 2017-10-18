@@ -1,7 +1,5 @@
 UrlStateManager = {};
-UrlStateManager._globalQueryParams = [
-  "range", "date", "host"
-];
+UrlStateManager._globalQueryParams = ['range', 'date', 'host'];
 UrlStateManager._globalQueryParamsStore = {};
 UrlStateManager._currentSubSectionStore = {};
 UrlStateManager._subSectionStateStore = {};
@@ -16,8 +14,7 @@ UrlStateManager.triggers.saveGlobalQueryParams = function(context) {
   var appId = context.params.appId;
   var queryStore = getQueryParamStore(appId);
 
-  var FilteredQueryParams =
-    _.pick(context.queryParams, UrlStateManager._globalQueryParams);
+  var FilteredQueryParams = _.pick(context.queryParams, UrlStateManager._globalQueryParams);
 
   _.each(UrlStateManager._globalQueryParams, function(param) {
     delete queryStore[param];
@@ -45,18 +42,18 @@ UrlStateManager.triggers.saveSubSection = function(context) {
 };
 
 UrlStateManager.triggers.saveLastPath = function(context) {
-  Meteor._localStorage.setItem("lastPath_" + context.params.appId,context.path);
+  Meteor._localStorage.setItem('lastPath_' + context.params.appId, context.path);
 };
 
 UrlStateManager.pathTo = function(appId, section, subSection, defaults) {
   // if no section, we will try to get the path from local storage
   // if there is no path in localStorage, we'll use defaults.
-  if(!section) {
-    var path = Meteor._localStorage.getItem("lastPath_" + appId);
-    if(!path) {
-      var params = {appId: appId};
+  if (!section) {
+    var path = Meteor._localStorage.getItem('lastPath_' + appId);
+    if (!path) {
+      var params = { appId: appId };
       _.extend(params, defaults);
-      path = FlowRouter.path("app", params);
+      path = FlowRouter.path('app', params);
     }
 
     return path;
@@ -64,14 +61,14 @@ UrlStateManager.pathTo = function(appId, section, subSection, defaults) {
 
   // when we have a section
   var queryParams = {};
-  var params = {appId: appId};
+  var params = { appId: appId };
   params.section = section;
 
   var currentSubSectionStore = getCurrentSubSectionStore(appId);
   var currentSubSection = currentSubSectionStore[section];
 
   // getting subSection
-  if(!subSection && currentSubSection) {
+  if (!subSection && currentSubSection) {
     subSection = currentSubSection;
   }
 
@@ -83,19 +80,19 @@ UrlStateManager.pathTo = function(appId, section, subSection, defaults) {
   _.extend(queryParams, subSectionStates.queryParams || {});
 
   // load global queryParams
-   _.each(UrlStateManager._globalQueryParams, function(param) {
+  _.each(UrlStateManager._globalQueryParams, function(param) {
     delete queryParams[param];
   });
   _.extend(queryParams, getQueryParamStore(appId));
 
-  var path = FlowRouter.path("app", params, queryParams);
+  var path = FlowRouter.path('app', params, queryParams);
 
   return path;
 };
 
 function getCurrentSubSectionStore(appId) {
   var subSectionStore = UrlStateManager._currentSubSectionStore[appId];
-  if(!subSectionStore) {
+  if (!subSectionStore) {
     subSectionStore = UrlStateManager._currentSubSectionStore[appId] = {};
   }
 
@@ -104,7 +101,7 @@ function getCurrentSubSectionStore(appId) {
 
 function getQueryParamStore(appId) {
   var queryStore = UrlStateManager._globalQueryParamsStore[appId];
-  if(!queryStore) {
+  if (!queryStore) {
     queryStore = UrlStateManager._globalQueryParamsStore[appId] = {};
   }
 
@@ -113,17 +110,17 @@ function getQueryParamStore(appId) {
 
 function getStatesForSubSection(appId, section, subSection) {
   var forApp = UrlStateManager._subSectionStateStore[appId];
-  if(!forApp) {
+  if (!forApp) {
     forApp = UrlStateManager._subSectionStateStore[appId] = {};
   }
 
   var forSection = forApp[section];
-  if(!forSection) {
+  if (!forSection) {
     forSection = forApp[section] = {};
   }
 
   var forSubSection = forSection[subSection];
-  if(!forSubSection) {
+  if (!forSubSection) {
     forSubSection = forSection[subSection] = {};
   }
 

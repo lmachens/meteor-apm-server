@@ -1,18 +1,17 @@
 KadiraData._coll = new Mongo.Collection('kadira-data-collection');
-KadiraData._metricsCache = new LRU({max: 1000});
-KadiraData._traceCache = new LRU({max: 1000});
+KadiraData._metricsCache = new LRU({ max: 1000 });
+KadiraData._traceCache = new LRU({ max: 1000 });
 
 KadiraData.fetchTraces = function(dataKey, args, callback) {
   var hash = KadiraData._generateHash(dataKey, args);
-  var allowToGetFromCache = 
+  var allowToGetFromCache =
     // if there is no time, it's okay to get from the cache
     !args.time ||
     // older than 5 minutes. It's possible to change recent data
     // so, we should not rely on the cache
-    (Date.now() - args.time.getTime()) > 1000 * 60 * 5;
+    Date.now() - args.time.getTime() > 1000 * 60 * 5;
 
-
-  if(allowToGetFromCache && KadiraData._traceCache.peek(hash)) {
+  if (allowToGetFromCache && KadiraData._traceCache.peek(hash)) {
     var traces = KadiraData._traceCache.get(hash);
     // it's possible to alter the content inside traces
     // so, it should not affect others
@@ -22,7 +21,7 @@ KadiraData.fetchTraces = function(dataKey, args, callback) {
   }
 
   Meteor.call('kadiraData.fetchTraces', dataKey, args, function(err, traces) {
-    if(err) {
+    if (err) {
       callback(err);
     } else {
       KadiraData._traceCache.set(hash, traces);
@@ -42,7 +41,7 @@ KadiraData.observeMetrics = function observeMetrics(dataKey, args, callbacks) {
   var dataVariable = new ReactiveVar(null);
 
   // send the data in the cache
-  if(KadiraData._metricsCache.peek(hash)) {
+  if (KadiraData._metricsCache.peek(hash)) {
     var data = KadiraData._metricsCache.get(hash);
 
     // We need to run callback after we've returned the handler.
@@ -51,9 +50,9 @@ KadiraData.observeMetrics = function observeMetrics(dataKey, args, callbacks) {
     Meteor.defer(function() {
       callbacks.onReady();
     });
-  
-    if(args.realtime) {
-      // this is realtime query, we need to set the data immediately and 
+
+    if (args.realtime) {
+      // this is realtime query, we need to set the data immediately and
       // let the query DB.
       dataVariable.set(data);
       readyState.set(true);
@@ -62,7 +61,7 @@ KadiraData.observeMetrics = function observeMetrics(dataKey, args, callbacks) {
       var handle = {
         ready: function() {
           return true;
-        }, 
+        },
         stop: function() {},
         fetch: function() {
           return EJSON.clone(data);
@@ -72,7 +71,7 @@ KadiraData.observeMetrics = function observeMetrics(dataKey, args, callbacks) {
     }
   }
 
-  var dataHandle = KadiraData._coll.find({_id: id}).observe({
+  var dataHandle = KadiraData._coll.find({ _id: id }).observe({
     added: function(doc) {
       KadiraData._metricsCache.set(hash, doc.data);
       dataVariable.set(doc.data);
@@ -88,7 +87,7 @@ KadiraData.observeMetrics = function observeMetrics(dataKey, args, callbacks) {
     onReady: function() {
       readyState.set(true);
       // if not realtime we dont need to watch for data changes
-      if(!args.realtime){
+      if (!args.realtime) {
         dataHandle.stop();
       }
       callbacks.onReady();
@@ -111,6 +110,6 @@ KadiraData.observeMetrics = function observeMetrics(dataKey, args, callbacks) {
 };
 
 KadiraData._generateHash = function _generateHash(dataKey, args) {
-  var payload = {dataKey: dataKey, args: args};
+  var payload = { dataKey: dataKey, args: args };
   return JSON.stringify(payload);
 };

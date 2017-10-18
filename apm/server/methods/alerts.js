@@ -1,5 +1,5 @@
 Meteor.methods({
-  "alerts.create": function(alertInfo) {
+  'alerts.create': function(alertInfo) {
     check(alertInfo, Object);
 
     alertInfo.meta.enabled = true;
@@ -7,26 +7,26 @@ Meteor.methods({
 
     alertInfo.meta.created = new Date();
     alertInfo.meta.createdBy = this.userId;
-    
+
     Alerts.insert(alertInfo);
   }
 });
 
 Meteor.methods({
-  "alerts.update": function(appId, alertId, alertInfo) {
+  'alerts.update': function(appId, alertId, alertInfo) {
     check(appId, String);
     check(alertId, String);
     check(alertInfo, Match.Any);
 
-    var alert = Alerts.findOne({_id: alertId});
+    var alert = Alerts.findOne({ _id: alertId });
 
     // 'enabled' field is not sent when updating from createAlert view.
-    if(alertInfo.meta.enabled === undefined) {
+    if (alertInfo.meta.enabled === undefined) {
       alertInfo.meta.enabled = alert.meta.enabled;
     }
 
     // duration must be less than 60mins
-    if(alertInfo.rule.duration > 3600000) {
+    if (alertInfo.rule.duration > 3600000) {
       alertInfo.rule.duration = 3600000;
     }
 
@@ -35,29 +35,29 @@ Meteor.methods({
     // user should not be allowed to set 'created', 'createdBy' fields
     alertInfo.meta.created = alert.meta.created;
     alertInfo.meta.createdBy = alert.meta.createdBy;
-    Alerts.update({_id: alertId}, {$set: alertInfo});
+    Alerts.update({ _id: alertId }, { $set: alertInfo });
     return true;
   }
 });
 
 Meteor.methods({
-  "alerts.delete": function(alertId) {
+  'alerts.delete': function(alertId) {
     check(alertId, String);
-    return Alerts.remove({"_id": alertId});
+    return Alerts.remove({ _id: alertId });
   }
 });
 
 Meteor.methods({
-  "alerts.toggleEnable": function(alertId) {
+  'alerts.toggleEnable': function(alertId) {
     check(alertId, String);
-    var alert = Alerts.findOne({"_id": alertId});
+    var alert = Alerts.findOne({ _id: alertId });
     var enabled;
-    if(alert.meta.enabled) {
+    if (alert.meta.enabled) {
       enabled = false;
     } else {
       enabled = true;
     }
-    Alerts.update({_id: alertId}, {$set: {"meta.enabled":enabled}});
+    Alerts.update({ _id: alertId }, { $set: { 'meta.enabled': enabled } });
     return true;
   }
 });

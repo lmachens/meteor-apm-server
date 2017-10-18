@@ -1,23 +1,42 @@
 PROVIDERS['pubsub'] = {
-  name: "pubsub",
+  name: 'pubsub',
   collection: PubMetrics,
   rawCollection: RawPubMetrics,
   scope: {
     FIELDS: [
-      'subs', 'unsubs', 'resTime', 'activeSubs', 'activeDocs',
-      'avgDocSize', 'avgObserverReuse', 'lifeTime', 'totalObserverHandlers',
-      'cachedObservers', 'createdObservers', 'deletedObservers', 'errors',
-      'polledDocuments', 'observerLifetime',
-      'oplogUpdatedDocuments', 'oplogInsertedDocuments', 'oplogDeletedDocuments',
-      'liveAddedDocuments', 'liveChangedDocuments', 'liveRemovedDocuments',
-      'initiallyAddedDocuments', 'polledDocSize', 'fetchedDocSize',
-      'initiallyFetchedDocSize', 'liveFetchedDocSize', 'initiallySentMsgSize',
+      'subs',
+      'unsubs',
+      'resTime',
+      'activeSubs',
+      'activeDocs',
+      'avgDocSize',
+      'avgObserverReuse',
+      'lifeTime',
+      'totalObserverHandlers',
+      'cachedObservers',
+      'createdObservers',
+      'deletedObservers',
+      'errors',
+      'polledDocuments',
+      'observerLifetime',
+      'oplogUpdatedDocuments',
+      'oplogInsertedDocuments',
+      'oplogDeletedDocuments',
+      'liveAddedDocuments',
+      'liveChangedDocuments',
+      'liveRemovedDocuments',
+      'initiallyAddedDocuments',
+      'polledDocSize',
+      'fetchedDocSize',
+      'initiallyFetchedDocSize',
+      'liveFetchedDocSize',
+      'initiallySentMsgSize',
       'liveSentMsgSize'
     ]
   },
   map: function() {
     var timeWithSeconds = new Date(this.value.startTime);
-    var timeSeconds = timeWithSeconds % (PROFILE.timeRange);
+    var timeSeconds = timeWithSeconds % PROFILE.timeRange;
     var time = new Date(timeWithSeconds - timeSeconds);
 
     var key = {
@@ -62,7 +81,7 @@ PROVIDERS['pubsub'] = {
       });
 
       reducedValues._expires = reducedValues._expires || new Date();
-      if(values._expires.getTime() > reducedValues._expires.getTime()) {
+      if (values._expires.getTime() > reducedValues._expires.getTime()) {
         reducedValues._expires = values._expires;
       }
     });

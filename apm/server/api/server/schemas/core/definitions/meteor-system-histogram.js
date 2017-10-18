@@ -1,11 +1,11 @@
-import { histogram } from "./utils/aggregation";
-import { setDefinition } from "./";
+import { histogram } from './utils/aggregation';
+import { setDefinition } from './';
 
-setDefinition("meteor-system-histogram", async function(dl, args) {
+setDefinition('meteor-system-histogram', async function(dl, args) {
   const query = {
-    "value.appId": String(args.appId),
-    "value.res": "1min",
-    "value.startTime": {
+    'value.appId': String(args.appId),
+    'value.res': '1min',
+    'value.startTime': {
       $gte: new Date(args.startTime),
       $lt: new Date(args.endTime)
     }
@@ -13,7 +13,7 @@ setDefinition("meteor-system-histogram", async function(dl, args) {
 
   // optional query parameters
   if (args.host !== undefined) {
-    query["value.host"] = String(args.host);
+    query['value.host'] = String(args.host);
   }
 
   const buildStages = METRICS[args.metric];
@@ -24,7 +24,7 @@ setDefinition("meteor-system-histogram", async function(dl, args) {
   // create the pipeline
   const pipes = [].concat([{ $match: query }], buildStages(args));
 
-  const bins = await dl.aggregate("systemMetrics", pipes);
+  const bins = await dl.aggregate('systemMetrics', pipes);
   return { binSize: args.binSize, bins };
 });
 
@@ -32,14 +32,14 @@ setDefinition("meteor-system-histogram", async function(dl, args) {
 // These functions must return an array of pipeline stages.
 const METRICS = {
   pcpu(args) {
-    return histogram(args.binSize, "$value.pcpu", "$value.count");
+    return histogram(args.binSize, '$value.pcpu', '$value.count');
   },
 
   memory(args) {
-    return histogram(args.binSize, "$value.memory", "$value.count");
+    return histogram(args.binSize, '$value.memory', '$value.count');
   },
 
   sessions(args) {
-    return histogram(args.binSize, "$value.sessions", "$value.count");
+    return histogram(args.binSize, '$value.sessions', '$value.count');
   }
 };

@@ -1,34 +1,34 @@
-describe("lib.validations.client", function() {
-  it("valid app name", function() {
+describe('lib.validations.client', function() {
+  it('valid app name', function() {
     // adopted from http://goo.gl/39IhWN
-    var appName = Math.random().toString(36).substring(7);
-    validateValue(appName, "checkAppName", true);
+    var appName = Math.random()
+      .toString(36)
+      .substring(7);
+    validateValue(appName, 'checkAppName', true);
   });
 
-  it("invalid app name", function() {
-    validateValue("&*(@&$*@$", "checkAppName", false);
-  });
-  
-  it("valid url", function() {
-    validateValue("http://meteorhacks.com", "checkUrl", true);
+  it('invalid app name', function() {
+    validateValue('&*(@&$*@$', 'checkAppName', false);
   });
 
-  it("invalid url", function() {
-    validateValue("www.meteorhacks.com", "checkUrl", false);
+  it('valid url', function() {
+    validateValue('http://meteorhacks.com', 'checkUrl', true);
   });
 
-  it("valid email", function() {
-    validateValue("pahan123@gmail.com", "checkEmail", true);
+  it('invalid url', function() {
+    validateValue('www.meteorhacks.com', 'checkUrl', false);
   });
 
-  it("invalid email", function() {
-    validateValue("111@$@$", "checkEmail", false);
-  });  
+  it('valid email', function() {
+    validateValue('pahan123@gmail.com', 'checkEmail', true);
+  });
+
+  it('invalid email', function() {
+    validateValue('111@$@$', 'checkEmail', false);
+  });
 });
 
-
 function validateValue(value, validator, expectedResult) {
-  
   var validate = function(resolve, reject, value, validator) {
     var validatorFunction = Validations[validator];
     validatorFunction(value, function(error, isValid) {

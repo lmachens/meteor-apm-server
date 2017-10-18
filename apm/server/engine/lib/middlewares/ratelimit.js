@@ -14,8 +14,8 @@ module.exports = function(config) {
     var data = req.body;
     var appId = req.appId;
 
-    if(!appId) {
-      console.warn("blocked due missing appId: ", req.url);
+    if (!appId) {
+      console.warn('blocked due missing appId: ', req.url);
       res.writeHead(401);
       res.end();
       return;
@@ -24,12 +24,12 @@ module.exports = function(config) {
     ratesPerApp[appId] = ratesPerApp[appId] || 0;
     ratesPerApp[appId]++;
 
-    if(ratesPerApp[appId] > config.limit) {
-      console.warn("blocked due to high throughput - appId: ", appId);
+    if (ratesPerApp[appId] > config.limit) {
+      console.warn('blocked due to high throughput - appId: ', appId);
       res.writeHead(429);
       res.end();
-    } else if (totalTraceLimitExceeds(data)){
-      console.warn("blocked due to high totalTraceLimit - appId: ", appId);
+    } else if (totalTraceLimitExceeds(data)) {
+      console.warn('blocked due to high totalTraceLimit - appId: ', appId);
       res.writeHead(430);
       res.end();
     } else {
@@ -38,12 +38,12 @@ module.exports = function(config) {
   };
 
   function totalTraceLimitExceeds(data) {
-    if(!data) {
+    if (!data) {
       return false;
     } else {
       var totalTraces = 0;
-      totalTraces += (data.methodRequests)? data.methodRequests.length: 0;
-      totalTraces += (data.pubRequests)? data.pubRequests.length: 0;
+      totalTraces += data.methodRequests ? data.methodRequests.length : 0;
+      totalTraces += data.pubRequests ? data.pubRequests.length : 0;
 
       return totalTraces > config.limitTotalTraces;
     }

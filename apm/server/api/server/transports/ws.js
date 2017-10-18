@@ -1,4 +1,4 @@
-import {graphql} from 'graphql';
+import { graphql } from 'graphql';
 
 /*
   Simple Protocol for sending GraphQL messages over WebSockets
@@ -85,8 +85,8 @@ import {graphql} from 'graphql';
   ```
 */
 
-export const handleConnection = function (authSecret, schema) {
-  return function (conn) {
+export const handleConnection = function(authSecret, schema) {
+  return function(conn) {
     const send = payload => {
       conn.send(JSON.stringify(payload));
     };
@@ -102,23 +102,23 @@ export const handleConnection = function (authSecret, schema) {
         // implement authentication
         if (parsedMessage.secret === authSecret) {
           conn.authenticated = true;
-          send({type: 'AUTHENTICATED'});
+          send({ type: 'AUTHENTICATED' });
         } else {
           conn.authenticated = false;
-          send({type: 'AUTHENTICATION_FAILED'});
+          send({ type: 'AUTHENTICATION_FAILED' });
         }
         return;
       }
 
       if (!conn.authenticated) {
-        send({type: 'NOT_AUTHENTICATED'});
+        send({ type: 'NOT_AUTHENTICATED' });
         conn.close();
       }
 
       if (parsedMessage.type === 'REQUEST') {
-        const {id, query, vars} = parsedMessage;
+        const { id, query, vars } = parsedMessage;
         const response = graphql(schema, query, null, vars || {});
-        response.then(({data, errors = []}) => {
+        response.then(({ data, errors = [] }) => {
           const payload = {
             type: 'RESPONSE',
             requestId: id,

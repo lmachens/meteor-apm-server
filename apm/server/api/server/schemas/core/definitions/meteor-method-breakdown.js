@@ -1,14 +1,14 @@
-import { divide, divideByRange } from "./utils/aggregation";
+import { divide, divideByRange } from './utils/aggregation';
 
-import { pickResolution } from "./utils/resolution";
-import { setDefinition } from "./";
+import { pickResolution } from './utils/resolution';
+import { setDefinition } from './';
 
-setDefinition("meteor-method-breakdown", async function(dl, args) {
+setDefinition('meteor-method-breakdown', async function(dl, args) {
   const resolution = pickResolution(args);
   const query = {
-    "value.appId": String(args.appId),
-    "value.res": resolution,
-    "value.startTime": {
+    'value.appId': String(args.appId),
+    'value.res': resolution,
+    'value.startTime': {
       $gte: new Date(args.startTime),
       $lt: new Date(args.endTime)
     }
@@ -16,30 +16,30 @@ setDefinition("meteor-method-breakdown", async function(dl, args) {
 
   // optional query parameters
   if (args.host !== undefined) {
-    query["value.host"] = String(args.host);
+    query['value.host'] = String(args.host);
   }
 
   let pipes = [];
   let projectDef = {};
-  let groupDef = { _id: "$value.name" };
+  let groupDef = { _id: '$value.name' };
 
-  groupDef.throughput = { $sum: "$value.count" };
-  projectDef.throughput = divideByRange("$throughput", args);
+  groupDef.throughput = { $sum: '$value.count' };
+  projectDef.throughput = divideByRange('$throughput', args);
   let sortDef = { sortedValue: args.sortOrder };
 
-  projectDef.name = "$_id";
-  projectDef.sortedValue = "$" + args.sortField;
+  projectDef.name = '$_id';
+  projectDef.sortedValue = '$' + args.sortField;
   switch (args.sortField) {
-    case "count":
-      groupDef.sortedValue = { $sum: "$value.count" };
-      projectDef.sortedValue = divideByRange("$sortedValue", args);
+    case 'count':
+      groupDef.sortedValue = { $sum: '$value.count' };
+      projectDef.sortedValue = divideByRange('$sortedValue', args);
       break;
-    case "sentMsgSize":
-    case "fetchedDocSize":
+    case 'sentMsgSize':
+    case 'fetchedDocSize':
       groupDef.sortedValue = {
-        $sum: "$value." + args.sortField
+        $sum: '$value.' + args.sortField
       };
-      projectDef.sortedValue = "$sortedValue";
+      projectDef.sortedValue = '$sortedValue';
       break;
     default:
       calculateTotalResTime(args.sortField);
@@ -53,12 +53,12 @@ setDefinition("meteor-method-breakdown", async function(dl, args) {
 
   function calculateTotalResTime(field) {
     groupDef.total = {
-      $sum: { $multiply: ["$value." + field, "$value.count"] }
+      $sum: { $multiply: ['$value.' + field, '$value.count'] }
     };
-    groupDef.samples = { $sum: "$value.count" };
-    projectDef.sortedValue = divide("$total", "$samples", true);
+    groupDef.samples = { $sum: '$value.count' };
+    projectDef.sortedValue = divide('$total', '$samples', true);
   }
 
-  const result = await dl.aggregate("methodsMetrics", pipes);
+  const result = await dl.aggregate('methodsMetrics', pipes);
   return result;
 });

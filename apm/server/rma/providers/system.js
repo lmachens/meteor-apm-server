@@ -1,43 +1,50 @@
 PROVIDERS['system'] = {
-  name: "system",
+  name: 'system',
   collection: SystemMetrics,
   rawCollection: RawSystemMetrics,
   scope: {
     // fixme: fields in AVERAGING_FIELDS must also appear in SUMMING_FIELDS
     SUMMING_FIELDS: [
-      'sessions', 'eventLoopTime', 'eventLoopCount', 'totalTime',
-      'memory', 'loadAverage', 'pcpu', 'cputime',
-      'newSessions', 'gcScavengeCount', 'gcScavengeDuration',
-      'gcFullCount', 'gcFullDuration', 'pctEvloopBlock'
-    ],
-    AVERAGING_FIELDS: [
-      'memory', 'loadAverage', 'sessions', 'pcpu',
+      'sessions',
+      'eventLoopTime',
+      'eventLoopCount',
+      'totalTime',
+      'memory',
+      'loadAverage',
+      'pcpu',
+      'cputime',
+      'newSessions',
+      'gcScavengeCount',
+      'gcScavengeDuration',
+      'gcFullCount',
+      'gcFullDuration',
       'pctEvloopBlock'
-    ]
+    ],
+    AVERAGING_FIELDS: ['memory', 'loadAverage', 'sessions', 'pcpu', 'pctEvloopBlock']
   },
 
   getPipe: function() {
     var pipes = [];
-    var groupDef = {_id: {}};
-    var valueDef = {_id: {}, value: {}};
+    var groupDef = { _id: {} };
+    var valueDef = { _id: {}, value: {} };
 
-    ["appId", "host"].forEach(function(field) {
-      groupDef._id[field] = "$value." + field;
-      valueDef._id[field] = "$_id." + field;
+    ['appId', 'host'].forEach(function(field) {
+      groupDef._id[field] = '$value.' + field;
+      valueDef._id[field] = '$_id.' + field;
     });
 
     PROVIDER.scope.SUMMING_FIELDS.forEach(function(field) {
       var isAvgField = PROVIDER.scope.AVERAGING_FIELDS.indexOf(field) >= 0;
-      if(isAvgField) {
-        groupDef[field] = {$avg: "$value." + field};
+      if (isAvgField) {
+        groupDef[field] = { $avg: '$value.' + field };
       } else {
-        groupDef[field] = {$sum: "$value." + field};
+        groupDef[field] = { $sum: '$value.' + field };
       }
-      valueDef.value[field] = "$" + field;
+      valueDef.value[field] = '$' + field;
     });
 
-    pipes.push({$group: groupDef});
-    pipes.push({$project: valueDef})
+    pipes.push({ $group: groupDef });
+    pipes.push({ $project: valueDef });
 
     return pipes;
   },
@@ -45,7 +52,7 @@ PROVIDERS['system'] = {
   map: function() {
     var self = this;
     var timeWithSeconds = new Date(this.value.startTime);
-    var timeSeconds = timeWithSeconds % (PROFILE.timeRange);
+    var timeSeconds = timeWithSeconds % PROFILE.timeRange;
     var time = new Date(timeWithSeconds - timeSeconds);
     var appId = this.value.appId;
     var host = this.value.host;
@@ -61,11 +68,11 @@ PROVIDERS['system'] = {
 
     var value = {
       count: 1,
-      _expires: self.value._expires || new Date(Date.now() + 1000*60*60*24*2),
+      _expires: self.value._expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       subShard: self.value.subShard || 0
     };
 
-    SUMMING_FIELDS.forEach(function (field) {
+    SUMMING_FIELDS.forEach(function(field) {
       value[field] = self.value[field] || 0;
     });
 
@@ -77,14 +84,14 @@ PROVIDERS['system'] = {
     var reducedVal = {};
 
     values.forEach(function(value) {
-      SUMMING_FIELDS.forEach(function(field){
+      SUMMING_FIELDS.forEach(function(field) {
         reducedVal[field] = reducedVal[field] || 0;
         reducedVal[field] += value[field];
       });
       reducedVal.count = reducedVal.count || 0;
       reducedVal.count += value.count;
       reducedVal._expires = reducedVal._expires || new Date();
-      if(value._expires.getTime() > reducedVal._expires.getTime()) {
+      if (value._expires.getTime() > reducedVal._expires.getTime()) {
         reducedVal._expires = value._expires;
       }
     });
@@ -108,23 +115,23 @@ PROVIDERS['system'] = {
       subShard: reducedVal.subShard || 0
     };
 
-    SUMMING_FIELDS.forEach(function (field){
+    SUMMING_FIELDS.forEach(function(field) {
       finalValue[field] = reducedVal[field];
     });
-    AVERAGING_FIELDS.forEach(function (field){
-      finalValue[field] = finalValue[field]/reducedVal.count;
+    AVERAGING_FIELDS.forEach(function(field) {
+      finalValue[field] = finalValue[field] / reducedVal.count;
     });
 
     var currentTime = Date.now();
-    var defaultExpire = new Date(currentTime + 1000*60*60*24*2);
+    var defaultExpire = new Date(currentTime + 1000 * 60 * 60 * 24 * 2);
     finalValue._expires = reducedVal._expires || defaultExpire;
 
     var lifeTime = finalValue._expires.getTime() - currentTime;
-    if(PROFILE.name === '3hour' && lifeTime < 1000*60*60*24*60) {
-      var minimumExpire = new Date(currentTime + 1000*60*60*24*60);
+    if (PROFILE.name === '3hour' && lifeTime < 1000 * 60 * 60 * 24 * 60) {
+      var minimumExpire = new Date(currentTime + 1000 * 60 * 60 * 24 * 60);
       finalValue._expires = minimumExpire;
     }
 
     return finalValue;
   }
-}
+};

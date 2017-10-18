@@ -7,9 +7,9 @@ PROFILES['1min'] = {
   //because of time diffrences in the Browser and RMA server
   reverseMillis: 60 * 1000 * 1.5,
   //time range assigned for this profile
-  timeRange: 60* 1000,
+  timeRange: 60 * 1000,
   // only process back
-  maxAllowedRange:  1000 * 60 * 60 * 2, // 3hours
+  maxAllowedRange: 1000 * 60 * 60 * 2, // 3hours
   //used to filter resolutions for the input
   resolution: null
 };

@@ -1,24 +1,24 @@
 /* eslint max-len:0 */
 
-import * as urlShortener from "./url_shortener";
+import * as urlShortener from './url_shortener';
 
-import AlertsStore from "./alerts_store";
-import Messenger from "./messenger";
-import MetricsStore from "./metrics/store";
-import MongoOplog from "mongo-oplog";
-import RuleEngine from "./rules/engine";
-import TickManager from "./tick_manager";
-import parseMongoUrl from "parse-mongo-url";
-import { processAlone } from "./utils";
+import AlertsStore from './alerts_store';
+import Messenger from './messenger';
+import MetricsStore from './metrics/store';
+import MongoOplog from 'mongo-oplog';
+import RuleEngine from './rules/engine';
+import TickManager from './tick_manager';
+import parseMongoUrl from 'parse-mongo-url';
+import { processAlone } from './utils';
 
-const debug = require("debug")("alertsman:index");
+const debug = require('debug')('alertsman:index');
 const { info, error } = console;
 
 const {
   NODE_ENV,
   MONGO_URL,
   MONGO_OPLOG_URL,
-  KADIRA_API_URL = "http://root:secret@localhost:7007/core",
+  KADIRA_API_URL = 'http://root:secret@localhost:7007/core',
   MAIL_URL,
   TICK_TRIGGER_INTERVAL = 1000 * 10,
   MESSENGER_LOGGING_ONLY,
@@ -42,8 +42,8 @@ const messenger = new Messenger(MAIL_URL, {
 urlShortener.setGoogleDevKey(GOOGLE_DEV_KEY);
 
 alertsStore
-  .on("enabled", alert => tickManager.register(alert))
-  .on("disabled", alert => tickManager.unregister(alert));
+  .on('enabled', alert => tickManager.register(alert))
+  .on('disabled', alert => tickManager.unregister(alert));
 
 const handleFire = async alert => {
   const endTime = Date.now();
@@ -59,15 +59,13 @@ const handleFire = async alert => {
   const lastCheckedMinute = new Date(now - diff);
   await alertsStore.updateLastCheckedDate(alert, lastCheckedMinute);
 
-  debug(
-    `tick firing success=${checkedResult.success} armed=${armed} id=${alertId}`
-  );
+  debug(`tick firing success=${checkedResult.success} armed=${armed} id=${alertId}`);
   if (!armed && checkedResult.success) {
     // We don't need to wait until the trigger sends
     // to mark the alert as armed.
     messenger.sendTriggered(alert, checkedResult);
     await alertsStore.setArmed(alert, true);
-    console.log("sendTriggered");
+    console.log('sendTriggered');
     return;
   }
 
@@ -76,12 +74,12 @@ const handleFire = async alert => {
     // to mark the alert as cleared.
     messenger.sendCleared(alert, checkedResult);
     await alertsStore.setArmed(alert, false);
-    console.log("sendCleared");
+    console.log('sendCleared');
     return;
   }
 };
 
-tickManager.on("fire", async alert => {
+tickManager.on('fire', async alert => {
   await processAlone(alert, async () => {
     try {
       await handleFire(alert);
@@ -92,4 +90,4 @@ tickManager.on("fire", async alert => {
 });
 
 alertsStore.load();
-info("Kadira Alertsman started");
+info('Kadira Alertsman started');

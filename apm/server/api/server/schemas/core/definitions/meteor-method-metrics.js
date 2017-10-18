@@ -1,13 +1,13 @@
-import { averageMetric, countMetric, rateMetric } from "./utils/aggregation";
-import { formatMetrics, getGroupId } from "./utils/timeseries";
+import { averageMetric, countMetric, rateMetric } from './utils/aggregation';
+import { formatMetrics, getGroupId } from './utils/timeseries';
 
-import { setDefinition } from "./";
+import { setDefinition } from './';
 
-setDefinition("meteor-method-metrics", async function(dl, args) {
+setDefinition('meteor-method-metrics', async function(dl, args) {
   const query = {
-    "value.appId": String(args.appId),
-    "value.res": String(args.resolution),
-    "value.startTime": {
+    'value.appId': String(args.appId),
+    'value.res': String(args.resolution),
+    'value.startTime': {
       $gte: new Date(args.startTime),
       $lt: new Date(args.endTime)
     }
@@ -15,10 +15,10 @@ setDefinition("meteor-method-metrics", async function(dl, args) {
 
   // optional query parameters
   if (args.host !== undefined) {
-    query["value.host"] = String(args.host);
+    query['value.host'] = String(args.host);
   }
   if (args.method !== undefined) {
-    query["value.name"] = String(args.method);
+    query['value.name'] = String(args.method);
   }
 
   const buildStages = METRICS[args.metric];
@@ -27,32 +27,30 @@ setDefinition("meteor-method-metrics", async function(dl, args) {
   }
 
   // create the pipeline
-  const pipes = [].concat([{ $match: query }], buildStages(args), [
-    { $sort: { "_id.time": 1 } }
-  ]);
+  const pipes = [].concat([{ $match: query }], buildStages(args), [{ $sort: { '_id.time': 1 } }]);
 
-  const result = await dl.aggregate("methodsMetrics", pipes);
+  const result = await dl.aggregate('methodsMetrics', pipes);
   return formatMetrics(args, result);
 });
 
 const METRICS = {
   responseTime(args) {
     const groupId = getGroupId(args);
-    return averageMetric("$value.total", "$value.count", groupId);
+    return averageMetric('$value.total', '$value.count', groupId);
   },
 
   throughput(args) {
     const groupId = getGroupId(args);
-    return rateMetric("$value.count", args.resolution, groupId);
+    return rateMetric('$value.count', args.resolution, groupId);
   },
 
   sentMsgSize(args) {
     const groupId = getGroupId(args);
-    return countMetric("$value.sentMsgSize", groupId);
+    return countMetric('$value.sentMsgSize', groupId);
   },
 
   fetchedDocSize(args) {
     const groupId = getGroupId(args);
-    return countMetric("$value.fetchedDocSize", groupId);
+    return countMetric('$value.fetchedDocSize', groupId);
   }
 };

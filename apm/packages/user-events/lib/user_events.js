@@ -9,20 +9,19 @@ UserEventsImpl.prototype.track = function(category, type, data) {
   this.emit('event', category, type, data);
 };
 
-if(Meteor.isClient) {
-  
+if (Meteor.isClient) {
   // If this called inside a computation, only one of ensureState for a
   // state will be allowed
   UserEventsImpl.prototype.ensureState = function(state, firstFireCallback) {
     var self = this;
     this._withUserStatus(function(user) {
-      if(!user.states[state]) {
+      if (!user.states[state]) {
         self.track('user', state);
-        if(firstFireCallback) {
+        if (firstFireCallback) {
           firstFireCallback();
         }
 
-        var stateCreatedAt = (new Date()).getTime();
+        var stateCreatedAt = new Date().getTime();
         Meteor.call('userEvents.changeState', state, stateCreatedAt);
       }
     });
@@ -46,7 +45,7 @@ if(Meteor.isClient) {
       // server makes sure, we always send states object
       // even for an user without no states, so we can use that
       // to check whether subscription with states has came to the client
-      if(user && user.states) {
+      if (user && user.states) {
         callback(user);
         computation.stop();
         childComputation = null;
@@ -55,12 +54,12 @@ if(Meteor.isClient) {
 
     // cleaning up childComputation, if that's inside a computation
     // and that's invalidating
-    if(Deps.active && childComputation) {
+    if (Deps.active && childComputation) {
       Deps.onInvalidate(function() {
         childComputation.stop();
       });
     }
-  }; 
+  };
 }
 
 UserEvents = new UserEventsImpl();

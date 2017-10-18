@@ -1,12 +1,7 @@
-import {
-  GraphQLFloat,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLFloat, GraphQLObjectType, GraphQLString } from 'graphql';
 
 import MeteorErrorClientInfo from './MeteorErrorClientInfo';
 import MeteorServerTrace from './MeteorServerTrace';
-
 
 export default new GraphQLObjectType({
   name: 'MeteorErrorTrace',
@@ -15,29 +10,29 @@ export default new GraphQLObjectType({
     id: {
       type: GraphQLString,
       description: 'TODO description',
-      resolve: root => root._id,
+      resolve: root => root._id
     },
     host: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     time: {
       type: GraphQLFloat,
       description: 'TODO description',
-      resolve: root => root.startTime,
+      resolve: root => root.startTime
     },
     message: {
       type: GraphQLString,
       description: 'TODO description',
-      resolve: root => root.name,
+      resolve: root => root.name
     },
     type: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     subType: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     info: {
       type: MeteorErrorClientInfo,
@@ -45,11 +40,11 @@ export default new GraphQLObjectType({
     },
     stacks: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     trace: {
       type: MeteorServerTrace,
-      description: 'TODO description',
-    },
-  }),
+      description: 'TODO description'
+    }
+  })
 });

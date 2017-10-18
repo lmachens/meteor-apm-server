@@ -13,11 +13,11 @@ export default class MetricsStore {
   // For now, we'll hit our API with HTTP
   // Later on, we can WS for efficiency
   getMetrics(alert, startTime, endTime) {
-    const {appId} = alert.getInfo();
-    const query = this._buildGraphQLQuery(alert.getMetric(), appId, startTime,
-      endTime, 'RES_1MIN');
+    const { appId } = alert.getInfo();
+    const query = this._buildGraphQLQuery(alert.getMetric(), appId, startTime, endTime, 'RES_1MIN');
 
-    const result = this._client.query(query)
+    const result = this._client
+      .query(query)
       .then(_ => this._graphqlResponseToStreams(_, startTime, 60 * 1000));
 
     return result;
@@ -67,7 +67,7 @@ export default class MetricsStore {
   _graphqlResponseToStreams(result, start, resolution) {
     const hostsWithPoints = result.metrics;
     const streamsByHost = {};
-    hostsWithPoints.forEach(({host, points}) => {
+    hostsWithPoints.forEach(({ host, points }) => {
       streamsByHost[host] = [];
       points.forEach((value, index) => {
         if (!value) {

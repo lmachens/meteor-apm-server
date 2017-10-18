@@ -3,24 +3,24 @@
 Validations = {};
 Validations.checkAppName = function(appName, callback) {
   var err;
-  if(!isAlphaNumeric(appName)) {
-    err = new Meteor.Error(403, i18n("validations.app_name_validation_failed"));
+  if (!isAlphaNumeric(appName)) {
+    err = new Meteor.Error(403, i18n('validations.app_name_validation_failed'));
   }
 
-  if(!(appName && appName.length <= 50)) {
-    err = new Meteor.Error(403, i18n("validations.app_name_too_long"));
+  if (!(appName && appName.length <= 50)) {
+    err = new Meteor.Error(403, i18n('validations.app_name_too_long'));
   }
   throwError(err, callback);
 };
 
-Validations.checkName = function(name){
+Validations.checkName = function(name) {
   return isAlphaNumeric(name);
 };
 
 Validations.checkUrl = function(url, callback) {
   var regex = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
   var isValid = regex.test(url);
-  var errorString = i18n("validations.url_validation_failed");
+  var errorString = i18n('validations.url_validation_failed');
   var err = isValid ? null : new Meteor.Error(403, errorString);
   throwError(err, callback);
 };
@@ -28,17 +28,17 @@ Validations.checkUrl = function(url, callback) {
 Validations.checkEmail = function(email, callback) {
   var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   var isValid = regex.test(email);
-  var errorString = i18n("validations.email_validation_failed");
+  var errorString = i18n('validations.email_validation_failed');
   var err = isValid ? null : new Meteor.Error(403, errorString);
   throwError(err, callback);
 };
 
 Validations.isValidEmailList = function(list) {
-  var listArr = list.split("\n");
+  var listArr = list.split('\n');
   var retVal = true;
   for (var i = 0; i < listArr.length; i++) {
     var email = $.trim(listArr[i]);
-    if (!isValidEmail(email)){
+    if (!isValidEmail(email)) {
       retVal = false;
     }
   }
@@ -46,14 +46,14 @@ Validations.isValidEmailList = function(list) {
 };
 
 Validations.isValidUrllList = function(list) {
-  var listArr = list.split("\n");
+  var listArr = list.split('\n');
   var retVal = true;
   for (var i = 0; i < listArr.length; i++) {
     var url = $.trim(listArr[i]);
-    if (!isValidUrl(url)){
+    if (!isValidUrl(url)) {
       retVal = false;
     }
-  } 
+  }
   return retVal;
 };
 
@@ -73,9 +73,9 @@ function isAlphaNumeric(string) {
 }
 
 function throwError(error, callback) {
-  if(Meteor.isServer && error) {
+  if (Meteor.isServer && error) {
     throw error;
-  } else if(Meteor.isClient){
+  } else if (Meteor.isClient) {
     var result = error ? false : true;
     callback(error, result);
   }

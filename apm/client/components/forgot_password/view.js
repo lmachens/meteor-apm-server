@@ -1,6 +1,6 @@
 Template.forgotPassword.events({
-  "submit #forgotPassword": function(e) {
+  'submit #forgotPassword': function(e) {
     e.preventDefault();
-    FlowComponents.callAction("forgotPassword");
+    FlowComponents.callAction('forgotPassword');
   }
 });

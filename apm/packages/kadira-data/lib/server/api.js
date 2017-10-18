@@ -2,14 +2,13 @@ KadiraData._metricDefinitions = {};
 KadiraData._traceDefinitions = {};
 
 KadiraData._metricsPollInterval = {
-  "1min": 1000 * 30,
-  "30min": 1000 * 60 * 10,
-  "3hour": 1000 * 60 * 30
+  '1min': 1000 * 30,
+  '30min': 1000 * 60 * 10,
+  '3hour': 1000 * 60 * 30
 };
 KadiraData._transportCollection = 'kadira-data-collection';
 
-KadiraData.defineMetrics =
-function define(dataKey, collection, pipeHandler, filters) {
+KadiraData.defineMetrics = function define(dataKey, collection, pipeHandler, filters) {
   KadiraData._metricDefinitions[dataKey] = {
     collection: collection,
     pipeHandler: pipeHandler,
@@ -17,8 +16,7 @@ function define(dataKey, collection, pipeHandler, filters) {
   };
 };
 
-KadiraData.defineTraces =
-function define(dataKey, collection, pipeHandler, filters) {
+KadiraData.defineTraces = function define(dataKey, collection, pipeHandler, filters) {
   KadiraData._traceDefinitions[dataKey] = {
     collection: collection,
     pipeHandler: pipeHandler,
@@ -28,29 +26,27 @@ function define(dataKey, collection, pipeHandler, filters) {
 
 KadiraData.getMetrics = function(dataKey, args, resolution, range) {
   var definition = KadiraData._metricDefinitions[dataKey];
-  if(!definition) {
+  if (!definition) {
     var message = 'There is no such publish definition for dataKey: ' + dataKey;
     throw new Meteor.Error('404', message);
   }
   var query = {
     'value.res': resolution,
     // args.appId is now an array
-    'value.appId': {$in: args.appId}
+    'value.appId': { $in: args.appId }
   };
 
-  if(args.realtime) {
-    query['value.startTime'] =
-      KadiraData._CalulateRealtimeDateRange(resolution, range);
+  if (args.realtime) {
+    query['value.startTime'] = KadiraData._CalulateRealtimeDateRange(resolution, range);
   } else {
-    query['value.startTime'] =
-      KadiraData._CalculateDateRange(args.time, range);
+    query['value.startTime'] = KadiraData._CalculateDateRange(args.time, range);
   }
 
-  if(args.host) {
+  if (args.host) {
     query['value.host'] = args.host;
   }
 
-  var newArgs = _.extend(_.clone(args), {query: query});
+  var newArgs = _.extend(_.clone(args), { query: query });
   var pipes = definition.pipeHandler(newArgs);
   const db = MongoInternals.defaultRemoteCollectionDriver().mongo.db;
   var coll = db.collection(definition.collection);
@@ -62,4 +58,3 @@ KadiraData.getMetrics = function(dataKey, args, resolution, range) {
   });
   return data;
 };
-

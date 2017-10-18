@@ -8,7 +8,7 @@ import {
   GraphQLBoolean,
   GraphQLList
 } from 'graphql';
-import {registerSchema} from '../../authlayer';
+import { registerSchema } from '../../authlayer';
 
 import Logic from './logic.js';
 
@@ -25,17 +25,17 @@ registerSchema('system', {
 
   checkAccess() {
     return true;
-  },
+  }
 });
 
 const MetricTypeEnum = new GraphQLEnumType({
   name: 'MetricType',
   description: 'TODO description',
   values: {
-    METHOD: {value: 'methodsMetrics'},
-    PUB: {value: 'pubMetrics'},
-    SYSTEM: {value: 'systemMetrics'},
-    ERROR: {value: 'errorMetrics'}
+    METHOD: { value: 'methodsMetrics' },
+    PUB: { value: 'pubMetrics' },
+    SYSTEM: { value: 'systemMetrics' },
+    ERROR: { value: 'errorMetrics' }
   }
 });
 
@@ -43,9 +43,9 @@ const MetricResolutionEnum = new GraphQLEnumType({
   name: 'MetricResolution',
   description: 'TODO description',
   values: {
-    RES_1MIN: {value: '1min'},
-    RES_30MIN: {value: '30min'},
-    RES_3HOUR: {value: '3hour'},
+    RES_1MIN: { value: '1min' },
+    RES_30MIN: { value: '30min' },
+    RES_3HOUR: { value: '3hour' }
   }
 });
 
@@ -78,9 +78,8 @@ const ResType = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLFloat)
         }
       },
-      resolve(res, {start, end}) {
-        return logic.getStatuses(
-          res.shard, res.collection, res.value, start, end);
+      resolve(res, { start, end }) {
+        return logic.getStatuses(res.shard, res.collection, res.value, start, end);
       }
     }
   }
@@ -102,7 +101,7 @@ const CollectionType = new GraphQLObjectType({
           type: new GraphQLNonNull(MetricResolutionEnum)
         }
       },
-      resolve(collection, {value}) {
+      resolve(collection, { value }) {
         return {
           shard: collection.shard,
           collection: collection.name,
@@ -126,7 +125,7 @@ const ShardType = new GraphQLObjectType({
           type: new GraphQLNonNull(MetricTypeEnum)
         }
       },
-      resolve(shard, {name}) {
+      resolve(shard, { name }) {
         return {
           shard: shard.name,
           name
@@ -152,8 +151,8 @@ const RootQuery = new GraphQLObjectType({
           type: new GraphQLNonNull(GraphQLString)
         }
       },
-      resolve(root, {name}) {
-        return {name};
+      resolve(root, { name }) {
+        return { name };
       }
     }
   }
@@ -162,5 +161,5 @@ const RootQuery = new GraphQLObjectType({
 export function loadSchema(config) {
   logic = new Logic(config);
 
-  return new GraphQLSchema({query: RootQuery});
+  return new GraphQLSchema({ query: RootQuery });
 }

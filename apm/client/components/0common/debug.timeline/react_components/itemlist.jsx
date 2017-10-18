@@ -1,5 +1,5 @@
 TimelineComponent.ItemList = React.createClass({
-  displayName: "TimelineComponent.ItemList",
+  displayName: 'TimelineComponent.ItemList',
   propTypes: {
     // array of items
     items: React.PropTypes.array.isRequired,
@@ -9,26 +9,27 @@ TimelineComponent.ItemList = React.createClass({
   },
   _getItemName(item) {
     var itemName = item.name;
-    if(itemName.length > 25) {
+    if (itemName.length > 25) {
       itemName = itemName.substring(0, 22) + ' ..';
     }
-    
+
     return itemName;
   },
   _buildItem(item) {
-    var spanClassName = "type-label type-" + item.type;
+    var spanClassName = 'type-label type-' + item.type;
 
     return (
-      <li 
+      <li
         key={item.key}
-        className={item.className} 
-        onClick={TimelineComponent.actions.selectItem.bind(null, item.key)}>
-          <span className={spanClassName}>{item.type}</span> {this._getItemName(item)}
+        className={item.className}
+        onClick={TimelineComponent.actions.selectItem.bind(null, item.key)}
+      >
+        <span className={spanClassName}>{item.type}</span> {this._getItemName(item)}
       </li>
     );
   },
   render() {
-    return (<ul>{this.props.items.map(this._buildItem)}</ul>);
+    return <ul>{this.props.items.map(this._buildItem)}</ul>;
   }
 });
 

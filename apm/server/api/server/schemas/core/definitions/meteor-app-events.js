@@ -1,8 +1,8 @@
 /* eslint require-yield: 0 */
 
-import { setDefinition } from "./";
+import { setDefinition } from './';
 
-setDefinition("meteor-app-events", async function(dl, args) {
+setDefinition('meteor-app-events', async function(dl, args) {
   const handlerFn = handlers[args.type];
   if (!handlerFn) {
     throw new Error(`Event type ${args.type} is not implemented.`);
@@ -13,10 +13,10 @@ setDefinition("meteor-app-events", async function(dl, args) {
 
 const handlers = {};
 
-handlers["deployment"] = async function(dl, args) {
+handlers['deployment'] = async function(dl, args) {
   const query = {
-    "value.appId": String(args.appId),
-    "value.startTime": {
+    'value.appId': String(args.appId),
+    'value.startTime': {
       $gte: new Date(args.startTime),
       $lt: new Date(args.endTime)
     }
@@ -24,11 +24,11 @@ handlers["deployment"] = async function(dl, args) {
 
   // optional query parameters
   if (args.host !== undefined) {
-    query["value.host"] = String(args.host);
+    query['value.host'] = String(args.host);
   }
 
-  const options = { sort: [["value.startTime", "asc"]] };
-  const results = await dl.find("appStats", query, options);
+  const options = { sort: [['value.startTime', 'asc']] };
+  const results = await dl.find('appStats', query, options);
 
   return results.map(doc => {
     return {

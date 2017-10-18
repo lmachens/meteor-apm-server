@@ -3,8 +3,14 @@ var uuid = require('uuid');
 var expire = require('./_expire');
 
 var ERROR_TRACES_FIELDS = [
-  'appId', 'name', 'type', 'startTime',
-  'subType', 'info', 'stacks', 'trace',
+  'appId',
+  'name',
+  'type',
+  'startTime',
+  'subType',
+  'info',
+  'stacks',
+  'trace',
   'source' // deprecated
 ];
 
@@ -14,19 +20,19 @@ var MAXIMUM_ARGS_LENGTH_ERROR = '--- argument size exceeds limit ---';
 module.exports = function(data) {
   var ttl = expire.getTTL(data.app);
 
-  if(data.errors) {
+  if (data.errors) {
     return data.errors.map(formatTraces);
   } else {
     return null;
-  };
+  }
 
-  function formatTraces (_trace) {
+  function formatTraces(_trace) {
     var trace = _.pick(_trace, ERROR_TRACES_FIELDS);
-    if(typeof trace.name !== 'string') {
+    if (typeof trace.name !== 'string') {
       trace.name = JSON.stringify(trace.name);
     }
 
-    if(trace.name) {
+    if (trace.name) {
       trace.name = trace.name.substring(0, 300);
     }
 
@@ -43,7 +49,7 @@ module.exports = function(data) {
     trace.type = String(trace.type).slice(0, 50);
     trace.subType = String(trace.subType).slice(0, 50);
 
-    if(trace.source) {
+    if (trace.source) {
       trace.subType = String(trace.type).slice(0, 50);
       trace.type = String(trace.source).slice(0, 50);
       trace.source = null;
@@ -53,17 +59,17 @@ module.exports = function(data) {
   }
 
   function formatStack(stack) {
-    if(stack) {
+    if (stack) {
       // replace owner args with error if it's bigger than allowed size
-      if(stack.ownerArgs && Array.isArray(stack.ownerArgs)) {
+      if (stack.ownerArgs && Array.isArray(stack.ownerArgs)) {
         stack.ownerArgs = stack.ownerArgs.map(validate);
       }
 
       // replace args inside events if it's bigger than allowed size
-      if(stack.events && Array.isArray(stack.events)) {
-        stack.events.forEach(function (event) {
-          for(var key in event) {
-            if(event.hasOwnProperty(key)) {
+      if (stack.events && Array.isArray(stack.events)) {
+        stack.events.forEach(function(event) {
+          for (var key in event) {
+            if (event.hasOwnProperty(key)) {
               event[key] = validate(event[key]);
             }
           }
@@ -71,16 +77,15 @@ module.exports = function(data) {
       }
 
       // replace args inside events if it's bigger than allowed size
-      if(stack.info && Array.isArray(stack.info)) {
-        stack.info.forEach(function (info) {
-          for(var key in info) {
-            if(info.hasOwnProperty(key)) {
+      if (stack.info && Array.isArray(stack.info)) {
+        stack.info.forEach(function(info) {
+          for (var key in info) {
+            if (info.hasOwnProperty(key)) {
               info[key] = validate(info[key]);
             }
           }
         });
       }
-
     } else {
       // invalid stack. This is extremely weird
       console.error('Invalid stack', stack);
@@ -91,12 +96,12 @@ module.exports = function(data) {
     var stringified = JSON.stringify(value);
 
     // replace values larger than allowed size with a message
-    if(stringified.length > MAXIMUM_ARGS_LENGTH) {
+    if (stringified.length > MAXIMUM_ARGS_LENGTH) {
       return MAXIMUM_ARGS_LENGTH_ERROR;
     }
 
     // user submitted values can cause errors when saving on db
-    if(typeof value === 'object') {
+    if (typeof value === 'object') {
       return stringified;
     }
 

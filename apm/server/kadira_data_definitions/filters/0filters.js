@@ -1,9 +1,8 @@
-var zlib = Npm.require("zlib");
+var zlib = Npm.require('zlib');
 
 KadiraDataFilters = {};
 
 KadiraDataFilters.rateFilterForBreakdown = function(rateFields) {
-
   var rateFieldsMap = {};
   rateFields.forEach(function(field) {
     rateFieldsMap[field] = true;
@@ -12,7 +11,7 @@ KadiraDataFilters.rateFilterForBreakdown = function(rateFields) {
   return function(data, args) {
     var divideAmount = rangeToMinutes(args.range);
     return data.map(function(item) {
-      if(rateFieldsMap[args.sortBy]) {
+      if (rateFieldsMap[args.sortBy]) {
         item.sortedValue /= divideAmount;
       }
 
@@ -25,14 +24,13 @@ KadiraDataFilters.rateFilterForBreakdown = function(rateFields) {
 };
 
 KadiraDataFilters.rateFilterForCharts = function(rateFields) {
-
   return function(data, args) {
-    var resolution = args.query["value.res"];
+    var resolution = args.query['value.res'];
 
     var divideAmount = getTimeInterval(resolution) / (1000 * 60);
     return data.map(function(item) {
       rateFields.forEach(function(field) {
-        if(item[field]) {
+        if (item[field]) {
           item[field] /= divideAmount;
         }
       });
@@ -42,12 +40,11 @@ KadiraDataFilters.rateFilterForCharts = function(rateFields) {
 };
 
 KadiraDataFilters.divideByRange = function(divideFields) {
-
   return function(data, args) {
     var divideAmount = rangeToMinutes(args.range);
     return data.map(function(item) {
       divideFields.forEach(function(field) {
-        if(item[field]) {
+        if (item[field]) {
           item[field] /= divideAmount;
         }
       });
@@ -56,16 +53,15 @@ KadiraDataFilters.divideByRange = function(divideFields) {
   };
 };
 
-
 KadiraDataFilters.roundTo = function(keys, decimalPoints) {
-  if(!(keys instanceof Array)) {
+  if (!(keys instanceof Array)) {
     keys = [keys];
   }
 
   return function(data) {
     return data.map(function(item) {
       keys.forEach(function(key) {
-        if(item[key]) {
+        if (item[key]) {
           item[key] = parseFloat(item[key].toFixed(decimalPoints));
         }
       });
@@ -77,7 +73,7 @@ KadiraDataFilters.roundTo = function(keys, decimalPoints) {
 KadiraDataFilters.toPct = function(decimalPoints) {
   return function(data) {
     return data.map(function(item) {
-      item.pcpu = parseFloat((item.pcpu).toFixed(decimalPoints));
+      item.pcpu = parseFloat(item.pcpu.toFixed(decimalPoints));
       return item;
     });
   };
@@ -85,7 +81,7 @@ KadiraDataFilters.toPct = function(decimalPoints) {
 
 KadiraDataFilters.decriptTrace = function decriptTrace(data) {
   var decriptedData = data.map(function(item) {
-    if(item.compressed) {
+    if (item.compressed) {
       return Meteor.wrapAsync(_unzipTrace)(item);
     } else {
       return item;
@@ -97,14 +93,14 @@ KadiraDataFilters.decriptTrace = function decriptTrace(data) {
 
 function _unzipTrace(trace, callback) {
   zlib.unzip(trace.events.value(true), function(err, eventJsonString) {
-    if(err) {
+    if (err) {
       callback(err);
     } else {
       var events = JSON.parse(eventJsonString.toString());
       // converting at dataString to date object
       // while at the compression, date object will became a date string
       trace.events = events.map(function(e) {
-        if(e.at) {
+        if (e.at) {
           e.at = new Date(e.at);
         }
         return e;
@@ -118,13 +114,13 @@ function _unzipTrace(trace, callback) {
 KadiraDataFilters.addZeros = function(metrics) {
   return function(data, args) {
     var query = args.query;
-    var startTime = new Date(query["value.startTime"]["$gte"]).getTime();
-    var endTime = new Date(query["value.startTime"]["$lt"]).getTime();
-    var resolution = query["value.res"];
+    var startTime = new Date(query['value.startTime']['$gte']).getTime();
+    var endTime = new Date(query['value.startTime']['$lt']).getTime();
+    var resolution = query['value.res'];
     var timeInterval = getTimeInterval(resolution);
     var expectedCount = Math.round((endTime - startTime) / timeInterval);
     var newData = [];
-    if(args.groupByHost) {
+    if (args.groupByHost) {
       var hostsData = getHostsData(data);
       var newHostsData = {};
       for (var host in hostsData) {
@@ -156,7 +152,7 @@ KadiraDataFilters.addZeros = function(metrics) {
       }
 
       var unSortedHostsData = _.flatten(_.values(newHostsData), true);
-      newData = _.sortBy(unSortedHostsData, function (d) {
+      newData = _.sortBy(unSortedHostsData, function(d) {
         return d._id.time.getTime();
       });
     } else {
@@ -183,29 +179,28 @@ KadiraDataFilters.addZeros = function(metrics) {
     }
 
     return newData;
-
   };
 };
 
 KadiraDataFilters._addZeroPoints = function(newData, args) {
-  args.timeDiff = args.addtoFront ? - args.timeDiff : args.timeDiff;
+  args.timeDiff = args.addtoFront ? -args.timeDiff : args.timeDiff;
   for (var j = 1; j <= args.zeroPointsCount; j++) {
-    var newPointTime = new Date(args.timeStamp + (args.timeDiff * j));
-    var point = {_id: {time: newPointTime}};
-    if(args.host) {
+    var newPointTime = new Date(args.timeStamp + args.timeDiff * j);
+    var point = { _id: { time: newPointTime } };
+    if (args.host) {
       point._id.host = args.host;
     }
 
     /* jshint ignore:start */
-    args.metrics.forEach(function (metric) {
+    args.metrics.forEach(function(metric) {
       point[metric] = 0;
     });
 
     /* jshint ignore:end */
 
-    if(args.addtoFront){
+    if (args.addtoFront) {
       newData.unshift(point);
-    }else {
+    } else {
       newData.push(point);
     }
   }
@@ -215,9 +210,9 @@ KadiraDataFilters._addZeroPoints = function(newData, args) {
 function getHostsData(data) {
   var hostsData = {};
 
-  data.forEach(function (d) {
+  data.forEach(function(d) {
     var host = d._id.host;
-    if(host) {
+    if (host) {
       hostsData[host] = hostsData[host] || [];
       hostsData[host].push(d);
     }
@@ -227,9 +222,9 @@ function getHostsData(data) {
 
 function getTimeInterval(resolution) {
   var INTERVALS = {
-    "1min": 1 * 60 * 1000,
-    "30min": 30 * 60 * 1000,
-    "3hour": 3 * 3600 * 1000
+    '1min': 1 * 60 * 1000,
+    '30min': 30 * 60 * 1000,
+    '3hour': 3 * 3600 * 1000
   };
   return INTERVALS[resolution];
 }
@@ -238,9 +233,9 @@ function fillMiddlePoints(data, newData, args) {
   for (var i = 0; i < data.length; i++) {
     newData.push(data[i]);
     var j = i + 1;
-    if(j < data.length){
+    if (j < data.length) {
       var timeStamp = data[i]._id.time.getTime();
-      var pointTimeDiff =  data[i+1]._id.time.getTime() - timeStamp;
+      var pointTimeDiff = data[i + 1]._id.time.getTime() - timeStamp;
       var zeroMPointsCount = Math.floor(pointTimeDiff / args.timeInterval) - 1;
 
       var zeroPointArgs = {
@@ -257,7 +252,8 @@ function fillMiddlePoints(data, newData, args) {
 
 function fillFrontPoints(data, newData, args) {
   var firstPoint = data[0];
-  if(!firstPoint){ // empty data array
+  if (!firstPoint) {
+    // empty data array
     //addZeroPoints ignores first point, so push back start time
     var pointsStartTime = args.startTime - args.timeInterval;
     var emptyZeroPointArgs = {
@@ -270,8 +266,7 @@ function fillFrontPoints(data, newData, args) {
     KadiraDataFilters._addZeroPoints(newData, emptyZeroPointArgs);
   } else {
     var firstPointTime = data[0]._id.time.getTime();
-    var zeroFPointsCount =
-      Math.floor((firstPointTime - args.startTime) / args.timeInterval);
+    var zeroFPointsCount = Math.floor((firstPointTime - args.startTime) / args.timeInterval);
     var zeroPointArgs = {
       metrics: args.metrics,
       timeStamp: firstPointTime,
@@ -287,10 +282,9 @@ function fillFrontPoints(data, newData, args) {
 
 function fillEndPoints(data, newData, args) {
   var lastPoint = data[data.length - 1];
-  if(lastPoint) {
+  if (lastPoint) {
     var lastPointTime = lastPoint._id.time.getTime();
-    var zeroEPointsCount =
-      Math.floor((args.endTime - lastPointTime) / args.timeInterval);
+    var zeroEPointsCount = Math.floor((args.endTime - lastPointTime) / args.timeInterval);
     var zeroPointArgs = {
       metrics: args.metrics,
       timeStamp: lastPointTime,
@@ -303,7 +297,7 @@ function fillEndPoints(data, newData, args) {
 }
 
 KadiraDataFilters.convertObjectToId = function(data) {
-  data.forEach(function (d) {
+  data.forEach(function(d) {
     d._id = Random.id();
   });
   return data;
@@ -311,7 +305,7 @@ KadiraDataFilters.convertObjectToId = function(data) {
 
 KadiraDataFilters.limitSamples = function(limit) {
   return function(data) {
-    data.forEach(function (d) {
+    data.forEach(function(d) {
       d.samples.splice(limit);
     });
     return data;

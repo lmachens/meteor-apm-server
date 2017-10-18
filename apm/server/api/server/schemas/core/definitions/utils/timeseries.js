@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import {Stats} from 'fast-stats';
+import { Stats } from 'fast-stats';
 
 // TODO check whether this constant
 // can be moved to another module.
 export const RESOLUTION_MILLIS = {
   '1min': 1000 * 60,
   '30min': 1000 * 60 * 30,
-  '3hour': 1000 * 60 * 60 * 3,
+  '3hour': 1000 * 60 * 60 * 3
 };
 
 // gets the total number of minutes for resolution
@@ -39,7 +39,7 @@ export function fillEmptySlots(timeField, args, data) {
   }
 
   let dataIdx = 0;
-  for (let i = 0; i <= count;) {
+  for (let i = 0; i <= count; ) {
     const ts = start + i * millis;
 
     // no more real documents available
@@ -65,7 +65,7 @@ export function fillEmptySlots(timeField, args, data) {
 // This function is used by metric field definitions to create groupId
 // Not strictly related to time series but I'll leave it here for now.
 export function getGroupId(args) {
-  const groupId = {time: '$value.startTime'};
+  const groupId = { time: '$value.startTime' };
   if (args.groupByHost) {
     groupId.host = '$value.host';
   }
@@ -82,7 +82,7 @@ export function formatMetrics(args, result) {
   }
 
   if (!args.groupByHost) {
-    return [ formatMetricSet(args, null, result) ];
+    return [formatMetricSet(args, null, result)];
   }
 
   const groups = _.groupBy(result, '_id.host');
@@ -95,8 +95,8 @@ export function formatMetrics(args, result) {
 // This is also not strictly related to timeseries but leaving here.
 export function formatMetricSet(args, host, group) {
   const filled = fillEmptySlots('_id.time', args, group);
-  const points = filled.map(p => p ? p.value : p);
+  const points = filled.map(p => (p ? p.value : p));
   const values = points.filter(v => v !== null);
   const stats = new Stats().push(...values);
-  return {host, points, stats};
+  return { host, points, stats };
 }

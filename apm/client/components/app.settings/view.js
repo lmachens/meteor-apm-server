@@ -1,6 +1,6 @@
-Template["app.settings"].events({
-  "click #app-settings": function (e) {
+Template['app.settings'].events({
+  'click #app-settings': function(e) {
     e.preventDefault();
-    FlowComponents.callAction("show");
+    FlowComponents.callAction('show');
   }
 });

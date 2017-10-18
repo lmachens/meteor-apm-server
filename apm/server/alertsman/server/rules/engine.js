@@ -45,20 +45,18 @@
 import _ from 'lodash';
 
 export default class RulesEngine {
-  constructor() {
-
-  }
+  constructor() {}
 
   check(alert, streamsMap) {
     const checkedStreamsMap = {};
     const predicates = alert.getPredicates();
-    
+
     _.each(streamsMap, (stream, host) => {
       const validatedSteam = this._normalizePoints(alert, stream);
-      const checkedPointsStream = validatedSteam
-        .map(this._checkSinglePoint.bind(this, predicates.singlePoint));
-      const checkedWholeStream =
-        this._checkStream(predicates.singleStream, checkedPointsStream);
+      const checkedPointsStream = validatedSteam.map(
+        this._checkSinglePoint.bind(this, predicates.singlePoint)
+      );
+      const checkedWholeStream = this._checkStream(predicates.singleStream, checkedPointsStream);
 
       checkedStreamsMap[host] = checkedWholeStream;
     });
@@ -68,8 +66,7 @@ export default class RulesEngine {
 
   _normalizePoints(alert, stream) {
     const filterTimestamp = this._getFilterDate(alert).getTime();
-    const filteredStream = stream
-      .filter(({timestamp}) => timestamp >= filterTimestamp);
+    const filteredStream = stream.filter(({ timestamp }) => timestamp >= filterTimestamp);
 
     // Most of the times, last minute(s) value could return as 0.
     // That's because we are preaggregating data by every minute
@@ -100,7 +97,7 @@ export default class RulesEngine {
     // possible 0s.
     let filterTimestamp = lastCheckedDate.getTime() - 1000 * 60 * 2;
 
-    let {duration} = alert.getPredicates().singleStream;
+    let { duration } = alert.getPredicates().singleStream;
     if (duration === 0) {
       // When duration is 0 there is a chance that after filtering the points
       // array is empty. This results in incorrect clears. To avoid add 1.
@@ -118,7 +115,7 @@ export default class RulesEngine {
     return new Date(filterTimestamp);
   }
 
-  _checkSinglePoint({condition, threshold}, point) {
+  _checkSinglePoint({ condition, threshold }, point) {
     let success = false;
     if (condition === 'lessThan') {
       success = point.value < threshold;
@@ -128,7 +125,7 @@ export default class RulesEngine {
       throw new Error(`Unknown condition: ${condition}`);
     }
 
-    const payload = {success};
+    const payload = { success };
     if (success) {
       payload.data = point;
     }
@@ -136,7 +133,7 @@ export default class RulesEngine {
     return payload;
   }
 
-  _checkStream({duration}, resultStream) {
+  _checkStream({ duration }, resultStream) {
     if (!duration) {
       // Al least one point needs to be success
       for (const checkedPoint of resultStream) {
@@ -149,7 +146,7 @@ export default class RulesEngine {
       }
 
       // there is no success points
-      return {success: false};
+      return { success: false };
     }
 
     // Now this is a duration as we need to check it.
@@ -172,10 +169,10 @@ export default class RulesEngine {
     }
 
     // there is no success durations
-    return {success: false};
+    return { success: false };
   }
 
-  _checkAllStreams({type}, checkedStreamsMap) {
+  _checkAllStreams({ type }, checkedStreamsMap) {
     if (_.size(checkedStreamsMap) === 0) {
       // this seems like user does not get any data.
       // Without any data, it's hard for us to get a decision.
@@ -183,7 +180,7 @@ export default class RulesEngine {
       // XXX: If we do so, we may loss the ability to fire alerts
       // specially when our alerting system went down. That's again
       // not for all alerts. But for alerts added to detect server down.
-      return {success: false};
+      return { success: false };
     }
 
     const successStreamMap = {};
@@ -201,7 +198,7 @@ export default class RulesEngine {
         };
       }
 
-      return {success: false};
+      return { success: false };
     }
 
     if (type === '$ALL') {
@@ -212,7 +209,7 @@ export default class RulesEngine {
         };
       }
 
-      return {success: false};
+      return { success: false };
     }
 
     throw new Error(`Unknown allStreams predicate: ${type}`);

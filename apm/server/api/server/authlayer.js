@@ -12,9 +12,11 @@ const ERR_BAD_SCHEMA = new Error('invalid schema module');
 
 // run this function before using
 export function configureAuth(_config) {
-  if (typeof _config !== 'object' ||
-      typeof _config.secret !== 'string' ||
-      typeof _config.lifetime !== 'string') {
+  if (
+    typeof _config !== 'object' ||
+    typeof _config.secret !== 'string' ||
+    typeof _config.lifetime !== 'string'
+  ) {
     throw ERR_BAD_CONFIG;
   }
 
@@ -23,9 +25,11 @@ export function configureAuth(_config) {
 
 // call this function from all schemas used
 export function registerSchema(schemaName, schema) {
-  if (typeof schema.getAdminToken !== 'function' ||
-      typeof schema.getAppToken !== 'function' ||
-      typeof schema.checkAccess !== 'function') {
+  if (
+    typeof schema.getAdminToken !== 'function' ||
+    typeof schema.getAppToken !== 'function' ||
+    typeof schema.checkAccess !== 'function'
+  ) {
     throw ERR_BAD_SCHEMA;
   }
 
@@ -37,8 +41,8 @@ export function getAdminToken(schemaName) {
   return createToken({
     appId: '*',
     schemas: {
-      [schemaName]: schemas[schemaName].getAdminToken(),
-    },
+      [schemaName]: schemas[schemaName].getAdminToken()
+    }
   });
 }
 
@@ -48,8 +52,8 @@ export function getAppToken(app, schemaName) {
   return createToken({
     appId: app._id,
     schemas: {
-      [schemaName]: schemas[schemaName].getAppToken(app),
-    },
+      [schemaName]: schemas[schemaName].getAppToken(app)
+    }
   });
 }
 
@@ -60,11 +64,7 @@ export function decodeToken(token) {
     throw ERR_NO_CONFIG;
   }
 
-  return jwt.verify(
-    token,
-    config.secret,
-    {algorithms: [ 'HS256' ]}
-  );
+  return jwt.verify(token, config.secret, { algorithms: ['HS256'] });
 }
 
 // examples:
@@ -107,6 +107,6 @@ function createToken(payload) {
 
   return jwt.sign(payload, config.secret, {
     algorithm: 'HS256',
-    expiresIn: config.lifetime,
+    expiresIn: config.lifetime
   });
 }

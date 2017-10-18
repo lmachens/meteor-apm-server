@@ -1,7 +1,4 @@
-import {
-  GraphQLFloat,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLFloat, GraphQLObjectType } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'MeteorHistogramBin',
@@ -9,11 +6,11 @@ export default new GraphQLObjectType({
   fields: () => ({
     value: {
       type: GraphQLFloat,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     count: {
       type: GraphQLFloat,
-      description: 'TODO description',
-    },
-  }),
+      description: 'TODO description'
+    }
+  })
 });

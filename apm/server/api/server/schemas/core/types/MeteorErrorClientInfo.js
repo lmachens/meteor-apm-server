@@ -1,7 +1,4 @@
-import {
-  GraphQLString,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLString, GraphQLObjectType } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'MeteorErrorClientInfo',
@@ -9,19 +6,19 @@ export default new GraphQLObjectType({
   fields: () => ({
     browser: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     userId: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     resolution: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     ip: {
       type: GraphQLString,
-      description: 'TODO description',
-    },
-  }),
+      description: 'TODO description'
+    }
+  })
 });

@@ -8,11 +8,11 @@ module.exports = function(db) {
     var appSecret = req.appSecret;
     if (appId && appSecret) {
       //do the authentication
-      appsCollection.findOne({_id: appId, secret: appSecret}, function(err, app) {
-        if(err) {
-          console.error('error getting app:', {appId: appId, error: err.message});
+      appsCollection.findOne({ _id: appId, secret: appSecret }, function(err, app) {
+        if (err) {
+          console.error('error getting app:', { appId: appId, error: err.message });
           endRequest(500);
-        } else if(app) {
+        } else if (app) {
           req.app = req.body.app = app;
           req.appId = req.body.appId = appId;
           req.plan = req.body.plan = app.plan;
@@ -28,9 +28,9 @@ module.exports = function(db) {
     }
 
     function afterUpdated(err) {
-      if(err) {
+      if (err) {
         //todo: do the error handling and re-try logic
-        console.error('error on updating app:', {appId: appId, error: err.message});
+        console.error('error on updating app:', { appId: appId, error: err.message });
       }
     }
 
@@ -38,5 +38,5 @@ module.exports = function(db) {
       res.writeHead(statusCode);
       res.end();
     }
-  }
-}
+  };
+};

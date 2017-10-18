@@ -1,7 +1,7 @@
-import { inflateEvents } from "./utils/trace";
-import { setDefinition } from "./";
+import { inflateEvents } from './utils/trace';
+import { setDefinition } from './';
 
-setDefinition("meteor-pub-traces", async function(dl, args) {
+setDefinition('meteor-pub-traces', async function(dl, args) {
   const query = {
     appId: String(args.appId),
     startTime: {
@@ -19,11 +19,11 @@ setDefinition("meteor-pub-traces", async function(dl, args) {
   }
   if (args.minValue !== undefined) {
     query.totalValue = query.totalValue || {};
-    query.totalValue["$gte"] = Number(args.minValue);
+    query.totalValue['$gte'] = Number(args.minValue);
   }
   if (args.maxValue !== undefined) {
     query.totalValue = query.totalValue || {};
-    query.totalValue["$lte"] = Number(args.maxValue);
+    query.totalValue['$lte'] = Number(args.maxValue);
   }
 
   const options = {
@@ -31,7 +31,7 @@ setDefinition("meteor-pub-traces", async function(dl, args) {
     limit: args.limit
   };
 
-  const result = await dl.find("pubTraces", query, options);
+  const result = await dl.find('pubTraces', query, options);
 
   if (!result) {
     return null;

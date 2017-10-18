@@ -1,9 +1,4 @@
-import {
-  GraphQLFloat,
-  GraphQLList,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLFloat, GraphQLList, GraphQLObjectType, GraphQLString } from 'graphql';
 
 export const PackageVersion = new GraphQLObjectType({
   name: 'PackageVersion',
@@ -11,13 +6,13 @@ export const PackageVersion = new GraphQLObjectType({
   fields: {
     name: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     version: {
       type: GraphQLString,
-      description: 'TODO description',
-    },
-  },
+      description: 'TODO description'
+    }
+  }
 });
 
 export const MeteorVersions = new GraphQLObjectType({
@@ -26,17 +21,17 @@ export const MeteorVersions = new GraphQLObjectType({
   fields: {
     cordova: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     refreshable: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     webapp: {
       type: GraphQLString,
-      description: 'TODO description',
-    },
-  },
+      description: 'TODO description'
+    }
+  }
 });
 
 export default new GraphQLObjectType({
@@ -48,49 +43,49 @@ export default new GraphQLObjectType({
       description: 'TODO description',
       resolve(root) {
         return root._id;
-      },
+      }
     },
     appId: {
       type: GraphQLString,
       description: 'TODO description',
       resolve(root) {
         return root.value.appId;
-      },
+      }
     },
     host: {
       type: GraphQLString,
       description: 'TODO description',
       resolve(root) {
         return root.value.host;
-      },
+      }
     },
     time: {
       type: GraphQLFloat,
       description: 'TODO description',
       resolve(root) {
         return root.value.startTime.getTime();
-      },
+      }
     },
     release: {
       type: GraphQLString,
       description: 'TODO description',
       resolve(root) {
         return root.value.release;
-      },
+      }
     },
     versions: {
       type: MeteorVersions,
       description: 'TODO description',
       resolve(root) {
         return root.value.appVersions;
-      },
+      }
     },
     packages: {
       type: new GraphQLList(PackageVersion),
       description: 'TODO description',
       resolve(root) {
         return root.value.packageVersions;
-      },
-    },
-  }),
+      }
+    }
+  })
 });

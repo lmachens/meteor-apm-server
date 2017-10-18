@@ -1,4 +1,4 @@
-var LRU = require("lru-cache");
+var LRU = require('lru-cache');
 const logger = console;
 
 export default class UpTimeMonitor {
@@ -24,11 +24,11 @@ export default class UpTimeMonitor {
 
     const coll = appDb.collection(collectionName);
     const selector = {
-      "value.startTime": new Date(timestamp),
-      "value.res": "1min"
+      'value.startTime': new Date(timestamp),
+      'value.res': '1min'
     };
 
-    const cursor = coll.find(selector, { "value.startTime": 1 }).limit(1);
+    const cursor = coll.find(selector, { 'value.startTime': 1 }).limit(1);
     let count = 0;
     try {
       count = cursor.count();

@@ -1,8 +1,4 @@
-import {
-  GraphQLObjectType,
-  GraphQLList,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLList, GraphQLString } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'MeteorErrorTraceSample',
@@ -10,23 +6,23 @@ export default new GraphQLObjectType({
   fields: () => ({
     host: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     message: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     type: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     status: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     samples: {
       type: new GraphQLList(GraphQLString),
-      description: 'TODO description',
+      description: 'TODO description'
     }
-  }),
+  })
 });

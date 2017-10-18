@@ -1,8 +1,8 @@
-import { setDefinition, useDefinition } from "./";
+import { setDefinition, useDefinition } from './';
 
-import _ from "lodash";
+import _ from 'lodash';
 
-setDefinition("meteor-error-trace-samples", async function(dl, args) {
+setDefinition('meteor-error-trace-samples', async function(dl, args) {
   const query = {
     appId: String(args.appId),
     startTime: {
@@ -12,29 +12,28 @@ setDefinition("meteor-error-trace-samples", async function(dl, args) {
   };
 
   if (args.host !== undefined) {
-    query["host"] = String(args.host);
+    query['host'] = String(args.host);
   }
 
   // filtering out by error status
   var breakdownArgs = _.clone(args);
-  breakdownArgs.sortField = "count";
+  breakdownArgs.sortField = 'count';
   breakdownArgs.sortOrder = -1;
-  const breakdowns =
-    (await useDefinition("meteor-error-breakdown", breakdownArgs)) || [];
+  const breakdowns = (await useDefinition('meteor-error-breakdown', breakdownArgs)) || [];
   if (!breakdowns.length) {
     return [];
   }
   const breakdownStatusMap = {};
-  query["$or"] = [];
+  query['$or'] = [];
   breakdowns.forEach(bd => {
-    query["$or"].push({ $and: [{ name: bd.message }, { type: bd.type }] });
+    query['$or'].push({ $and: [{ name: bd.message }, { type: bd.type }] });
 
     const key = `${bd.message}-${bd.type}`;
     breakdownStatusMap[key] = bd.status;
   });
 
   if (args.message !== undefined) {
-    query["name"] = String(args.message);
+    query['name'] = String(args.message);
   }
 
   const pipes = [];
@@ -44,12 +43,12 @@ setDefinition("meteor-error-trace-samples", async function(dl, args) {
 
   sortDef[args.sortField] = args.sortOrder;
 
-  groupDef._id = { name: "$name", type: "$type" };
-  groupDef.samples = { $push: "$_id" };
+  groupDef._id = { name: '$name', type: '$type' };
+  groupDef.samples = { $push: '$_id' };
 
-  projectDef.type = "$_id.type";
-  projectDef.message = "$_id.name";
-  projectDef.samples = "$samples";
+  projectDef.type = '$_id.type';
+  projectDef.message = '$_id.name';
+  projectDef.samples = '$samples';
 
   pipes.push({ $match: query });
   pipes.push({ $group: groupDef });
@@ -57,7 +56,7 @@ setDefinition("meteor-error-trace-samples", async function(dl, args) {
   pipes.push({ $sort: sortDef });
   pipes.push({ $limit: args.limit });
 
-  const result = await dl.aggregate("errorTraces", pipes);
+  const result = await dl.aggregate('errorTraces', pipes);
   return formatSamples(result, breakdownStatusMap);
 });
 

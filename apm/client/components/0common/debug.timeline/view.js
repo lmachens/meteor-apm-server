@@ -1,6 +1,6 @@
-Template["debug.timeline"].events({
-  "click .toggle-activities": function(e) {
+Template['debug.timeline'].events({
+  'click .toggle-activities': function(e) {
     e.preventDefault();
-    FlowComponents.callAction("toggleActivities");
+    FlowComponents.callAction('toggleActivities');
   }
 });

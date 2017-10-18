@@ -1,6 +1,6 @@
-var FlowMixin = KadiraData.FlowMixin = {
-  prototype: {},
-};
+var FlowMixin = (KadiraData.FlowMixin = {
+  prototype: {}
+});
 
 FlowMixin.created = function() {
   this._kdHanders = {};
@@ -15,7 +15,7 @@ FlowMixin.destroyed = function() {
 FlowMixin.prototype.kdFindMetrics = function(name, dataKey, args) {
   var self = this;
   var oldHandler = self._kdHanders[name];
-  if(oldHandler) {
+  if (oldHandler) {
     oldHandler.stop();
   }
 
@@ -23,7 +23,7 @@ FlowMixin.prototype.kdFindMetrics = function(name, dataKey, args) {
   self.set('_kdErrorMetrics' + name, null);
   var handle = KadiraData.observeMetrics(dataKey, args, {
     onStop: function(err) {
-      if(err) {
+      if (err) {
         self.set('_kdErrorMetrics' + name, err);
       }
     }
@@ -35,9 +35,9 @@ FlowMixin.prototype.kdFindMetrics = function(name, dataKey, args) {
   // We use this to get the ready state immediately
   Tracker.autorun(function(c) {
     var ready = handle.ready();
-    if(ready) {
+    if (ready) {
       self.set('_kdReadyMetrics' + name, true);
-      if(!args.realtime) {
+      if (!args.realtime) {
         handle.stop();
       }
       c.stop();
@@ -54,7 +54,7 @@ FlowMixin.prototype.kdMetrics = function(name) {
   return {
     fetch: function() {
       var handler = self._kdHanders[name];
-      if(handler) {
+      if (handler) {
         return handler.fetch();
       }
     },
@@ -74,7 +74,7 @@ FlowMixin.prototype.kdFindTraces = function(name, dataKey, args) {
   self.set('_kdReadyTraces' + name, false);
   self.set('_kdErrorTraces' + name, null);
   KadiraData.fetchTraces(dataKey, args, function(err, traceList) {
-    if(err) {
+    if (err) {
       self.set('_kdErrorTraces' + name, err);
     } else {
       self.set('_kdReadyTraces' + name, true);

@@ -1,13 +1,13 @@
-import { averageMetric, countMetric } from "./utils/aggregation";
-import { formatMetrics, getGroupId } from "./utils/timeseries";
+import { averageMetric, countMetric } from './utils/aggregation';
+import { formatMetrics, getGroupId } from './utils/timeseries';
 
-import { setDefinition } from "./";
+import { setDefinition } from './';
 
-setDefinition("meteor-system-metrics", async function(dl, args) {
+setDefinition('meteor-system-metrics', async function(dl, args) {
   const query = {
-    "value.appId": String(args.appId),
-    "value.res": String(args.resolution),
-    "value.startTime": {
+    'value.appId': String(args.appId),
+    'value.res': String(args.resolution),
+    'value.startTime': {
       $gte: new Date(args.startTime),
       $lt: new Date(args.endTime)
     }
@@ -15,7 +15,7 @@ setDefinition("meteor-system-metrics", async function(dl, args) {
 
   // optional query parameters
   if (args.host !== undefined) {
-    query["value.host"] = String(args.host);
+    query['value.host'] = String(args.host);
   }
 
   const buildStages = METRICS[args.metric];
@@ -24,23 +24,21 @@ setDefinition("meteor-system-metrics", async function(dl, args) {
   }
 
   // create the pipeline
-  const pipes = [].concat([{ $match: query }], buildStages(args), [
-    { $sort: { "_id.time": 1 } }
-  ]);
+  const pipes = [].concat([{ $match: query }], buildStages(args), [{ $sort: { '_id.time': 1 } }]);
 
-  const result = await dl.aggregate("systemMetrics", pipes);
+  const result = await dl.aggregate('systemMetrics', pipes);
   return formatMetrics(args, result);
 });
 
 const METRICS = {
   pcpu(args) {
     const groupId = getGroupId(args);
-    return averageMetric("$value.pcpu", "$value.count", groupId);
+    return averageMetric('$value.pcpu', '$value.count', groupId);
   },
 
   memory(args) {
     const groupId = getGroupId(args);
-    return averageMetric("$value.memory", "$value.count", groupId);
+    return averageMetric('$value.memory', '$value.count', groupId);
   },
 
   sessions(args) {
@@ -50,28 +48,28 @@ const METRICS = {
       {
         $group: {
           _id: {
-            time: "$value.startTime",
-            host: "$value.host",
-            pub: "$value.pub"
+            time: '$value.startTime',
+            host: '$value.host',
+            pub: '$value.pub'
           },
-          value: { $avg: "$value.sessions" }
+          value: { $avg: '$value.sessions' }
         }
       },
       {
         $project: {
           value: {
-            sessions: "$value",
-            startTime: "$_id.time",
-            host: "$_id.host"
+            sessions: '$value',
+            startTime: '$_id.time',
+            host: '$_id.host'
           }
         }
       },
-      { $group: { _id: groupId, value: { $sum: "$value.sessions" } } }
+      { $group: { _id: groupId, value: { $sum: '$value.sessions' } } }
     ];
   },
 
   newSessions(args) {
     const groupId = getGroupId(args);
-    return countMetric("$value.newSessions", groupId);
+    return countMetric('$value.newSessions', groupId);
   }
 };

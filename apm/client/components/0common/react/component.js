@@ -1,9 +1,9 @@
-FlowComponents.define("react", function(props) {
+FlowComponents.define('react', function(props) {
   this.onRendered(function() {
-    var dom = this.find("div");
-    var reactProps = _.omit(props, "component", "class");
+    var dom = this.find('div');
+    var reactProps = _.omit(props, 'component', 'class');
     var reactClass = window;
-    _.each(props.class.split("."), function(name) {
+    _.each(props.class.split('.'), function(name) {
       reactClass = reactClass[name];
     });
 

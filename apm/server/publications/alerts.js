@@ -1,8 +1,8 @@
-Meteor.publish("alerts", function(appId) {
+Meteor.publish('alerts', function(appId) {
   this.unblock();
   check(appId, String);
-  var user = Meteor.users.findOne({_id: this.userId});
-  if(user){
+  var user = Meteor.users.findOne({ _id: this.userId });
+  if (user) {
     var collFields = {
       _id: 1,
       meta: 1,
@@ -10,8 +10,8 @@ Meteor.publish("alerts", function(appId) {
       triggers: 1,
       armedDate: 1
     };
-    return Alerts.find({"meta.appId": appId}, {fields: collFields});
-  }else {
+    return Alerts.find({ 'meta.appId': appId }, { fields: collFields });
+  } else {
     this.ready();
   }
 });

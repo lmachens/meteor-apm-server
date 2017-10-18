@@ -16,15 +16,14 @@ Meteor.publish('kadiraData.observeMetrics', function(id, dataKey, args) {
   sendData();
   sub.ready();
 
-  if(args.realtime) {
-    var intervalHandler =
-      Meteor.setInterval(sendData, KadiraData._metricsPollInterval[resolution]);
+  if (args.realtime) {
+    var intervalHandler = Meteor.setInterval(sendData, KadiraData._metricsPollInterval[resolution]);
     sub.onStop(function() {
       Meteor.clearInterval(intervalHandler);
     });
   } else {
-    // if not realtime and if client doesnt call subHandle.stop() for 30 secs. 
-    // force stop subscription 
+    // if not realtime and if client doesnt call subHandle.stop() for 30 secs.
+    // force stop subscription
     var timeOut = process.env.METEOR_ENV === 'test' ? 200 : 30000;
     Meteor.setTimeout(function() {
       sub.stop();
@@ -33,7 +32,7 @@ Meteor.publish('kadiraData.observeMetrics', function(id, dataKey, args) {
 
   function sendData() {
     var data = KadiraData.getMetrics(dataKey, args, resolution, range);
-    if(sendAttempts++ > 0) {
+    if (sendAttempts++ > 0) {
       sub.removed(KadiraData._transportCollection, id);
     }
     sub.added(KadiraData._transportCollection, id, {

@@ -3,7 +3,7 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString,
+  GraphQLString
 } from 'graphql';
 
 import { UserError } from 'graphql-errors';
@@ -14,7 +14,7 @@ export default new GraphQLObjectType({
   fields: () => ({
     host: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     percentile: {
       type: GraphQLFloat,
@@ -22,10 +22,10 @@ export default new GraphQLObjectType({
       args: {
         value: {
           type: new GraphQLNonNull(GraphQLFloat),
-          description: 'TODO description',
-        },
+          description: 'TODO description'
+        }
       },
-      resolve(root, {value}) {
+      resolve(root, { value }) {
         if (value > 100) {
           throw new UserError('percentile should be less than 100');
         }
@@ -35,7 +35,7 @@ export default new GraphQLObjectType({
     },
     points: {
       type: new GraphQLList(GraphQLFloat),
-      description: 'TODO description',
-    },
-  }),
+      description: 'TODO description'
+    }
+  })
 });

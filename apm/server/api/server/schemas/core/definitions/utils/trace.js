@@ -1,4 +1,4 @@
-import zlib from "zlib";
+import zlib from 'zlib';
 
 // Create a promisified inflate function (avoid callbacks)
 const inflate = zlib.inflate;
@@ -13,7 +13,7 @@ export async function inflateEvents(doc) {
 }
 
 export function stringifyStacks(doc) {
-  if (typeof doc.stacks !== "string") {
+  if (typeof doc.stacks !== 'string') {
     doc.stacks = JSON.stringify(doc.stacks);
   }
   return doc;

@@ -1,13 +1,13 @@
 /* eslint max-len:0 */
 
-import { handleAuth, loadExplorer, sendPong } from "./transports/http";
+import { handleAuth, loadExplorer, sendPong } from './transports/http';
 
-import { MongoClient } from "mongodb";
-import { configureAuth } from "./authlayer";
-import cors from "cors";
-import express from "express";
-import http from "http";
-import { loadSchemas } from "./schemas";
+import { MongoClient } from 'mongodb';
+import { configureAuth } from './authlayer';
+import cors from 'cors';
+import express from 'express';
+import http from 'http';
+import { loadSchemas } from './schemas';
 
 const logger = console;
 
@@ -22,8 +22,8 @@ try {
   });
 
   configureAuth({
-    secret: "secret",
-    lifetime: "1d"
+    secret: 'secret',
+    lifetime: '1d'
   });
 
   const server = http.createServer();
@@ -32,18 +32,18 @@ try {
   // Configurations for CORS
   const corsOptions = { origin: true, credentials: true };
   app.use(cors(corsOptions));
-  app.options("*", cors(corsOptions));
+  app.options('*', cors(corsOptions));
 
-  server.on("request", app);
+  server.on('request', app);
 
-  app.use("/auth", handleAuth(appDb));
-  app.use("/ping", sendPong());
-  app.use("/:schema?", loadExplorer("secret", schemas));
+  app.use('/auth', handleAuth(appDb));
+  app.use('/ping', sendPong());
+  app.use('/:schema?', loadExplorer('secret', schemas));
 
   server.listen(apiPort);
   logger.log(`Fetchman started on port: ${apiPort}`);
 } catch (ex) {
-  console.log("EEEEEE", ex);
+  console.log('EEEEEE', ex);
   setTimeout(() => {
     throw ex;
   });

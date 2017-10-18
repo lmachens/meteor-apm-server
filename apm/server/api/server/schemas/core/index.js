@@ -1,32 +1,32 @@
 import _ from 'lodash';
-import {GraphQLSchema} from 'graphql';
-import {initDataLayer} from './datalayer';
+import { GraphQLSchema } from 'graphql';
+import { initDataLayer } from './datalayer';
 import RootQuery from './types/_RootQuery';
-import {registerSchema} from '../../authlayer';
+import { registerSchema } from '../../authlayer';
 
 export function loadSchema(config) {
   // The data layer needs to be initialized before use.
   // It will be used when resolving graphql fields.
   initDataLayer(config);
-  return new GraphQLSchema({query: RootQuery});
+  return new GraphQLSchema({ query: RootQuery });
 }
 
 registerSchema('core', {
   getAdminToken() {
     return {
-      features: [ '*' ],
-      r1m: {rng: '*', hst: '*'},
-      r30m: {rng: '*', hst: '*'},
-      r3h: {rng: '*', hst: '*'},
+      features: ['*'],
+      r1m: { rng: '*', hst: '*' },
+      r30m: { rng: '*', hst: '*' },
+      r3h: { rng: '*', hst: '*' }
     };
   },
 
   getAppToken(/* app */) {
     return {
-      features: [ 'meteor' ],
-      r1m: {rng: '*', hst: '*'},
-      r30m: {rng: '*', hst: '*'},
-      r3h: {rng: '*', hst: '*'},
+      features: ['meteor'],
+      r1m: { rng: '*', hst: '*' },
+      r30m: { rng: '*', hst: '*' },
+      r3h: { rng: '*', hst: '*' }
     };
   },
 
@@ -45,5 +45,5 @@ registerSchema('core', {
     }
 
     return true;
-  },
+  }
 });

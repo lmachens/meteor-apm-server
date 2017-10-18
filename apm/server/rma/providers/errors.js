@@ -1,7 +1,7 @@
 PROVIDERS = {};
 
 PROVIDERS['errors'] = {
-  name: "errors",
+  name: 'errors',
   collection: ErrorMetrics,
   rawCollection: RawErrorMetrics,
   scope: {},
@@ -9,10 +9,10 @@ PROVIDERS['errors'] = {
   map: function() {
     var self = this;
     var timeWithSeconds = new Date(this.value.startTime);
-    var timeSeconds = timeWithSeconds % (PROFILE.timeRange);
+    var timeSeconds = timeWithSeconds % PROFILE.timeRange;
     var time = new Date(timeWithSeconds - timeSeconds);
     var appId = this.value.appId;
-    var name = this.value.name || "";
+    var name = this.value.name || '';
     var type = this.value.type;
     var subType = this.value.subType;
 
@@ -32,7 +32,7 @@ PROVIDERS['errors'] = {
 
     var value = {
       count: this.value.count || 1,
-      _expires: self.value._expires || new Date(Date.now() + 1000*60*60*24*2),
+      _expires: self.value._expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 2),
       subShard: self.value.subShard || 0
     };
 
@@ -41,11 +41,11 @@ PROVIDERS['errors'] = {
   },
 
   reduce: function(key, values) {
-    var reducedVal = {count: 0, _expires: new Date()};
+    var reducedVal = { count: 0, _expires: new Date() };
 
     values.forEach(function(value) {
       reducedVal.count += value.count;
-      if(value._expires.getTime() > reducedVal._expires.getTime()) {
+      if (value._expires.getTime() > reducedVal._expires.getTime()) {
         reducedVal._expires = value._expires;
       }
     });
@@ -55,7 +55,6 @@ PROVIDERS['errors'] = {
     } else {
       reducedVal.subShard = 0;
     }
-
 
     return reducedVal;
   },
@@ -72,8 +71,8 @@ PROVIDERS['errors'] = {
       subShard: reducedVal.subShard || 0
     };
 
-    finalValue._expires = reducedVal._expires || new Date(Date.now() + 1000*60*60*24*2);
+    finalValue._expires = reducedVal._expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 2);
 
     return finalValue;
   }
-}
+};

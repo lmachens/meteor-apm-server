@@ -1,8 +1,4 @@
-import {
-  GraphQLFloat,
-  GraphQLString,
-  GraphQLObjectType,
-} from 'graphql';
+import { GraphQLFloat, GraphQLString, GraphQLObjectType } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'MeteorPubBreakdown',
@@ -10,9 +6,9 @@ export default new GraphQLObjectType({
   fields: () => ({
     publication: {
       type: GraphQLString,
-      resolve: root => root.name,
+      resolve: root => root.name
     },
-    sortedValue: {type: GraphQLFloat},
-    subRate: {type: GraphQLFloat}
+    sortedValue: { type: GraphQLFloat },
+    subRate: { type: GraphQLFloat }
   })
 });

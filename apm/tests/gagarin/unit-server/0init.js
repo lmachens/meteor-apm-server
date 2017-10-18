@@ -1,5 +1,5 @@
 createServer = function() {
-  var server = meteor({flavor: "fiber"});
+  var server = meteor({ flavor: 'fiber' });
   return server;
 };
 

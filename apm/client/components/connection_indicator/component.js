@@ -1,23 +1,22 @@
-var component = FlowComponents.define("connectionIndicator", function () {
-  this.autorun(function () {
+var component = FlowComponents.define('connectionIndicator', function() {
+  this.autorun(function() {
     var self = this;
     var retryTime = Meteor.status().retryTime;
-    if(retryTime > 0 && !this.connectionRetry && !Meteor.status().connected) {
+    if (retryTime > 0 && !this.connectionRetry && !Meteor.status().connected) {
       this.connectionRetry = setInterval(function() {
-
         var newRetryTimeInMillis = Meteor.status().retryTime - Date.now();
-        var newRetryTimeInSec = Math.round((newRetryTimeInMillis)/1000);
+        var newRetryTimeInSec = Math.round(newRetryTimeInMillis / 1000);
         var text;
-        if(newRetryTimeInSec){
+        if (newRetryTimeInSec) {
           text = newRetryTimeInSec;
         } else {
-          text = "few";
+          text = 'few';
         }
-        self.set("retryTime", text);
+        self.set('retryTime', text);
       }, 1000);
     }
 
-    if(Meteor.status().connected){
+    if (Meteor.status().connected) {
       clearInterval(this.connectionRetry);
       this.connectionRetry = null;
     }
@@ -25,7 +24,7 @@ var component = FlowComponents.define("connectionIndicator", function () {
 });
 
 component.state.isDisconnected = function() {
-  return !Meteor.status().connected &&  Meteor.status().retryTime > 0;
+  return !Meteor.status().connected && Meteor.status().retryTime > 0;
 };
 
 component.action.retry = function() {

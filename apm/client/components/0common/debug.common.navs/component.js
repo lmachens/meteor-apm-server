@@ -1,4 +1,4 @@
-var component = FlowComponents.define("debug.common.navs", function(props) {
+var component = FlowComponents.define('debug.common.navs', function(props) {
   this.navs = props.navs;
 });
 
@@ -8,19 +8,19 @@ component.state.navs = function() {
 
 component.state.isActiveNav = function(nav) {
   var navs = this.navs;
-  if(navs) {
+  if (navs) {
     var currentNavId = null;
 
-    var page = FlowRouter.getQueryParam("page");
-    if(page) {
-      _.each(navs,function(navObj) {
-        if(page === navObj.id) {
+    var page = FlowRouter.getQueryParam('page');
+    if (page) {
+      _.each(navs, function(navObj) {
+        if (page === navObj.id) {
           currentNavId = page;
         }
       });
 
-      if(!currentNavId) {
-        FlowRouter.setQueryParams({page: null});
+      if (!currentNavId) {
+        FlowRouter.setQueryParams({ page: null });
       }
     }
 
@@ -35,9 +35,9 @@ component.action.changeNav = function(nav) {
 
 component.prototype.setTabQueryParam = function(nav) {
   this.resetQueryParams();
-  FlowRouter.setQueryParams({page: nav});
+  FlowRouter.setQueryParams({ page: nav });
 };
 
 component.prototype.resetQueryParams = function() {
-  FlowRouter.setQueryParams({tab: null, item: null});
+  FlowRouter.setQueryParams({ tab: null, item: null });
 };

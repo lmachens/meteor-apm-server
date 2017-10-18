@@ -1,19 +1,19 @@
-import ColorHash from 'color-hash'
-import CrcChecksum from 'crc'
+import ColorHash from 'color-hash';
+import CrcChecksum from 'crc';
 
-var component = FlowComponents.define("timeseries.single", function(props) {
+var component = FlowComponents.define('timeseries.single', function(props) {
   this.metricDataKey = props.metricDataKey;
 
-  this.colorHash = new ColorHash({hash: CrcChecksum.crc16});
+  this.colorHash = new ColorHash({ hash: CrcChecksum.crc16 });
   this.color = props.color;
   this.label = props.label;
   this.metric = props.metric;
   this.onChartClick = props.onChartClick;
 
-  this.set("title", props.title);
-  this.set("helperId", props.helperId);
-  this.set("color", props.color);
-  this.set("chartType", props.chartType || "area");
+  this.set('title', props.title);
+  this.set('helperId', props.helperId);
+  this.set('color', props.color);
+  this.set('chartType', props.chartType || 'area');
 
   this.autorun(function() {
     var args = this.getArgs(props);
@@ -27,11 +27,11 @@ var component = FlowComponents.define("timeseries.single", function(props) {
       delete args[arg];
     });
 
-    this.kdFindMetrics("timeseries", this.metricDataKey, args);
+    this.kdFindMetrics('timeseries', this.metricDataKey, args);
   });
 
   this.autorun(function() {
-    var data = this.kdMetrics("timeseries").fetch() || [];
+    var data = this.kdMetrics('timeseries').fetch() || [];
     this.processChartData(data);
   });
 });
@@ -45,34 +45,34 @@ component.prototype.processChartData = function(rawData) {
     timeseries.push([timestamp, value]);
   });
 
-  var timeSeriesPayload = [{name: self.label, data: timeseries}];
+  var timeSeriesPayload = [{ name: self.label, data: timeseries }];
   var chartData = timeSeriesPayload;
   // set fireAway=true for avoid equality check for large object
-  this.set("processedChartData", chartData, true);
+  this.set('processedChartData', chartData, true);
 };
 
 component.action.setSelectedPoint = function(x, y) {
-  if(this.onChartClick){
+  if (this.onChartClick) {
     this.onChartClick(x, y);
   }
-  var currentPoint = this.get("selectedPoint") || [];
-  if(currentPoint[0] === x && currentPoint[1] === y) {
+  var currentPoint = this.get('selectedPoint') || [];
+  if (currentPoint[0] === x && currentPoint[1] === y) {
     // unselect if it is already selected point
-    this.set("selectedPoint", []);
+    this.set('selectedPoint', []);
   } else {
-    this.set("selectedPoint", [x, y]);
-    var seriesName = this.get("hoveredSeries");
-    this.set("selectedSeries", seriesName);
+    this.set('selectedPoint', [x, y]);
+    var seriesName = this.get('hoveredSeries');
+    this.set('selectedSeries', seriesName);
   }
 };
 
 component.state.isChartLoading = function() {
-  return !this.kdMetrics("timeseries").ready();
+  return !this.kdMetrics('timeseries').ready();
 };
 
 component.state.isDataEmpty = function() {
-  var chartData = this.get("processedChartData") || [];
-  var isChartLoading = this.get("isChartLoading");
+  var chartData = this.get('processedChartData') || [];
+  var isChartLoading = this.get('isChartLoading');
   return !isChartLoading && chartData.length === 0;
 };
 

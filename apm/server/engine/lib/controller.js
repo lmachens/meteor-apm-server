@@ -13,59 +13,58 @@ module.exports = function(app, db) {
     {
       type: 'appStats',
       parser: require('./parsers/appStats'),
-      persister: persisters.collection("appStats", db)
+      persister: persisters.collection('appStats', db)
     },
     {
       type: 'methodRequests',
       parser: tracerParser('methodRequests'),
-      persister: persisters.trace("methodTraces", db)
+      persister: persisters.trace('methodTraces', db)
     },
     {
       type: 'pubRequests',
       parser: tracerParser('pubRequests'),
-      persister: persisters.trace("pubTraces", db)
+      persister: persisters.trace('pubTraces', db)
     },
     {
       type: 'errors',
       parser: require('./parsers/errorTraces'),
-      persister: persisters.trace("errorTraces", db)
+      persister: persisters.trace('errorTraces', db)
     },
     {
       type: 'methodMetrics',
       parser: require('./parsers/methodMetrics'),
-      persister: persisters.collection("rawMethodsMetrics", db)
+      persister: persisters.collection('rawMethodsMetrics', db)
     },
     {
       type: 'pubMetrics',
       parser: require('./parsers/pubMetrics'),
-      persister: persisters.collection("rawPubMetrics", db)
+      persister: persisters.collection('rawPubMetrics', db)
     },
     {
       type: 'hotSubs',
       parser: require('./parsers/hotSubs'),
-      persister: persisters.collection("rawHotSubs", db)
+      persister: persisters.collection('rawHotSubs', db)
     },
     {
       type: 'systemMetrics',
       parser: require('./parsers/systemMetrics'),
-      persister: persisters.collection("rawSystemMetrics", db)
+      persister: persisters.collection('rawSystemMetrics', db)
     },
     {
       type: 'errorMetrics',
       parser: require('./parsers/errorMetrics'),
-      persister: persisters.collection("rawErrorMetrics", db)
-    },
+      persister: persisters.collection('rawErrorMetrics', db)
+    }
   ];
 
   app.use(function(req, res) {
     if (req.method == 'POST') {
-
       parsers.forEach(function(parserInfo) {
         var parsedData = parserInfo.parser(req.body);
-        if(parsedData && parsedData.length > 0) {
+        if (parsedData && parsedData.length > 0) {
           parserInfo.persister(req.app, parsedData);
 
-          if(parserInfo.type == 'errors') {
+          if (parserInfo.type == 'errors') {
             // track initial state for errors;
             stateManager.setState(db, req.app, 'initialErrorsReceived');
           }
@@ -78,7 +77,7 @@ module.exports = function(app, db) {
       res.end();
     } else {
       res.writeHead(400);
-      res.end("cannot get  \n");
+      res.end('cannot get  \n');
     }
   });
-}
+};

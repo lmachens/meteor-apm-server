@@ -1,19 +1,17 @@
-var component = FlowComponents.define("apps", function() {
-
-});
+var component = FlowComponents.define('apps', function() {});
 
 component.state.apps = function() {
   return Apps.find({});
 };
 
 component.state.haveApps = function() {
-  return true
+  return true;
 };
 
 component.state.appUrl = function(appId) {
   var defaults = {
-    section: "dashboard",
-    subSection: "overview"
+    section: 'dashboard',
+    subSection: 'overview'
   };
   return UrlStateManager.pathTo(appId, null, null, defaults);
 };

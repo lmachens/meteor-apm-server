@@ -1,8 +1,4 @@
-import {
-  GraphQLFloat,
-  GraphQLObjectType,
-  GraphQLString,
-} from 'graphql';
+import { GraphQLFloat, GraphQLObjectType, GraphQLString } from 'graphql';
 
 export default new GraphQLObjectType({
   name: 'MeteorAppEvent',
@@ -10,15 +6,15 @@ export default new GraphQLObjectType({
   fields: () => ({
     appId: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     host: {
       type: GraphQLString,
-      description: 'TODO description',
+      description: 'TODO description'
     },
     time: {
       type: GraphQLFloat,
-      description: 'TODO description',
-    },
-  }),
+      description: 'TODO description'
+    }
+  })
 });

@@ -124,7 +124,6 @@
 //     expect(ownerCount).to.be.equal(1);
 //   });
 
-
 //   it("change owner and resend email", function() {
 //     var appId = createApp();
 //     var dialogPath = "/apps/" + appId + "/dashboard/overview?action=share";
@@ -199,7 +198,7 @@
 //       return $(".shared-user-list.owner").html()
 //     });
 //     GlobalClient.sleep(400);
-//     var el = ".shared-user-list.owner li:nth-child(3) .remove-owner-invite"; 
+//     var el = ".shared-user-list.owner li:nth-child(3) .remove-owner-invite";
 //     GlobalClient.waitForDOM(el);
 //     GlobalClient.click(el);
 
@@ -224,7 +223,6 @@
 //   var appId = GlobalServer.createApp("new-app", userId, fields);
 //   return appId;
 // }
-
 
 // function cleanUpPendingUsers(){
 //   GlobalServer.execute(function() {

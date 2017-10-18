@@ -1,5 +1,5 @@
 TimelineComponent.TimeChart = React.createClass({
-  displayName: "TimelineComponent.TimeChart",
+  displayName: 'TimelineComponent.TimeChart',
   propTypes: {
     // positional props
     height: React.PropTypes.number.isRequired,
@@ -15,10 +15,8 @@ TimelineComponent.TimeChart = React.createClass({
     props.itemId = item.key;
     props.key = item.key;
     props.sections = item.timeline;
-    
-    return (
-      <TimelineComponent.TimeBar {...props} />
-    );
+
+    return <TimelineComponent.TimeBar {...props} />;
   },
   render() {
     return (

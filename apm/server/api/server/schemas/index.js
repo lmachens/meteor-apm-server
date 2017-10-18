@@ -1,6 +1,6 @@
 import * as core from './core';
 import * as system from './system';
-import {maskErrors} from 'graphql-errors';
+import { maskErrors } from 'graphql-errors';
 
 // This function will initialize all the schemas
 // by passing their dependencies.

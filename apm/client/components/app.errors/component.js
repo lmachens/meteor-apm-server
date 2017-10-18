@@ -6,14 +6,14 @@ var errorMetaSubs = new SubsManager({
   cacheExpire: 10
 });
 
-var component = FlowComponents.define("app.errors", function(props) {
+var component = FlowComponents.define('app.errors', function(props) {
   this.props = props;
   var sorts = this.hbarSortOptions();
-  this.set("hbarSortOptions", sorts);
+  this.set('hbarSortOptions', sorts);
 
   this.autorun(function() {
     var args = this.getHbarArgs(sorts);
-    this.kdFindMetrics("breakdown", "breakdown.errors", args);
+    this.kdFindMetrics('breakdown', 'breakdown.errors', args);
   });
 
   this.onRendered(function() {
@@ -22,7 +22,7 @@ var component = FlowComponents.define("app.errors", function(props) {
 
   this.autorun(function() {
     //calculate hbar height on data arrived
-    this.get("hbarChartData");
+    this.get('hbarChartData');
 
     var self = this;
     Meteor.defer(function() {
@@ -33,18 +33,18 @@ var component = FlowComponents.define("app.errors", function(props) {
 
   this.onDestroyed(function() {
     //remove  window resize listeners on component destroyed
-    $(window).off("resize", this.fixWidthHandler);
-    $(window).off("resize", this.fixHeightHandler);
+    $(window).off('resize', this.fixWidthHandler);
+    $(window).off('resize', this.fixHeightHandler);
   });
 
   // Invoking subscriptions for the error messages
   // We need to do this seperate from the hBar data fetching logic
   // If we do it we'll have somekind of loops
   this.autorun(function() {
-    var appId = FlowRouter.getParam("appId");
-    var data = this.kdMetrics("breakdown").fetch() || [];
+    var appId = FlowRouter.getParam('appId');
+    var data = this.kdMetrics('breakdown').fetch() || [];
     data.forEach(function(d) {
-      errorMetaSubs.subscribe("errorsMeta.single", appId, d._id.name, d.type);
+      errorMetaSubs.subscribe('errorsMeta.single', appId, d._id.name, d.type);
     });
   });
 });
@@ -56,24 +56,24 @@ component.prototype.getHbarArgs = function(sorts) {
 
   var sortBy = this.getSortedMetric(sorts);
 
-  this.set("hbarSortedItem", sortBy);
+  this.set('hbarSortedItem', sortBy);
 
   args.sortBy = sortBy;
 
-  var errorType = FlowRouter.getQueryParam("traceType");
+  var errorType = FlowRouter.getQueryParam('traceType');
   if (errorType) {
     args.errorType = errorType;
   }
 
-  var searchq = FlowRouter.getQueryParam("searchq");
+  var searchq = FlowRouter.getQueryParam('searchq');
   if (searchq) {
     args.searchq = searchq;
   }
 
-  args.status = this.get("currentStatus");
+  args.status = this.get('currentStatus');
 
-  var showIgnored = FlowRouter.getQueryParam("showIgnored");
-  if (showIgnored && showIgnored === "true") {
+  var showIgnored = FlowRouter.getQueryParam('showIgnored');
+  if (showIgnored && showIgnored === 'true') {
     args.showIgnored = true;
   } else {
     args.showIgnored = false;
@@ -89,15 +89,15 @@ component.prototype.getHbarArgs = function(sorts) {
 component.prototype.hbarSortOptions = function() {
   var BREAKDOWN_SORT_TYPES = [
     {
-      value: "count",
-      label: i18n("dashboard.errors.count"),
+      value: 'count',
+      label: i18n('dashboard.errors.count'),
       formatter: function(value) {
         return value;
       }
     },
     {
-      value: "lastSeenTime",
-      label: i18n("dashboard.errors.last_seen"),
+      value: 'lastSeenTime',
+      label: i18n('dashboard.errors.last_seen'),
       formatter: function(value) {
         return value;
       }
@@ -107,23 +107,23 @@ component.prototype.hbarSortOptions = function() {
 };
 
 component.state.isInLiveMode = function() {
-  return !FlowRouter.getQueryParam("date");
+  return !FlowRouter.getQueryParam('date');
 };
 
 component.state.hbarChartData = function() {
   var self = this;
-  var data = this.kdMetrics("breakdown").fetch() || [];
+  var data = this.kdMetrics('breakdown').fetch() || [];
 
   // check the ready status of subscriptions
   var errorMetaLoaded = errorMetaSubs.ready();
 
   var hbarData = [];
-  var isInLiveMode = this.get("isInLiveMode");
+  var isInLiveMode = this.get('isInLiveMode');
 
-  var countMax = this.getMaxValue(data, "count");
+  var countMax = this.getMaxValue(data, 'count');
   data.forEach(function(d) {
     var obj = {
-      id: CryptoJS.MD5(d._id.name + "-" + d.type).toString(),
+      id: CryptoJS.MD5(d._id.name + '-' + d.type).toString(),
       errorName: d._id.name,
       count: d.count,
       type: d.type,
@@ -134,7 +134,7 @@ component.state.hbarChartData = function() {
       if (isInLiveMode) {
         obj.lastSeenTime = moment(d.lastSeenTime).fromNow();
       } else {
-        obj.lastSeenTime = moment(d.lastSeenTime).format("MMM Do HH:mm");
+        obj.lastSeenTime = moment(d.lastSeenTime).format('MMM Do HH:mm');
       }
     }
 
@@ -145,13 +145,13 @@ component.state.hbarChartData = function() {
     }
 
     // If the status became ignored via the subscription, we need to hide it.
-    if (!self.get("showIgnored") && obj.status === "ignored") {
+    if (!self.get('showIgnored') && obj.status === 'ignored') {
       return;
     }
 
     // if the error's status changed, we need to remove it from hbar
-    var currentStatus = self.get("currentStatus");
-    if (currentStatus !== "all" && obj.status !== currentStatus) {
+    var currentStatus = self.get('currentStatus');
+    if (currentStatus !== 'all' && obj.status !== currentStatus) {
       return;
     }
 
@@ -181,17 +181,17 @@ component.prototype.getStatus = function(obj) {
   // 1. client didnt receive it yet
   // 2. it is a new error
   // 1 is handled by checking for subscription ready
-  errorMeta.status = errorMeta.status || "new";
+  errorMeta.status = errorMeta.status || 'new';
   return errorMeta.status;
 };
 
 component.state.isHbarChartLoading = function() {
-  return !this.kdMetrics("breakdown").ready();
+  return !this.kdMetrics('breakdown').ready();
 };
 
 component.prototype.selectedErrorInfo = function() {
-  var hbarData = this.get("hbarChartData") || [];
-  var selection = FlowRouter.getQueryParam("selection");
+  var hbarData = this.get('hbarChartData') || [];
+  var selection = FlowRouter.getQueryParam('selection');
   var selectionInfo;
   for (var i = hbarData.length - 1; i >= 0; i--) {
     if (hbarData[i].id === selection) {
@@ -217,19 +217,19 @@ component.state.extraArgs = function() {
     args.selection = selectionInfo.errorName;
   }
 
-  var errorType = selectionInfo.type || FlowRouter.getQueryParam("traceType");
+  var errorType = selectionInfo.type || FlowRouter.getQueryParam('traceType');
   if (errorType) {
     args.errorType = errorType;
   }
-  var searchq = FlowRouter.getQueryParam("searchq");
+  var searchq = FlowRouter.getQueryParam('searchq');
   if (searchq) {
     args.searchq = searchq;
   }
 
-  var status = FlowRouter.getQueryParam("status") || "all";
+  var status = FlowRouter.getQueryParam('status') || 'all';
   args.status = status;
 
-  args.showIgnored = this.get("showIgnored");
+  args.showIgnored = this.get('showIgnored');
   return args;
 };
 
@@ -238,12 +238,12 @@ component.state.isSubsLoading = function() {
 };
 
 component.state.isFilteredByStatus = function() {
-  var extraArgs = this.get("extraArgs");
-  return !!extraArgs.status && extraArgs.status !== "all";
+  var extraArgs = this.get('extraArgs');
+  return !!extraArgs.status && extraArgs.status !== 'all';
 };
 
 component.state.isErrorTrackingOn = function() {
-  var appId = FlowRouter.getParam("appId");
+  var appId = FlowRouter.getParam('appId');
   var app = Apps.findOne({
     _id: appId,
     initialErrorsReceived: { $exists: true }
@@ -252,17 +252,17 @@ component.state.isErrorTrackingOn = function() {
 };
 
 component.state.showIgnored = function() {
-  var status = FlowRouter.getQueryParam("status");
-  if (status === "ignored") {
+  var status = FlowRouter.getQueryParam('status');
+  if (status === 'ignored') {
     return true;
   }
-  var showIgnored = FlowRouter.getQueryParam("showIgnored");
-  showIgnored = showIgnored === "true" ? true : false;
+  var showIgnored = FlowRouter.getQueryParam('showIgnored');
+  showIgnored = showIgnored === 'true' ? true : false;
   return showIgnored;
 };
 
 component.state.currentStatus = function() {
-  var status = FlowRouter.getQueryParam("status") || "all";
+  var status = FlowRouter.getQueryParam('status') || 'all';
   return status;
 };
 
@@ -275,16 +275,15 @@ component.action.showIgnoredErrors = function(showIgnoredErrors) {
 };
 
 component.action.changeCurrentErrorStatus = function(status) {
-  var appId = FlowRouter.getParam("appId");
-  var extraArgs = this.get("extraArgs");
+  var appId = FlowRouter.getParam('appId');
+  var extraArgs = this.get('extraArgs');
   var errorName = extraArgs.selection;
   var errorType = extraArgs.errorType;
 
-  var currentStatus = this.get("currentStatus");
-  var showIgnored = this.get("showIgnored");
+  var currentStatus = this.get('currentStatus');
+  var showIgnored = this.get('showIgnored');
 
-  var removeSelection =
-    (!showIgnored && status === "ignored") || currentStatus !== "all";
+  var removeSelection = (!showIgnored && status === 'ignored') || currentStatus !== 'all';
 
   if (removeSelection) {
     FlowRouter.setQueryParams({ selection: null });
@@ -292,21 +291,14 @@ component.action.changeCurrentErrorStatus = function(status) {
 
   var afterChanged = function(err) {
     if (err) {
-      var message = "Error changing status: " + (err.reason || err.message);
+      var message = 'Error changing status: ' + (err.reason || err.message);
       growlAlert.error(message);
       // if there's an error, I need to bring back the selection again
       FlowRouter.setQueryParams({ selection: errorName });
     }
   };
 
-  Meteor.call(
-    "errorsMeta.changeState",
-    appId,
-    errorName,
-    errorType,
-    status,
-    afterChanged
-  );
+  Meteor.call('errorsMeta.changeState', appId, errorName, errorType, status, afterChanged);
 };
 
 component.prototype.resetSelection = function() {
@@ -322,13 +314,13 @@ component.prototype.initAffix = function() {
   $(window).resize(fixWidth);
   $(window).resize(fixHeight);
 
-  this.$(".hbar-wrap").on("affixed.bs.affix", fixWidth);
-  this.$(".hbar-wrap").on("affixed.bs.affix", fixHeight);
+  this.$('.hbar-wrap').on('affixed.bs.affix', fixWidth);
+  this.$('.hbar-wrap').on('affixed.bs.affix', fixHeight);
 
-  this.$(".hbar-wrap").on("affixed-top.bs.affix", fixWidth);
-  this.$(".hbar-wrap").on("affixed-top.bs.affix", fixHeight);
+  this.$('.hbar-wrap').on('affixed-top.bs.affix', fixWidth);
+  this.$('.hbar-wrap').on('affixed-top.bs.affix', fixHeight);
 
-  this.$(".hbar-wrap").affix({
+  this.$('.hbar-wrap').affix({
     offset: {
       top: 165
     }
@@ -336,16 +328,16 @@ component.prototype.initAffix = function() {
 };
 
 component.prototype.fixHbarWidth = function() {
-  var width = this.$(".hbar-wrap")
+  var width = this.$('.hbar-wrap')
     .parent()
     .width();
-  this.$(".hbar-wrap").width(width);
+  this.$('.hbar-wrap').width(width);
 };
 
 component.prototype.fixHbarHeight = function() {
   var height = $(window).height();
-  this.$(".hbar-wrap.affix-top .list-group").height(height - 310);
-  this.$(".hbar-wrap.affix .list-group").height(height - 100);
+  this.$('.hbar-wrap.affix-top .list-group').height(height - 310);
+  this.$('.hbar-wrap.affix .list-group').height(height - 100);
 };
 
 component.extend(KadiraData.FlowMixin);

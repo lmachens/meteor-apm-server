@@ -6,11 +6,11 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLString,
+  GraphQLString
 } from 'graphql';
 
-import {checkAccess} from '../../../authlayer';
-import {useDefinition} from '../definitions/';
+import { checkAccess } from '../../../authlayer';
+import { useDefinition } from '../definitions/';
 
 import MeteorAppEvent from './MeteorAppEvent';
 import MeteorAppInfo from './MeteorAppInfo';
@@ -47,7 +47,7 @@ const Arguments = {
     description: `
       "appId" specifies which application to fetch data from.
       This field is required and it must be of an active application.
-    `,
+    `
   },
 
   meteorBreakdownLimit: {
@@ -73,7 +73,7 @@ const Arguments = {
 
   meteorErrorStatus: {
     type: MeteorErrorStatusEnum,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorErrorTraceSort: {
@@ -84,24 +84,24 @@ const Arguments = {
 
   meteorErrorType: {
     type: MeteorErrorTypeEnum,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorEventType: {
     type: new GraphQLNonNull(MeteorEventTypeEnum),
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorGroupByHost: {
     type: GraphQLBoolean,
     description: 'TODO description',
-    defaultValue: false,
+    defaultValue: false
   },
 
   meteorHistogramBinSize: {
     type: GraphQLFloat,
     description: 'TODO description',
-    defaultValue: 100,
+    defaultValue: 100
   },
 
   meteorHostname: {
@@ -109,76 +109,76 @@ const Arguments = {
     description: `
       "host" field can be used to limit data to a host/server If this argument
       is not used, it will default to all available hosts.
-    `,
+    `
   },
 
   meteorMethodBreakdownSort: {
     type: new GraphQLNonNull(MeteorMethodBreakdownSortEnum),
     description: 'TODO description',
-    defaultValue: 1,
+    defaultValue: 1
   },
 
   meteorMethodMetric: {
     type: new GraphQLNonNull(MeteorMethodMetricsEnum),
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorMethodName: {
     type: GraphQLString,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorMethodTraceMaxValue: {
     type: GraphQLFloat,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorMethodTraceMinValue: {
     type: GraphQLFloat,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorMethodTraceSort: {
     type: MeteorMethodTraceSortEnum,
     description: 'TODO description',
-    defaultValue: 'startTime',
+    defaultValue: 'startTime'
   },
 
   meteorPubBreakdownSort: {
     type: new GraphQLNonNull(MeteorPubBreakdownSortEnum),
     description: 'TODO description',
-    defaultValue: 1,
+    defaultValue: 1
   },
 
   meteorPubMetric: {
     type: new GraphQLNonNull(MeteorPubMetricsEnum),
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorPubName: {
     type: GraphQLString,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorPubTraceMaxValue: {
     type: GraphQLFloat,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorPubTraceMinValue: {
     type: GraphQLFloat,
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorPubTraceSort: {
     type: MeteorPubTraceSortEnum,
     description: 'TODO description',
-    defaultValue: 'startTime',
+    defaultValue: 'startTime'
   },
 
   meteorSystemMetric: {
     type: new GraphQLNonNull(MeteorSystemMetricsEnum),
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorTimeEndTime: {
@@ -188,13 +188,13 @@ const Arguments = {
       If "endTime" is set, it will only fetch data before that time.
       The time is represented as a unix timestamp in milliseconds (js time).
       If no values are given, this field defaults to "Date.now()".
-    `,
+    `
   },
 
   meteorTimeResolution: {
     type: MeteorMetricResolution,
     description: 'TODO description',
-    defaultValue: '1min',
+    defaultValue: '1min'
   },
 
   meteorTimeStartTime: {
@@ -204,25 +204,25 @@ const Arguments = {
       If "startTime" is set, it will only fetch data after that time.
       The time is represented as a unix timestamp in milliseconds (js time).
       If no values are given, this field defaults to "endTime - 1HOUR."
-    `,
+    `
   },
 
   meteorTraceId: {
     type: new GraphQLNonNull(GraphQLString),
-    description: 'TODO description',
+    description: 'TODO description'
   },
 
   meteorTraceLimit: {
     type: GraphQLFloat,
     description: 'TODO description',
-    defaultValue: 5,
+    defaultValue: 5
   },
 
   sortOrder: {
     type: SortOrderEnum,
     description: 'TODO description',
-    defaultValue: 1,
-  },
+    defaultValue: 1
+  }
 };
 
 // Argument Helpers
@@ -246,7 +246,7 @@ function setDefaultTimeRange(args) {
 function checkTokenPermissions(token, appId, features) {
   const criteria = {
     appId,
-    schemas: {core: {}},
+    schemas: { core: {} }
   };
 
   if (features) {
@@ -269,13 +269,13 @@ const meteorAppEvents = {
     host: Arguments.meteorHostname,
     startTime: Arguments.meteorTimeStartTime,
     endTime: Arguments.meteorTimeEndTime,
-    type: Arguments.meteorEventType,
+    type: Arguments.meteorEventType
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-app-events', args);
-  },
+  }
 };
 
 const meteorAppInfo = {
@@ -285,13 +285,13 @@ const meteorAppInfo = {
     appId: Arguments.meteorAppId,
     host: Arguments.meteorHostname,
     startTime: Arguments.meteorTimeStartTime,
-    endTime: Arguments.meteorTimeEndTime,
+    endTime: Arguments.meteorTimeEndTime
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-app-info', args);
-  },
+  }
 };
 
 const meteorErrorBreakdowns = {
@@ -306,11 +306,11 @@ const meteorErrorBreakdowns = {
     sortOrder: Arguments.sortOrder,
     sortField: Arguments.meteorErrorBreakdownSort,
     status: Arguments.meteorErrorStatus,
-    type: Arguments.meteorErrorType,
+    type: Arguments.meteorErrorType
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-error-breakdown', args);
   }
 };
@@ -327,11 +327,11 @@ const meteorErrorMetrics = {
     message: Arguments.meteorErrorMessage,
     type: Arguments.meteorErrorType,
     status: Arguments.meteorErrorStatus,
-    groupByHost: Arguments.meteorGroupByHost,
+    groupByHost: Arguments.meteorGroupByHost
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-error-metrics', args);
   }
 };
@@ -341,13 +341,13 @@ const meteorErrorTrace = {
   description: 'TODO description',
   args: {
     appId: Arguments.meteorAppId,
-    traceId: Arguments.meteorTraceId,
+    traceId: Arguments.meteorTraceId
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-error-trace', args);
-  },
+  }
 };
 
 const meteorErrorTraces = {
@@ -367,9 +367,9 @@ const meteorErrorTraces = {
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-error-traces', args);
-  },
+  }
 };
 
 const meteorErrorTraceSamples = {
@@ -389,9 +389,9 @@ const meteorErrorTraceSamples = {
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-error-trace-samples', args);
-  },
+  }
 };
 
 const meteorMethodBreakdowns = {
@@ -404,11 +404,11 @@ const meteorMethodBreakdowns = {
     endTime: Arguments.meteorTimeEndTime,
     limit: Arguments.meteorBreakdownLimit,
     sortOrder: Arguments.sortOrder,
-    sortField: Arguments.meteorMethodBreakdownSort,
+    sortField: Arguments.meteorMethodBreakdownSort
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-method-breakdown', args);
   }
 };
@@ -423,13 +423,13 @@ const meteorMethodHistogram = {
     endTime: Arguments.meteorTimeEndTime,
     binSize: Arguments.meteorHistogramBinSize,
     method: Arguments.meteorMethodName,
-    metric: Arguments.meteorMethodMetric,
+    metric: Arguments.meteorMethodMetric
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-method-histogram', args);
-  },
+  }
 };
 
 const meteorMethodMetrics = {
@@ -443,13 +443,13 @@ const meteorMethodMetrics = {
     resolution: Arguments.meteorTimeResolution,
     method: Arguments.meteorMethodName,
     metric: Arguments.meteorMethodMetric,
-    groupByHost: Arguments.meteorGroupByHost,
+    groupByHost: Arguments.meteorGroupByHost
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-method-metrics', args);
-  },
+  }
 };
 
 const meteorMethodTrace = {
@@ -457,12 +457,12 @@ const meteorMethodTrace = {
   description: 'TODO description',
   args: {
     appId: Arguments.meteorAppId,
-    traceId: Arguments.meteorTraceId,
+    traceId: Arguments.meteorTraceId
   },
   resolve(root, args) {
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-method-trace', args);
-  },
+  }
 };
 
 const meteorMethodTraces = {
@@ -478,13 +478,13 @@ const meteorMethodTraces = {
     maxValue: Arguments.meteorMethodTraceMaxValue,
     limit: Arguments.meteorTraceLimit,
     sortOrder: Arguments.sortOrder,
-    sortField: Arguments.meteorMethodTraceSort,
+    sortField: Arguments.meteorMethodTraceSort
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-method-traces', args);
-  },
+  }
 };
 
 const meteorPubBreakdowns = {
@@ -497,11 +497,11 @@ const meteorPubBreakdowns = {
     endTime: Arguments.meteorTimeEndTime,
     limit: Arguments.meteorBreakdownLimit,
     sortOrder: Arguments.sortOrder,
-    sortField: Arguments.meteorPubBreakdownSort,
+    sortField: Arguments.meteorPubBreakdownSort
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-pub-breakdown', args);
   }
 };
@@ -516,13 +516,13 @@ const meteorPubHistogram = {
     endTime: Arguments.meteorTimeEndTime,
     binSize: Arguments.meteorHistogramBinSize,
     publication: Arguments.meteorPubName,
-    metric: Arguments.meteorPubMetric,
+    metric: Arguments.meteorPubMetric
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-pub-histogram', args);
-  },
+  }
 };
 
 const meteorPubMetrics = {
@@ -536,13 +536,13 @@ const meteorPubMetrics = {
     resolution: Arguments.meteorTimeResolution,
     publication: Arguments.meteorPubName,
     metric: Arguments.meteorPubMetric,
-    groupByHost: Arguments.meteorGroupByHost,
+    groupByHost: Arguments.meteorGroupByHost
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-pub-metrics', args);
-  },
+  }
 };
 
 const meteorPubTrace = {
@@ -550,12 +550,12 @@ const meteorPubTrace = {
   description: 'TODO description',
   args: {
     appId: Arguments.meteorAppId,
-    traceId: Arguments.meteorTraceId,
+    traceId: Arguments.meteorTraceId
   },
   resolve(root, args) {
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-pub-trace', args);
-  },
+  }
 };
 
 const meteorPubTraces = {
@@ -571,13 +571,13 @@ const meteorPubTraces = {
     maxValue: Arguments.meteorPubTraceMaxValue,
     limit: Arguments.meteorTraceLimit,
     sortOrder: Arguments.sortOrder,
-    sortField: Arguments.meteorPubTraceSort,
+    sortField: Arguments.meteorPubTraceSort
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-pub-traces', args);
-  },
+  }
 };
 
 const meteorSystemHistogram = {
@@ -589,13 +589,13 @@ const meteorSystemHistogram = {
     startTime: Arguments.meteorTimeStartTime,
     endTime: Arguments.meteorTimeEndTime,
     binSize: Arguments.meteorHistogramBinSize,
-    metric: Arguments.meteorSystemMetric,
+    metric: Arguments.meteorSystemMetric
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-system-histogram', args);
-  },
+  }
 };
 
 const meteorSystemMetrics = {
@@ -608,13 +608,13 @@ const meteorSystemMetrics = {
     endTime: Arguments.meteorTimeEndTime,
     resolution: Arguments.meteorTimeResolution,
     metric: Arguments.meteorSystemMetric,
-    groupByHost: Arguments.meteorGroupByHost,
+    groupByHost: Arguments.meteorGroupByHost
   },
   resolve(root, args) {
     setDefaultTimeRange(args);
-    checkTokenPermissions(root.token, args.appId, [ 'meteor' ]);
+    checkTokenPermissions(root.token, args.appId, ['meteor']);
     return useDefinition('meteor-system-metrics', args);
-  },
+  }
 };
 
 // GraphQL Root Query
@@ -642,6 +642,6 @@ export default new GraphQLObjectType({
     meteorPubTrace,
     meteorPubTraces,
     meteorSystemHistogram,
-    meteorSystemMetrics,
-  }),
+    meteorSystemMetrics
+  })
 });

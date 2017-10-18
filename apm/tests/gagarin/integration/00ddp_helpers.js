@@ -6,5 +6,5 @@ DdpHelpers.createUser = function(server, fields) {
 };
 
 DdpHelpers.createApp = function(appName) {
-  return this.call("apps.create", [appName]);
+  return this.call('apps.create', [appName]);
 };

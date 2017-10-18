@@ -1,14 +1,14 @@
-Tracker.autorun(function () {
-  var appId = FlowRouter.getParam("appId");
-  if(!appId) {
+Tracker.autorun(function() {
+  var appId = FlowRouter.getParam('appId');
+  if (!appId) {
     return;
   }
 
-  if(!FlowRouter.subsReady()) {
+  if (!FlowRouter.subsReady()) {
     return;
   }
 
-  Apps.findOne({_id: appId}, {fields: {perAppTeam: 1}});
+  Apps.findOne({ _id: appId }, { fields: { perAppTeam: 1 } });
 
-  Meteor.subscribe("apps.collaborators", appId);
+  Meteor.subscribe('apps.collaborators', appId);
 });

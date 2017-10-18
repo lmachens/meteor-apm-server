@@ -17,24 +17,24 @@ Autourl.prototype.trackPreviousContext = function(context) {
 Autourl.prototype.handle = function(context, redirect) {
   // When we see appId === AUTO
   // Then, we'll tring to figure our an appId automatically
-  if(context.params.appId !== "AUTO") {
+  if (context.params.appId !== 'AUTO') {
     return false;
   }
 
   var appId = null;
-  if(this._previousContext && this._previousContext.params.appId) {
+  if (this._previousContext && this._previousContext.params.appId) {
     appId = this._previousContext.params.appId;
   } else {
     var app = Apps.findOne() || {};
     appId = app._id;
   }
 
-  if(appId) {
+  if (appId) {
     var queryParams = context.queryParams;
     var params = context.params;
     params.appId = appId;
-    redirect("app", params, queryParams);
+    redirect('app', params, queryParams);
   } else {
-    redirect("/");
+    redirect('/');
   }
 };

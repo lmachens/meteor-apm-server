@@ -5,7 +5,7 @@ PROFILES['3hour'] = {
   //time range assigned for this profile
   timeRange: 1000 * 60 * 60 * 3,
   //collection where we need to read data from,
-  maxAllowedRange:  1000 * 60 * 60 * 15, // 15 hours
+  maxAllowedRange: 1000 * 60 * 60 * 15, // 15 hours
   //collection where we need to read data from
   resolution: '30min'
 };

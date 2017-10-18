@@ -1,14 +1,14 @@
 PROVIDERS['methods'] = {
-  name: "methods",
+  name: 'methods',
   collection: MethodsMetrics,
   rawCollection: RawMethodsMetrics,
   scope: {
     COUNTING_FIELDS: ['count', 'errors', 'fetchedDocSize', 'sentMsgSize'],
-    AVERAGING_FIELDS: ['wait', 'db', 'http', 'email', 'async', 'compute', 'total'],
+    AVERAGING_FIELDS: ['wait', 'db', 'http', 'email', 'async', 'compute', 'total']
   },
   map: function() {
     var timeWithSeconds = new Date(this.value.startTime);
-    var timeSeconds = timeWithSeconds % (PROFILE.timeRange);
+    var timeSeconds = timeWithSeconds % PROFILE.timeRange;
 
     var time = new Date(timeWithSeconds - timeSeconds);
 
@@ -29,16 +29,16 @@ PROVIDERS['methods'] = {
     var value = {
       counts: {},
       sums: {},
-      _expires: this.value._expires || new Date(Date.now() + 1000*60*60*24*2)
+      _expires: this.value._expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 2)
     };
 
     var self = this;
 
-    AVERAGING_FIELDS.forEach(function(field){
-      value.sums[field] = (self.value[field])? self.value[field] * self.value.count : 0;
+    AVERAGING_FIELDS.forEach(function(field) {
+      value.sums[field] = self.value[field] ? self.value[field] * self.value.count : 0;
     });
 
-    COUNTING_FIELDS.forEach(function(field){
+    COUNTING_FIELDS.forEach(function(field) {
       value.counts[field] = self.value[field] || 0;
     });
 
@@ -55,18 +55,18 @@ PROVIDERS['methods'] = {
     };
 
     values.forEach(function(value) {
-      COUNTING_FIELDS.forEach(function(field){
+      COUNTING_FIELDS.forEach(function(field) {
         reducedVal.counts[field] = reducedVal.counts[field] || 0;
         reducedVal.counts[field] += value.counts[field];
       });
 
-      AVERAGING_FIELDS.forEach(function(field){
+      AVERAGING_FIELDS.forEach(function(field) {
         reducedVal.sums[field] = reducedVal.sums[field] || 0;
         reducedVal.sums[field] += value.sums[field];
       });
 
       reducedVal._expires = reducedVal._expires || new Date();
-      if(value._expires.getTime() > reducedVal._expires.getTime()) {
+      if (value._expires.getTime() > reducedVal._expires.getTime()) {
         reducedVal._expires = value._expires;
       }
     });
@@ -92,15 +92,15 @@ PROVIDERS['methods'] = {
       subShard: reducedVal.subShard || 0
     };
 
-    COUNTING_FIELDS.forEach(function(field){
+    COUNTING_FIELDS.forEach(function(field) {
       finalValue[field] = reducedVal.counts[field];
-    })
-
-    AVERAGING_FIELDS.forEach(function (field){
-      finalValue[field] = reducedVal.sums[field]/reducedVal.counts.count;
     });
 
-    finalValue._expires = reducedVal._expires || new Date(Date.now() + 1000*60*60*24*2);
+    AVERAGING_FIELDS.forEach(function(field) {
+      finalValue[field] = reducedVal.sums[field] / reducedVal.counts.count;
+    });
+
+    finalValue._expires = reducedVal._expires || new Date(Date.now() + 1000 * 60 * 60 * 24 * 2);
 
     return finalValue;
   }

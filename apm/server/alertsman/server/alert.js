@@ -122,7 +122,8 @@ export default class Alert {
       hosts.forEach((host, id) => {
         if (id === 0) {
           onHosts = `${onHosts} ${host}`;
-        } else if (id === hosts.length - 1) { // last host
+        } else if (id === hosts.length - 1) {
+          // last host
           onHosts = `${onHosts} and ${host}`;
         } else {
           onHosts = `${onHosts}, ${host}`;
@@ -155,19 +156,23 @@ export default class Alert {
     const threshold = this.rule.params.threshold;
     const duration = this.rule.duration;
 
-    const formatedHosts = hosts.map(host => {return `<b>${host}</b>`;});
+    const formatedHosts = hosts.map(host => {
+      return `<b>${host}</b>`;
+    });
     const onHosts = this._getOnHosts(formatedHosts);
 
     let prettyTime;
     let current = 'Observed';
     if (duration > 0) {
-      const datetime = moment(time).utc().format(
-        '[<b>]h:mm:ss a[</b>,] [<b>]YYYY-MM-DD [GMT</b>]');
-      prettyTime = `for ${(duration / 60000)} minutes from ${datetime}`;
+      const datetime = moment(time)
+        .utc()
+        .format('[<b>]h:mm:ss a[</b>,] [<b>]YYYY-MM-DD [GMT</b>]');
+      prettyTime = `for ${duration / 60000} minutes from ${datetime}`;
       current = `${current} average`;
     } else {
-      prettyTime = moment(time).utc().format(
-        '[at <b>] h:mm:ss a [</b>, <b>] YYYY-MM-DD [GMT</b>]');
+      prettyTime = moment(time)
+        .utc()
+        .format('[at <b>] h:mm:ss a [</b>, <b>] YYYY-MM-DD [GMT</b>]');
     }
 
     const reason = this._getReason();
@@ -180,20 +185,23 @@ export default class Alert {
     const body = `
 Regarding Your App: <b>${appName}</b>.<br/>
 Alert <b>${name}</b> has triggered.<br/><br/>
-${ruleType} has been <b>${reason} ${threshold}</b> (${current}: <b>${value}</b>) ${prettyTime}${onHosts ? ' ' + onHosts : ''}.<br/><br/>
+${ruleType} has been <b>${reason} ${threshold}</b> (${current}: <b>${value}</b>) ${prettyTime}${onHosts
+      ? ' ' + onHosts
+      : ''}.<br/><br/>
 
 Visit <a href="${url}">Kadira</a> and find out more.`;
     /* eslint-enable max-len */
 
-    return {subject, body};
+    return { subject, body };
   }
 
   getEmailInfoForCleared() {
     const { name, appName } = this.meta;
 
     const time = Date.now();
-    const prettyTime = moment(time).utc().format(
-      '[at <b>]h:mm:ss a[</b>, <b>]YYYY-MM-DD [GMT</b>]');
+    const prettyTime = moment(time)
+      .utc()
+      .format('[at <b>]h:mm:ss a[</b>, <b>]YYYY-MM-DD [GMT</b>]');
     const url = this._getURL(time);
 
     const subject = `Alert ${name} of app: "${appName}" has cleared!`;
@@ -203,7 +211,7 @@ Regarding Your App: <b>${appName}</b>.<br/>
 Alert <b>${name}</b> has cleared ${prettyTime}.<br/><br/>
 Visit <a href="${url}">Kadira</a> and find out more.`;
 
-    return {subject, body};
+    return { subject, body };
   }
 
   getSlackInfoForTriggered(result) {
@@ -212,7 +220,9 @@ Visit <a href="${url}">Kadira</a> and find out more.`;
     const threshold = this.rule.params.threshold;
     const duration = this.rule.duration;
 
-    const formatedHosts = hosts.map(host => {return `*${host}*`;});
+    const formatedHosts = hosts.map(host => {
+      return `*${host}*`;
+    });
     const onHosts = this._getOnHosts(formatedHosts);
 
     const reason = this._getReason();
@@ -227,35 +237,36 @@ Visit <a href="${url}">Kadira</a> and find out more.`;
     const title = `Alert ${name} of app: "${appName}" has triggered!`;
     const titleLink = this._getURL(time);
 
-    const promise = shorten(titleLink)
-      .then(shortUrl => {
-        /* eslint-disable max-len */
-        const text = `
-${ruleType} has been *${reason} ${threshold}* (Observed: *${value}*) ${prettyTime}${onHosts ? ' ' + onHosts : ''}.
+    const promise = shorten(titleLink).then(shortUrl => {
+      /* eslint-disable max-len */
+      const text = `
+${ruleType} has been *${reason} ${threshold}* (Observed: *${value}*) ${prettyTime}${onHosts
+        ? ' ' + onHosts
+        : ''}.
 
 Visit ${shortUrl} and find out more.
         `;
-        /* eslint-enable max-len */
-        const fallback = `Alert ${name} of app: "${appName}" has triggered!`;
-        const color = 'danger';
+      /* eslint-enable max-len */
+      const fallback = `Alert ${name} of app: "${appName}" has triggered!`;
+      const color = 'danger';
 
-        /* eslint-disable camelcase */
-        return {
-          username: 'Kadira Alerts',
-          icon_url: 'http://static.kadira.io/kadira-alert-triggered.png',
-          attachments: [
-            {
-              fallback, // This should idealy be plain text
-              color,
-              title,
-              title_link: titleLink,
-              text,
-              mrkdwn_in: [ 'text' ]
-            }
-          ]
-        };
-        /* eslint-enable camelcase */
-      });
+      /* eslint-disable camelcase */
+      return {
+        username: 'Kadira Alerts',
+        icon_url: 'http://static.kadira.io/kadira-alert-triggered.png',
+        attachments: [
+          {
+            fallback, // This should idealy be plain text
+            color,
+            title,
+            title_link: titleLink,
+            text,
+            mrkdwn_in: ['text']
+          }
+        ]
+      };
+      /* eslint-enable camelcase */
+    });
 
     return promise;
   }
@@ -268,30 +279,28 @@ Visit ${shortUrl} and find out more.
     const title = `Alert ${name} of app: "${appName}" has cleared!`;
     const titleLink = this._getURL(time);
 
-    const promise = shorten(titleLink)
-      .then(shortUrl => {
+    const promise = shorten(titleLink).then(shortUrl => {
+      const text = `Visit ${shortUrl} and find out more.`;
+      const fallback = `Alert ${name} of app: "${appName}" has cleared!`;
+      const color = 'good';
 
-        const text = `Visit ${shortUrl} and find out more.`;
-        const fallback = `Alert ${name} of app: "${appName}" has cleared!`;
-        const color = 'good';
-
-        /* eslint-disable camelcase */
-        return {
-          username: 'Kadira Alerts',
-          icon_url: 'http://static.kadira.io/kadira-alert-cleared.png',
-          attachments: [
-            {
-              fallback,
-              color,
-              title,
-              title_link: titleLink,
-              text,
-              mrkdwn_in: [ 'text' ]
-            }
-          ]
-        };
-        /* eslint-enable camelcase */
-      });
+      /* eslint-disable camelcase */
+      return {
+        username: 'Kadira Alerts',
+        icon_url: 'http://static.kadira.io/kadira-alert-cleared.png',
+        attachments: [
+          {
+            fallback,
+            color,
+            title,
+            title_link: titleLink,
+            text,
+            mrkdwn_in: ['text']
+          }
+        ]
+      };
+      /* eslint-enable camelcase */
+    });
 
     return promise;
   }

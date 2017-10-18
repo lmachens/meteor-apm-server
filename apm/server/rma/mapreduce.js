@@ -1,24 +1,24 @@
-MapReduce = function (SourceColl, OutCollection, map, reduce, options) {
+MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
   var finalize = options.finalize;
   var query = options.query;
   var mrContext = options.scope || {};
   var statMap = {};
 
-  for(var key in mrContext) {
+  for (var key in mrContext) {
     this[key] = mrContext[key];
   }
   this['emit'] = function() {};
-  
+
   var emittedData = {};
   var data = SourceColl.find(query);
-  var count = data.count();  
+  var count = data.count();
   var startAt = Date.now();
   //console.log("   need to fetch: " + count, SourceColl._name);
 
   data.forEach(function(d) {
     var response = map.call(d);
     var k = JSON.stringify(response[0]);
-    if(!emittedData[k]) {
+    if (!emittedData[k]) {
       emittedData[k] = [];
     }
 
@@ -55,9 +55,12 @@ MapReduce = function (SourceColl, OutCollection, map, reduce, options) {
     key.time = new Date(key.time);
     var reducedData = reduce(key, emittedData[k]);
     var finalValue = finalize(key, reducedData);
-    bulk.find({id: key}).upsert().updateOne({$set: {value: finalValue}});
+    bulk
+      .find({ id: key })
+      .upsert()
+      .updateOne({ $set: { value: finalValue } });
   }
-  
+
   startAt = Date.now();
   //console.log(startAt);
   if (!empty) {

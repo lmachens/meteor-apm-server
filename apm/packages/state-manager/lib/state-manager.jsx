@@ -4,16 +4,13 @@ StateManager = function() {
   this.actions = {};
   this._ev = new EventEmitter();
 
-  [
-    'on', 'removeListener', 
-    'removeAllListeners', 'emit'
-  ].forEach((methodName) => {
+  ['on', 'removeListener', 'removeAllListeners', 'emit'].forEach(methodName => {
     var self = this;
     this[methodName] = function() {
       return self._ev[methodName].apply(self._ev, arguments);
     };
   });
-}
+};
 
 // support state validators
 StateManager.prototype.defineActions = function(actions) {
@@ -42,7 +39,7 @@ StateManager.prototype.defineStates = function(stores) {
   _.each(stores, (fn, name) => {
     var prevStates = {};
     _.each(this._states, (value, key) => {
-      prevStates[key] = true
+      prevStates[key] = true;
     });
 
     this._states[name] = {
@@ -54,7 +51,7 @@ StateManager.prototype.defineStates = function(stores) {
     };
 
     // support scalers as the initial value
-    if(typeof fn !== "function") {
+    if (typeof fn !== 'function') {
       this._states[name].fn = () => fn;
     }
   });
@@ -62,11 +59,11 @@ StateManager.prototype.defineStates = function(stores) {
 
 StateManager.prototype.get = function(name) {
   var stateInfo = this._states[name];
-  if(!stateInfo) {
+  if (!stateInfo) {
     throw new Error(`state "${name}" is not defined.`);
   }
 
-  if(!stateInfo.computation) {
+  if (!stateInfo.computation) {
     stateInfo.computation = Tracker.autorun(() => {
       // expose the get api as well (but using only previously declared states)
       var context = this._buildGetterContext(stateInfo.prevStates);
@@ -81,8 +78,8 @@ StateManager.prototype.get = function(name) {
 
 StateManager.prototype._buildGetterContext = function(prevStates) {
   var context = {
-    get: (name) => {
-      if(!prevStates[name]) {
+    get: name => {
+      if (!prevStates[name]) {
         throw new Error(`Not allowed to access state: "${name}" inside a getter`);
       }
 
@@ -97,13 +94,13 @@ StateManager.prototype._buildSetterContext = function() {
   var context = {
     set: (name, value) => {
       var stateInfo = this._states[name];
-      if(!stateInfo) {
+      if (!stateInfo) {
         throw new Error(`no such state called "${name}" exists to set`);
       }
 
       stateInfo.value = value;
       stateInfo.dep.changed();
-    }, 
+    },
 
     states: {}
   };

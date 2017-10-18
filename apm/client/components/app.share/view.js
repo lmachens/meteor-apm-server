@@ -1,6 +1,6 @@
-Template["app.share"].events({
-  "click #app-share": function (e) {
+Template['app.share'].events({
+  'click #app-share': function(e) {
     e.preventDefault();
-    FlowComponents.callAction("show");
+    FlowComponents.callAction('show');
   }
 });

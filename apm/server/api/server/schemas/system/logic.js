@@ -1,4 +1,4 @@
-import UpTimeMonitor from "./uptime_monitor";
+import UpTimeMonitor from './uptime_monitor';
 
 export default class Logic {
   constructor(config) {
@@ -12,12 +12,7 @@ export default class Logic {
     let resultPromises = [];
 
     while (t < end) {
-      const promise = this.upTimeMonitor.getStatus(
-        this.appDb,
-        collection,
-        res,
-        t
-      );
+      const promise = this.upTimeMonitor.getStatus(this.appDb, collection, res, t);
       resultPromises.push(promise);
       t += minute;
     }

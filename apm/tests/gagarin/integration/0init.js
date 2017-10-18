@@ -1,7 +1,7 @@
 createServer = function() {
-  var server = meteor({flavor: "fiber"});
+  var server = meteor({ flavor: 'fiber' });
 
-  for( var helper in ServerHelpers) {
+  for (var helper in ServerHelpers) {
     server[helper] = ServerHelpers[helper];
   }
   return server;
@@ -9,7 +9,7 @@ createServer = function() {
 
 createClient = function(server) {
   client = browser({
-    flavor: "fiber",
+    flavor: 'fiber',
     helpers: ClientHelpers,
     location: server
   });
@@ -20,7 +20,7 @@ createClient = function(server) {
 
 createDdpClient = function(server) {
   var ddpClient = ddp(server, {
-    flavor: "fiber",
+    flavor: 'fiber',
     helpers: DdpHelpers
   });
   return ddpClient;

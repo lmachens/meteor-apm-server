@@ -3,7 +3,11 @@ var uuid = require('uuid');
 var expire = require('./_expire');
 
 var ERROR_METRICS_FIELDS = [
-  'appId', 'name', 'type', 'subType', 'startTime',
+  'appId',
+  'name',
+  'type',
+  'subType',
+  'startTime',
   'count',
   'source' // deprecated
 ];
@@ -11,15 +15,15 @@ var ERROR_METRICS_FIELDS = [
 module.exports = function(data) {
   var ttl = expire.getTTL(data.app);
 
-  if(data.errors) {
+  if (data.errors) {
     return data.errors.map(formatMetrics);
   } else {
     return null;
-  };
+  }
 
-  function formatMetrics (_metrics) {
+  function formatMetrics(_metrics) {
     var metrics = _.pick(_metrics, ERROR_METRICS_FIELDS);
-    if(typeof metrics.name !== 'string') {
+    if (typeof metrics.name !== 'string') {
       metrics.name = JSON.stringify(metrics.name);
     }
 
@@ -50,6 +54,6 @@ module.exports = function(data) {
       metrics.host = metrics.host.substring(0, 80);
     }
 
-    return {_id: uuid.v4(), value: metrics};
+    return { _id: uuid.v4(), value: metrics };
   }
 };

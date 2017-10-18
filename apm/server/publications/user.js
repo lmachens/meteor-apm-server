@@ -1,6 +1,6 @@
-Meteor.publish("user.userInfo", function() {
+Meteor.publish('user.userInfo', function() {
   this.unblock();
-  if(this.userId){
+  if (this.userId) {
     var userFields = {
       emails: 1,
       plan: 1,
@@ -9,9 +9,9 @@ Meteor.publish("user.userInfo", function() {
       createdAt: 1,
       introVideoSeen: 1,
       billingInfo: 1,
-      "services.meteor-developer.emails": 1
+      'services.meteor-developer.emails': 1
     };
-    return Meteor.users.find({_id: this.userId}, {fields: userFields});
+    return Meteor.users.find({ _id: this.userId }, { fields: userFields });
   } else {
     this.ready();
   }

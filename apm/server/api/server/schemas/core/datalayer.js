@@ -1,5 +1,5 @@
-import LRU from "lru-cache";
-import { UserError } from "graphql-errors";
+import LRU from 'lru-cache';
+import { UserError } from 'graphql-errors';
 
 // global var!
 let datalayer;
@@ -19,7 +19,7 @@ export function initDataLayer(config) {
 export class DataLayer {
   constructor({ appDb }) {
     this.appDb = appDb;
-    this.appColl = appDb.collection("apps");
+    this.appColl = appDb.collection('apps');
   }
 
   async findOne(collectionName, query) {
