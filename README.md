@@ -2,8 +2,11 @@
 
 This project reduces the original Kadira APM to a single Meteor project.
 Most of the original features are working (like Slack alerts), but there is still a lot of work.
+Feel free to contribute!
 
 ## Running it
+
+A mongo replica set is required!
 
 ```
 cd apm
@@ -32,3 +35,4 @@ This opens the following ports:
 
 * Added MongoDB indexes
 * Remove raw data after processed
+* Use Meteor 1.6 (Node v8)
