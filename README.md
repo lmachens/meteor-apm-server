@@ -20,6 +20,11 @@ This opens the following ports:
 * RMA: 11011
 * API: 7007
 
+## Login
+
+username: admin@admin.com  
+password: admin  
+
 ## Meteor settings
 ```
 "kadira": {
