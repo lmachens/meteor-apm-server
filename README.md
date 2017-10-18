@@ -38,6 +38,9 @@ password: admin
 
 ## Changes to original Kadira
 
+* Reduce to one project
 * Added MongoDB indexes
+* Removed MongoDB shards
 * Remove raw data after processed
 * Use Meteor 1.6 (Node v8)
+* Removed premium packages
