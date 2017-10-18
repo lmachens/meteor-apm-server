@@ -131,7 +131,12 @@ export default class Messenger {
     }
 
     let retryPromise = promiseRetry(retry => {
-      return HTTP.post(uri, { uri, data: params }).catch(retry);
+      try {
+        return HTTP.post(uri, { uri, data: params });
+      } catch (e) {
+        console.error(e);
+        retry();
+      }
     }, retryOptions);
 
     let promise = retryPromise.catch(err => {
