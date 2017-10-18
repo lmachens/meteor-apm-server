@@ -34,32 +34,12 @@ if (Meteor.isServer) {
   MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-  RawMethodsMetrics.rawCollection().createIndex({
-    "value.appId": 1,
-    "value.host": 1,
-    "value.startTime": 1
-  });
   MethodsMetrics.rawCollection().createIndex({
     "value.appId": 1,
     "value.host": 1,
     "value.startTime": 1
   });
-  RawPubMetrics.rawCollection().createIndex({
-    "value.appId": 1,
-    "value.host": 1,
-    "value.startTime": 1
-  });
   PubMetrics.rawCollection().createIndex({
-    "value.appId": 1,
-    "value.host": 1,
-    "value.startTime": 1
-  });
-  RawSystemMetrics.rawCollection().createIndex({
-    "value.appId": 1,
-    "value.host": 1,
-    "value.startTime": 1
-  });
-  RawErrorMetrics.rawCollection().createIndex({
     "value.appId": 1,
     "value.host": 1,
     "value.startTime": 1
