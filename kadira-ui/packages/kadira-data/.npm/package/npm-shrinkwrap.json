@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "lru-cache": {
-      "version": "2.6.4",
-      "resolved": "https://registry.npmjs.org/lru-cache/-/lru-cache-2.6.4.tgz",
-      "from": "lru-cache@2.6.4"
-    }
-  }
-}

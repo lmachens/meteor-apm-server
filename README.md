@@ -1,37 +1,38 @@
-Meteor Development Group has bought Kadira APM from Arunoda. We have made the original Kadira code available under the MIT License in this GitHub repository.
+# APM
 
-As the code we're running in Galaxy has diverged, we will not be running this repository as an open source project. We've started a conversation with potential maintainers of a community fork.
+This project reduces the original Kadira APM to a single Meteor project.
+Most of the original features are working (like Slack alerts), but there is still a lot of work.
+Feel free to contribute!
 
-Arunoda uses the name Kadira for other projects and still owns the trademark on the "Kadira" name. Arunoda requests that public forks should choose a new name.
+## Running it
 
-# Kadira APM
-
-This is a set of components you need to run Kadira in your system.
-
-> The following instructions are not production deployment configurations. It's meant for running for testing.
-
-## Initial Setup
-
-Open `init-shell.sh` and update configurations.
-Make sure to set fresh DB configurations before getting started.
-
-Make the script executable.
-```sh
-chmod +x init-shell.sh
-```
-
-Then run following three components by visiting their directories:
-
-* kadira-engine
-* kadira-rma
-* kadira-ui
-
-## Connecting with Kadira Agent
-
-You you are ready to connect your app into Kadira. Since we are running with a custom setup, you need to export following environment variable before using Kadira in your app:
+A mongo replica set is required!
 
 ```
-export KADIRA_OPTIONS_ENDPOINT=http://localhost:11011
+cd apm
+meteor npm i
+meteor
 ```
 
-> Here's we've assumed http://localhost:11011 as the kadira-engine URL.
+This opens the following ports:
+
+* UI: 3000
+* RMA: 11011
+* API: 7007
+
+## Meteor settings
+```
+"kadira": {
+    "appId": "...",
+    "appSecret": "...",
+    "options": {
+        "endpoint": "http://localhost:11011"
+    }
+},
+```
+
+## Changes to original Kadira
+
+* Added MongoDB indexes
+* Remove raw data after processed
+* Use Meteor 1.6 (Node v8)
