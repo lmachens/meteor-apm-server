@@ -5,6 +5,7 @@
     "browser": true
   },
   "parserOptions": {
+    "ecmaVersion": 2017,
     "allowImportExportEverywhere": true,
     "sourceType": "module",
     "ecmaFeatures": {
