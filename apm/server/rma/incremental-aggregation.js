@@ -1,5 +1,5 @@
 incrementalAggregation = function(PROFILE, PROVIDER) {
-  var Log = { profile: PROFILE.name };
+  var Log = { profile: PROFILE.name, provider: PROVIDER.name };
 
   var SourceCollection = PROFILE.resolution ? PROVIDER.collection : PROVIDER.rawCollection;
   var DestCollection = PROVIDER.collection;
