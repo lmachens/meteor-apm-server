@@ -21,36 +21,60 @@ RawSystemMetrics = new Mongo.Collection('rawSystemMetrics');
 RmaLogs = new Mongo.Collection('rmaLogs');
 
 if (Meteor.isServer) {
-  AppStats.rawCollection().createIndex({
-    'value.appId': 1,
-    'value.host': 1,
-    'value.startTime': 1
-  });
-  SystemMetrics.rawCollection().createIndex({
-    'value.appId': 1,
-    'value.host': 1,
-    'value.startTime': 1
-  });
-  MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-  PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-  ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-  MethodsMetrics.rawCollection().createIndex({
-    'value.appId': 1,
-    'value.host': 1,
-    'value.startTime': 1
-  });
-  PubMetrics.rawCollection().createIndex({
-    'value.appId': 1,
-    'value.host': 1,
-    'value.startTime': 1
-  });
-  ErrorMetrics.rawCollection().createIndex({
-    'value.appId': 1,
-    'value.host': 1,
-    'value.startTime': 1
-  });
-  ProdStats.rawCollection().createIndex({
-    appId: 1,
-    metric: 1
-  });
+  AppStats.rawCollection().createIndex(
+    {
+      'value.appId': 1,
+      'value.host': 1,
+      'value.startTime': 1
+    },
+    { background: true }
+  );
+  SystemMetrics.rawCollection().createIndex(
+    {
+      'value.appId': 1,
+      'value.host': 1,
+      'value.startTime': 1
+    },
+    { background: true }
+  );
+  MethodTraces.rawCollection().createIndex(
+    { appId: 1, host: 1, startTime: 1 },
+    { background: true }
+  );
+  PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 }, { background: true });
+  ErrorTraces.rawCollection().createIndex(
+    { appId: 1, host: 1, startTime: 1 },
+    { background: true }
+  );
+  MethodsMetrics.rawCollection().createIndex(
+    {
+      'value.appId': 1,
+      'value.host': 1,
+      'value.startTime': 1
+    },
+    { background: true }
+  );
+  PubMetrics.rawCollection().createIndex(
+    {
+      'value.appId': 1,
+      'value.host': 1,
+      'value.startTime': 1
+    },
+    { background: true }
+  );
+  ErrorMetrics.rawCollection().createIndex(
+    {
+      'value.appId': 1,
+      'value.host': 1,
+      'value.startTime': 1
+    },
+    { background: true }
+  );
+  ProdStats.rawCollection().createIndex(
+    {
+      appId: 1,
+      metric: 1
+    },
+    { background: true }
+  );
 }
