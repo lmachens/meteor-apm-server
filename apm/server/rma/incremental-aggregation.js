@@ -59,9 +59,8 @@ incrementalAggregation = function(PROFILE, PROVIDER) {
     $gte: new Date(begin),
     $lt: Log.startedAt
   };
-
   //applying map reduce
-  let options = {
+  const options = {
     query: query,
     out: { merge: DestCollection._name },
     sort: {
@@ -96,8 +95,7 @@ incrementalAggregation = function(PROFILE, PROVIDER) {
       }
     };
 
-    let options = { upsert: true };
-    MapReduceProfileConfig.update(selector, modifier, options);
+    MapReduceProfileConfig.update(selector, modifier, { upsert: true });
     RmaLogs.insert(Log);
   } else {
     console.log('very strange! - no entries found');

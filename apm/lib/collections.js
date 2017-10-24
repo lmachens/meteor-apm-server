@@ -5,76 +5,81 @@ Alerts = new Mongo.Collection('alerts');
 ErrorsMeta = new Mongo.Collection('errorsMeta');
 
 MapReduceProfileConfig = new Mongo.Collection('mapReduceProfileConfig');
-RawErrorMetrics = new Mongo.Collection('rawErrorMetrics');
 ErrorTraces = new Mongo.Collection('errorTraces');
 ErrorMetrics = new Mongo.Collection('errorMetrics');
 AppStats = new Mongo.Collection('appStats');
 ProdStats = new Mongo.Collection('prodStats');
 MethodsMetrics = new Mongo.Collection('methodsMetrics');
 MethodTraces = new Mongo.Collection('methodsTraces');
+RawErrorMetrics = new Mongo.Collection('rawErrorMetrics');
 RawMethodsMetrics = new Mongo.Collection('rawMethodsMetrics');
+RawPubMetrics = new Mongo.Collection('rawPubMetrics');
+RawSystemMetrics = new Mongo.Collection('rawSystemMetrics');
 PubTraces = new Mongo.Collection('pubTraces');
 PubMetrics = new Mongo.Collection('pubMetrics');
-RawPubMetrics = new Mongo.Collection('rawPubMetrics');
 SystemMetrics = new Mongo.Collection('systemMetrics');
-RawSystemMetrics = new Mongo.Collection('rawSystemMetrics');
 RmaLogs = new Mongo.Collection('rmaLogs');
 
 if (Meteor.isServer) {
-  AppStats.rawCollection().createIndex(
-    {
-      'value.appId': 1,
-      'value.host': 1,
-      'value.startTime': 1
-    },
-    { background: true }
-  );
-  SystemMetrics.rawCollection().createIndex(
-    {
-      'value.appId': 1,
-      'value.host': 1,
-      'value.startTime': 1
-    },
-    { background: true }
-  );
-  MethodTraces.rawCollection().createIndex(
-    { appId: 1, host: 1, startTime: 1 },
-    { background: true }
-  );
+  AppStats.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  SystemMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 }, { background: true });
-  ErrorTraces.rawCollection().createIndex(
-    { appId: 1, host: 1, startTime: 1 },
-    { background: true }
-  );
-  MethodsMetrics.rawCollection().createIndex(
-    {
-      'value.appId': 1,
-      'value.host': 1,
-      'value.startTime': 1
-    },
-    { background: true }
-  );
-  PubMetrics.rawCollection().createIndex(
-    {
-      'value.appId': 1,
-      'value.host': 1,
-      'value.startTime': 1
-    },
-    { background: true }
-  );
-  ErrorMetrics.rawCollection().createIndex(
-    {
-      'value.appId': 1,
-      'value.host': 1,
-      'value.startTime': 1
-    },
-    { background: true }
-  );
-  ProdStats.rawCollection().createIndex(
-    {
-      appId: 1,
-      metric: 1
-    },
-    { background: true }
-  );
+  ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
+  MethodsMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  PubMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  ErrorMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  ProdStats.rawCollection().createIndex({
+    appId: 1,
+    metric: 1
+  });
+  RawErrorMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  RawMethodsMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  RawPubMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
+  RawSystemMetrics.rawCollection().createIndex({
+    'value.res': 1,
+    'value.appId': 1,
+    'value.host': 1,
+    'value.startTime': 1
+  });
 }

@@ -14,5 +14,6 @@ async function runAll() {
 }
 
 Meteor.startup(() => {
+  runAll();
   setInterval(runAll, 60000);
 });

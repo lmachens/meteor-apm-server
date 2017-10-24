@@ -4,18 +4,18 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
   var mrContext = options.scope || {};
   var statMap = {};
 
-  for (var key in mrContext) {
+  for (let key in mrContext) {
     this[key] = mrContext[key];
   }
   this['emit'] = function() {};
 
   var emittedData = {};
   var data = SourceColl.find(query);
-  var count = data.count();
+  //var count = data.count();
   var startAt = Date.now();
-  //console.log("   need to fetch: " + count, SourceColl._name);
+  //console.log('   need to fetch: ' + count, SourceColl._name);
 
-  data.forEach(function(d) {
+  data.fetch().forEach(function(d) {
     var response = map.call(d);
     var k = JSON.stringify(response[0]);
     if (!emittedData[k]) {
@@ -43,8 +43,8 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
     emittedData[k].push(response[1]);
   });
 
-  //var diff = Date.now() - startAt;
-  //console.log("   fetched in: " + diff + " ms");
+  var diff = Date.now() - startAt;
+  //console.log('   fetched in: ' + diff + ' ms');
 
   var bulk = OutCollection.rawCollection().initializeOrderedBulkOp();
 
@@ -79,5 +79,5 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
     Meteor.wrapAsync(statBulk.execute, statBulk)();
   }
   diff = Date.now() - startAt;
-  //console.log("   writing completed in: " + diff + " ms");
+  //console.log('   writing completed in: ' + diff + ' ms');
 };
