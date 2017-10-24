@@ -2,7 +2,6 @@
 
 import { handleAuth, loadExplorer, sendPong } from './transports/http';
 
-import { MongoClient } from 'mongodb';
 import { configureAuth } from './authlayer';
 import cors from 'cors';
 import express from 'express';

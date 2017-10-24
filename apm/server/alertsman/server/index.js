@@ -15,7 +15,6 @@ const debug = require('debug')('alertsman:index');
 const { info, error } = console;
 
 const {
-  NODE_ENV,
   MONGO_URL,
   MONGO_OPLOG_URL,
   KADIRA_API_URL = 'http://root:secret@localhost:7007/core',
