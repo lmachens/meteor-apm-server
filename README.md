@@ -44,3 +44,10 @@ password: admin
 * Remove raw data after processed
 * Use Meteor 1.6 (Node v8)
 * Removed premium packages
+
+## ToDo
+
+* Direct db access of alertsman (apm/server/alertsman/server.js) and remove api (apm/server/api/server.js)
+* Remove old documents from db after a configurable time
+* Optimize mongodb indexes
+* Replace invalid links to old kadira docs
