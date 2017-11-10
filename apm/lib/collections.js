@@ -23,7 +23,7 @@ if (Meteor.isServer) {
   const metricsIndex = {
     'value.res': 1,
     'value.appId': 1,
-    'value.startTime': 1
+    'value.startTime': -1
   };
   SystemMetrics.rawCollection().createIndex(metricsIndex);
   MethodsMetrics.rawCollection().createIndex(metricsIndex);
@@ -34,7 +34,7 @@ if (Meteor.isServer) {
     'value.res': 1,
     'value.appId': 1,
     'value.host': 1,
-    'value.startTime': 1
+    'value.startTime': -1
   });
 
   MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
