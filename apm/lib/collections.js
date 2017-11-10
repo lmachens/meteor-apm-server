@@ -8,7 +8,6 @@ MapReduceProfileConfig = new Mongo.Collection('mapReduceProfileConfig');
 ErrorTraces = new Mongo.Collection('errorTraces');
 ErrorMetrics = new Mongo.Collection('errorMetrics');
 AppStats = new Mongo.Collection('appStats');
-ProdStats = new Mongo.Collection('prodStats');
 MethodsMetrics = new Mongo.Collection('methodsMetrics');
 MethodTraces = new Mongo.Collection('methodsTraces');
 RawErrorMetrics = new Mongo.Collection('rawErrorMetrics');
@@ -41,9 +40,4 @@ if (Meteor.isServer) {
   MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 }, { background: true });
   ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-
-  ProdStats.rawCollection().createIndex({
-    appId: 1,
-    metric: 1
-  });
 }
