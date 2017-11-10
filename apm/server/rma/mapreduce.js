@@ -66,18 +66,6 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
   if (!empty) {
     Meteor.wrapAsync(bulk.execute, bulk)();
   }
-  // inserting stats
-  var statBulk = ProdStats.rawCollection().initializeUnorderedBulkOp();
-  empty = true;
-  for (var statStr in statMap) {
-    empty = false;
-    if (statMap.hasOwnProperty(statStr)) {
-      statBulk.insert(statMap[statStr]);
-    }
-  }
-  if (!empty) {
-    Meteor.wrapAsync(statBulk.execute, statBulk)();
-  }
   diff = Date.now() - startAt;
   //console.log('   writing completed in: ' + diff + ' ms');
 };
