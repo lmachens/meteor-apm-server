@@ -20,15 +20,22 @@ SystemMetrics = new Mongo.Collection('systemMetrics');
 RmaLogs = new Mongo.Collection('rmaLogs');
 
 if (Meteor.isServer) {
-  const metricsIndex = {
+  const aggregationMetricsIndex = {
     'value.res': 1,
     'value.appId': 1,
     'value.startTime': -1
   };
-  SystemMetrics.rawCollection().createIndex(metricsIndex);
-  MethodsMetrics.rawCollection().createIndex(metricsIndex);
-  PubMetrics.rawCollection().createIndex(metricsIndex);
-  ErrorMetrics.rawCollection().createIndex(metricsIndex);
+  const cleanupMetricsIndex = {
+    'value.startTime': 1
+  };
+  SystemMetrics.rawCollection().createIndex(aggregationMetricsIndex);
+  MethodsMetrics.rawCollection().createIndex(aggregationMetricsIndex);
+  PubMetrics.rawCollection().createIndex(aggregationMetricsIndex);
+  ErrorMetrics.rawCollection().createIndex(aggregationMetricsIndex);
+  SystemMetrics.rawCollection().createIndex(cleanupMetricsIndex);
+  MethodsMetrics.rawCollection().createIndex(cleanupMetricsIndex);
+  PubMetrics.rawCollection().createIndex(cleanupMetricsIndex);
+  ErrorMetrics.rawCollection().createIndex(cleanupMetricsIndex);
 
   AppStats.rawCollection().createIndex({
     'value.res': 1,
