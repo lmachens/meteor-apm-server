@@ -25,7 +25,15 @@ This opens the following ports:
 username: admin@admin.com  
 password: admin  
 
-## Meteor settings
+## Meteor apm settings
+`metricsLifetime` sets the maximum lifetime of the metrics. Old metrics are removed after each aggregation.
+The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days).
+
+```
+"metricsLifetime": 604800000
+```
+
+## Meteor client settings
 ```
 "kadira": {
     "appId": "...",
@@ -48,6 +56,4 @@ password: admin
 ## ToDo
 
 * Direct db access of alertsman (apm/server/alertsman/server.js) and remove api (apm/server/api/server.js)
-* Remove old documents from db after a configurable time
-* Optimize mongodb indexes
 * Replace invalid links to old kadira docs
