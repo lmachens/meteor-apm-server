@@ -1,6 +1,3 @@
-// Set maximum metrics lifetime (Default 7 days)
-const metricsLifetime = Meteor.settings.metricsLifetime || 1000 * 60 * 60 * 24 * 7;
-
 incrementalAggregation = function(PROFILE, PROVIDER) {
   var Log = { profile: PROFILE.name, provider: PROVIDER.name };
 
@@ -77,19 +74,6 @@ incrementalAggregation = function(PROFILE, PROVIDER) {
   //console.log("  Using local MR");
   MapReduce(SourceCollection, DestCollection, PROVIDER.map, PROVIDER.reduce, options);
   Log.elapsedTime = Date.now() - Log.startedAt.getTime();
-
-  // Clean up.
-  if (SourceCollection === PROVIDER.rawCollection) {
-    // We don't need fetched documents of rawCollection anymore.
-    PROVIDER.rawCollection.remove(query);
-  } else {
-    // To limit the documents in the db, we should remove old metrics.
-    SourceCollection.remove({
-      'value.startTime': {
-        $lt: new Date(Log.startedAt.getTime() - metricsLifetime)
-      }
-    });
-  }
 
   var entry = DestCollection.findOne({
     // we are using following query and sort because of the index we are utilizing

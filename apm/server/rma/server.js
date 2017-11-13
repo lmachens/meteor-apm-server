@@ -1,4 +1,5 @@
 async function runAll() {
+  const startTime = new Date();
   await incrementalAggregation(PROFILES['1min'], PROVIDERS['errors']);
   await incrementalAggregation(PROFILES['1min'], PROVIDERS['methods']);
   await incrementalAggregation(PROFILES['1min'], PROVIDERS['pubsub']);
@@ -11,6 +12,8 @@ async function runAll() {
   await incrementalAggregation(PROFILES['3hour'], PROVIDERS['methods']);
   await incrementalAggregation(PROFILES['3hour'], PROVIDERS['pubsub']);
   await incrementalAggregation(PROFILES['3hour'], PROVIDERS['system']);
+
+  cleanup(startTime);
 }
 
 Meteor.startup(() => {
