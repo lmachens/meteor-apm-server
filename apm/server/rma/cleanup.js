@@ -4,20 +4,24 @@ const rawCollections = [RawErrorMetrics, RawMethodsMetrics, RawPubMetrics, RawSy
 const collections = [ErrorMetrics, MethodsMetrics, PubMetrics, SystemMetrics];
 
 cleanup = function(startTime) {
-  rawCollections.forEach(rawCollection =>
-    rawCollection.remove({
-      'value.startTime': {
-        $lt: startTime
-      }
-    })
+  let removed = 0;
+  rawCollections.forEach(
+    rawCollection =>
+      (removed += rawCollection.remove({
+        'value.startTime': {
+          $lt: startTime
+        }
+      }))
   );
 
-  const dateLessThan = new Date(startTime.getTime - metricsLifetime);
-  collections.forEach(collection =>
-    collection.remove({
-      'value.startTime': {
-        $lt: dateLessThan
-      }
-    })
+  const dateLessThan = new Date(startTime.getTime() - metricsLifetime);
+  collections.forEach(
+    collection =>
+      (removed += collection.remove({
+        'value.startTime': {
+          $lt: dateLessThan
+        }
+      }))
   );
+  console.log('cleaned up', removed);
 };
