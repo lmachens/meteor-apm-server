@@ -26,19 +26,19 @@ if (Meteor.isServer) {
     'id.time': -1,
     'id.res': 1
   };
-  /*const aggregationMetricsIndex = {
+  const aggregationMetricsIndex = {
     'value.res': 1,
     'value.appId': 1,
     'value.startTime': -1
   };
   const cleanupMetricsIndex = {
     'value.startTime': 1
-  };*/
+  };
   SystemMetrics.rawCollection().createIndex(idIndex);
   MethodsMetrics.rawCollection().createIndex(idIndex);
   PubMetrics.rawCollection().createIndex(idIndex);
   ErrorMetrics.rawCollection().createIndex(idIndex);
-  /*SystemMetrics.rawCollection().createIndex(aggregationMetricsIndex);
+  SystemMetrics.rawCollection().createIndex(aggregationMetricsIndex);
   MethodsMetrics.rawCollection().createIndex(aggregationMetricsIndex);
   PubMetrics.rawCollection().createIndex(aggregationMetricsIndex);
   ErrorMetrics.rawCollection().createIndex(aggregationMetricsIndex);
@@ -53,9 +53,8 @@ if (Meteor.isServer) {
     'value.host': 1,
     'value.startTime': -1
   });
-  
+
   MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
-  */
 }
