@@ -4,6 +4,7 @@ const rawCollections = [RawErrorMetrics, RawMethodsMetrics, RawPubMetrics, RawSy
 const collections = [ErrorMetrics, MethodsMetrics, PubMetrics, SystemMetrics];
 
 cleanup = function(startTime) {
+  var startAt = Date.now();
   let removed = 0;
   rawCollections.forEach(
     rawCollection =>
@@ -23,5 +24,6 @@ cleanup = function(startTime) {
         }
       }))
   );
-  console.log('cleaned up', removed);
+  var diff = Date.now() - startAt;
+  console.log(`   cleaned up ${removed} in ${diff} ms`);
 };

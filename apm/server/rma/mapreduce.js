@@ -2,7 +2,6 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
   var finalize = options.finalize;
   var query = options.query;
   var mrContext = options.scope || {};
-  var statMap = {};
 
   for (let key in mrContext) {
     this[key] = mrContext[key];
@@ -11,9 +10,8 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
 
   var emittedData = {};
   var data = SourceColl.find(query);
-  //var count = data.count();
+  var count = data.count();
   var startAt = Date.now();
-  //console.log('   need to fetch: ' + count, SourceColl._name);
 
   data.fetch().forEach(function(d) {
     var response = map.call(d);
@@ -22,29 +20,11 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
       emittedData[k] = [];
     }
 
-    // hacking mapreduce to monitor app stats
-    var statId = {
-      time: new Date(startAt),
-      appId: response[0].appId,
-      metric: OutCollection._name,
-      res: response[0].res
-    };
-
-    var strStatId = statId.time.getTime() + statId.appId + statId.metric + statId.res;
-
-    if (statMap[strStatId]) {
-      statMap[strStatId].count += 1;
-    } else {
-      statMap[strStatId] = statId;
-      statMap[strStatId].count = 1;
-      statMap[strStatId].id = strStatId;
-    }
-
     emittedData[k].push(response[1]);
   });
 
   var diff = Date.now() - startAt;
-  //console.log('   fetched in: ' + diff + ' ms');
+  console.log(`   fetched ${count} of ${SourceColl._name} in ${diff} ms'`);
 
   var bulk = OutCollection.rawCollection().initializeOrderedBulkOp();
 
@@ -62,10 +42,9 @@ MapReduce = function(SourceColl, OutCollection, map, reduce, options) {
   }
 
   startAt = Date.now();
-  //console.log(startAt);
   if (!empty) {
     Meteor.wrapAsync(bulk.execute, bulk)();
   }
   diff = Date.now() - startAt;
-  //console.log('   writing completed in: ' + diff + ' ms');
+  console.log(`   writing completed in ${diff} ms`);
 };
