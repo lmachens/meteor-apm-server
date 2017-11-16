@@ -1,3 +1,4 @@
+const minTime = 30000;
 async function runAll() {
   const startTime = new Date();
   await incrementalAggregation(PROFILES['1min'], PROVIDERS['errors']);
@@ -15,7 +16,13 @@ async function runAll() {
 
   cleanup(startTime);
 
-  runAll();
+  var diff = Date.now() - startAt;
+  // Call the next aggregation max. once in every {minTime} ms
+  if (diff > minTime) {
+    runAll();
+  } else {
+    setTimeout(runAll, minTime - diff);
+  }
 }
 
 Meteor.startup(() => {
