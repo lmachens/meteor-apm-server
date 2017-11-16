@@ -14,9 +14,10 @@ async function runAll() {
   await incrementalAggregation(PROFILES['3hour'], PROVIDERS['system']);
 
   cleanup(startTime);
+
+  runAll();
 }
 
 Meteor.startup(() => {
   runAll();
-  setInterval(runAll, 60000);
 });
