@@ -16,7 +16,7 @@ async function runAll() {
 
   cleanup(startTime);
 
-  var diff = Date.now() - startAt;
+  var diff = Date.now() - startTime;
   // Call the next aggregation max. once in every {minTime} ms
   if (diff > minTime) {
     runAll();
