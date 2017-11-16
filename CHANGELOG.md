@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+## [1.0.4] - 2017-11-16
 ### Changed
 - Cleanup is optimized and called after each aggregation interval.
 - Make sure that the previous aggregation is finished before starting the next ones.
