@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+### Changed
+- Cleanup is optimized and called after each aggregation interval.
+- Make sure that the previous aggregation is finished before starting the next ones.
+
 ## [1.0.3] - 2017-11-10
 ### Added
 - Meteor.settings.metricsLifetime to set maximum lifetime of metrics.
