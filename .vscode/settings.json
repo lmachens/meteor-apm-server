@@ -11,5 +11,8 @@
         "**/bower_components": true,
         "**/.meteor/local": true
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "[markdown]": {
+        "editor.formatOnSave": false
+    }
 }
