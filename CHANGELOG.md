@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 ## [1.0.6] - 2018-01-19
 ### Changed
 - Call aggregation for 30min and 3hour profiles only when needed to reduce server load. Thx @jehartzog [#16](https://github.com/lmachens/meteor-apm-server/pull/16)
+- Remove console.logs which is the reason for large log files.
 
 ## [1.0.5] - 2017-12-12
 ### Changed
