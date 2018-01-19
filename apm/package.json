@@ -1,6 +1,6 @@
 {
   "name": "meteor-apm-server",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "This is the server project of meteor apm (formerly known as kadira).",
   "directories": {
     "test": "tests"
