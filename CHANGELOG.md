@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
+
+## [1.0.7] - 2018-01-23
+### Fixed
+- Fix aggregation bug [#17](https://github.com/lmachens/meteor-apm-server/pull/17)
+
 ## [1.0.6] - 2018-01-19
 ### Changed
 - Call aggregation for 30min and 3hour profiles only when needed to reduce server load. Thx @jehartzog [#16](https://github.com/lmachens/meteor-apm-server/pull/16)
