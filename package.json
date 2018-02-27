@@ -1,0 +1,23 @@
+{
+    "name": "meteor-apm-server",
+    "version": "1.0.8",
+    "description": "Get meteor-apm-server up and running with a stable configuration using MUP",
+    "scripts": {
+        "mup-deploy": "npx mup setup && npx mup deploy",
+        "mup-logs": "npx mup logs",
+        "mup-restart": "npx mup restart"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/lmachens/meteor-apm-server.git"
+    },
+    "author": "lmachens",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/lmachens/meteor-apm-server/issues"
+    },
+    "homepage": "https://github.com/lmachens/meteor-apm-server#readme",
+    "dependencies": {
+        "mup": "1.4.2"
+    }
+}
