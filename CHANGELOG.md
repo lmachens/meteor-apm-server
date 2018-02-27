@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 - Update npm dependencies.
 - Update Meteor to 1.6.1.
 - Fixed `MongoOplog is not a constructor`.
+- Removed Segment.io package.
 
 ## [1.0.7] - 2018-01-23
 ### Fixed

@@ -24,7 +24,6 @@ http@1.4.0
 local:kadira-data
 reactive-var@1.0.11
 local:permissions-manager
-percolatestudio:segment.io@=1.1.1_1
 raix:eventemitter
 local:url-state-manager
 meteorhacks:customer-io
