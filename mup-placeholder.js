@@ -23,7 +23,7 @@ module.exports = {
       MONGO_OPLOG_URL: 'mongodb://mongodb/local'
     },
     docker: {
-      image: 'abernix/meteord:node-8.4.0-base',
+      image: 'abernix/meteord:node-8.9.3-base',
       args: [
         '-p 11011:11011', // Open up the engine port
         '--log-driver json-file', // Without these the Docker log file for Mongo will exhaust disk space
