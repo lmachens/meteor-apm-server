@@ -14,7 +14,7 @@ Meteor.methods({
       name: appName,
       created: new Date(),
       owner: this.userId,
-      secret: Meteor.uuid(),
+      secret: Random.id(),
       plan: 'business',
       subShard: subShard
     };
@@ -29,7 +29,7 @@ Meteor.methods({
   },
   'apps.regenerateSecret': function(appId) {
     check(appId, String);
-    var appSecret = Meteor.uuid();
+    var appSecret = Random.id();
     Apps.update({ _id: appId, owner: this.userId }, { $set: { secret: appSecret } });
   },
   'apps.delete': function(appId) {

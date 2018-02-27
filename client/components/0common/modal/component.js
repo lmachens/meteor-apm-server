@@ -1,5 +1,5 @@
 var component = FlowComponents.define('modal', function(props) {
-  this.modalId = props.id || Meteor.uuid();
+  this.modalId = props.id || Random.id();
 
   this.set('modalId', this.modalId);
   this.modalClass = props.modalClass || '';

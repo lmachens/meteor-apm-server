@@ -3,7 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
-## [Unreleased]
+## [1.0.8] - 2018-02-27
+- BREAKING CHANGE: Merged package.json and moved meteor files to top level. You should update your mup scripts and point to this directory instead of `/apm`.
+- Adding  mongo indexes to improve cpu usage [#23](https://github.com/lmachens/meteor-apm-server/pull/23) Thx @jasongrishkoff
+- Provide working MUP deployment template and guide [#25](https://github.com/lmachens/meteor-apm-server/pull/25) Thx @jehartzog
+- Update npm dependencies.
+- Update Meteor to 1.6.1.
+- Fixed `MongoOplog is not a constructor`.
 
 ## [1.0.7] - 2018-01-23
 ### Fixed

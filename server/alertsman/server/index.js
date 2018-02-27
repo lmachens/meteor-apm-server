@@ -26,7 +26,7 @@ const {
 
 const parsedUrl = parseMongoUrl(MONGO_URL);
 const oplogFilterNs = `${parsedUrl.dbName}.alerts`;
-const oplogConn = new MongoOplog(MONGO_OPLOG_URL, { ns: oplogFilterNs });
+const oplogConn = MongoOplog(MONGO_OPLOG_URL, { ns: oplogFilterNs });
 const alertsStore = new AlertsStore(oplogConn);
 
 const tickManager = new TickManager({
