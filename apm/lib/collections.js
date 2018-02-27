@@ -57,4 +57,10 @@ if (Meteor.isServer) {
   MethodTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   PubTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
   ErrorTraces.rawCollection().createIndex({ appId: 1, host: 1, startTime: 1 });
+  
+  // Essential indexes to keep CPU load down                                                                           
+  ErrorMetrics.rawCollection().createIndex({id:1});                                                                    
+  SystemMetrics.rawCollection().createIndex({id:1});                                                                   
+  MethodsMetrics.rawCollection().createIndex({id:1});                                                                  
+  PubMetrics.rawCollection().createIndex({id:1}); 
 }
