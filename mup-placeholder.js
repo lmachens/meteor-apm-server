@@ -19,7 +19,7 @@ module.exports = {
     },
     env: {
       ROOT_URL: 'https://apm.YOUR_DOMAIN.com',
-      MONGO_URL: 'mongodb://localhost/meteor',
+      MONGO_URL: 'mongodb://mongodb/meteor',
       MONGO_OPLOG_URL: 'mongodb://mongodb/local'
     },
     docker: {
