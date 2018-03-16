@@ -8,6 +8,22 @@ Most of the original features are working (like Slack alerts), but there is stil
 
 The easiest way to get this server up and running is to use the recommended configuration with [MUP](https://github.com/zodern/meteor-up).
 
+You can also use docker to spin up an instance pretty quick:
+
+```
+docker run -d --name meteor-apm-server \
+  -p 4000:80 \
+  -p 7007:7007 \
+  -p 11011:11011 \
+  -e PORT=80 \
+  -e MONGO_URL=mongodb://[your mongodb url] \
+  -e MONGO_OPLOG_URL=mongodb://[your mongodb oplog url] \
+  -e ROOT_URL=[e.g. monitoring.yourdomain.com] \
+  strictlyskyler/meteor-apm-server:1.1.0
+```
+
+This can be useful for running an instance quickly in your own environment with orchestration.
+
 ### Setup steps
 
 1) Clone this repo and run `meteor npm install`.
