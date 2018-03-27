@@ -12,8 +12,7 @@
         <div class="alert alert-danger">{{state$error}}</div>
         {{/if}}
         {{#if state$isSignInPage}}
-          <div class="sign-in-toggle"><a data-toggle="collapse" href="#sign-in-with-email">{{i18n "signIn.sign_in_with_email"}}</a></div>
-          <form class="form collapse" id="sign-in-with-email">
+          <form class="form" id="sign-in-with-email">
             <div class="form-group">
               <input autofocus="" name="email" type="email" class="form-control" placeholder="{{i18n 'signIn.email'}}">
             </div>
