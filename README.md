@@ -30,7 +30,9 @@ This can be useful for running an instance quickly in your own environment with 
 
 2) Copy [`mup-placeholder.js`](mup-placeholder.js) to `mup.js`. Replace the placeholder entries in the configuration with your configuration.
 
-3) Server configuration steps you need to verify prior to deployment:
+3) Copy [`settings-placeholder.json`](settings-placeholder.json) to `settings.json`. Change any settings as it suits your project (see *Meteor apm settings* section below)
+
+4) Server configuration steps you need to verify prior to deployment:
 
    a) This setup was tested using a server with at least 512MB of RAM.
 
@@ -38,11 +40,11 @@ This can be useful for running an instance quickly in your own environment with 
 
    c) In order for SSL configuration to succeed, you must set setup your DNS to point to your server IP address prior to deployment. Make sure to point both `apm.YOUR_DOMAIN.com` and `apm-engine.YOUR_DOMAIN.com` to the same server IP address.
 
-4) Run `npm run mup-deploy`.
+5) Run `npm run mup-deploy`.
 
-5) Visit your APM UI page at `https://apm.YOUR_DOMAIN.com`. Login with username `admin@admin.com`, password `admin`. **CHANGE YOUR PASSWORD FROM THIS DEFAULT**.
+6) Visit your APM UI page at `https://apm.YOUR_DOMAIN.com`. Login with username `admin@admin.com`, password `admin`. **CHANGE YOUR PASSWORD FROM THIS DEFAULT**.
 
-6) In the APM web UI, create a new app and pass the settings to your Meteor app:
+7) In the APM web UI, create a new app and pass the settings to your Meteor app:
 
 `settings.json`
 ```
@@ -58,7 +60,7 @@ This can be useful for running an instance quickly in your own environment with 
 }
 ```
 
-7) Re-deploy your Meteor app, and you should see data populating in your APM UI in seconds.
+8) Re-deploy your Meteor app, and you should see data populating in your APM UI in seconds.
 
 ## Server Restarts
 
