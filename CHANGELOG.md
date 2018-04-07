@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.1.0] - 2018-04-07
+- Update Meteor to 1.6.1.1
+- Remove 'signin with email' [#27](https://github.com/lmachens/meteor-apm-server/pull/27) Thx @ramezrafla
+- Updated README Thx @StrictlySkyler and @markreid
+
 ## [1.0.8] - 2018-02-27
 - BREAKING CHANGE: Merged package.json and moved meteor files to top level. You should update your mup scripts and point to this directory instead of `/apm`.
 - Adding  mongo indexes to improve cpu usage [#23](https://github.com/lmachens/meteor-apm-server/pull/23) Thx @jasongrishkoff
