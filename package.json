@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/lmachens/meteor-apm-server#readme",
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.40",
+    "@babel/runtime": "^7.0.0-beta.44",
     "async": "^2.6.0",
     "babel-core": "^6.26.0",
     "babel-polyfill": "^6.26.0",
@@ -33,7 +33,7 @@
     "connect-query": "^1.0.0",
     "cors": "^2.8.4",
     "crc": "^3.5.0",
-    "express": "^4.16.2",
+    "express": "^4.16.3",
     "express-graphql": "^0.6.12",
     "fast-stats": "0.0.3",
     "goo.gl": "^0.1.4",
@@ -48,11 +48,11 @@
     "lokka": "^1.7.0",
     "lokka-transport-http-auth": "^1.2.0",
     "lru-cache": "^4.1.1",
-    "meteor-node-stubs": "^0.3.2",
+    "meteor-node-stubs": "^0.3.3",
     "mocha": "^5.0.1",
     "moment": "^2.20.1",
     "mongo-oplog": "^2.1.0",
-    "mongodb": "^3.0.3",
+    "mongodb": "^3.0.5",
     "parse-mongo-url": "^1.1.1",
     "promise-retry": "^1.1.1",
     "react": "^15.6.2",
@@ -69,6 +69,6 @@
     "zeroclipboard": "^2.3.0"
   },
   "devDependencies": {
-    "mup": "1.4.2"
+    "mup": "1.4.4"
   }
 }
