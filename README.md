@@ -77,7 +77,7 @@ If you want to do custom configuration and server setup, here are items to be aw
 
 1) A mongo replica set is required. This is set up automatically for you when using the template MUP configuration script.
 
-2) If you are not getting APM data and see a [No 'Access-Control-Allow-Origin' header is present](#14) console error in your Meteor app, this is due to incorrect nginx proxy configuration. To confirm the issue, ssh into your server (`npx mup ssh`) and run `docker exec mup-nginx-proxy cat /etc/nginx/conf.d/default.conf`. Look for the upstream block for `apm-engine.YOUR_DOMAIN.com`, the entry should look like 
+2) If you are not getting APM data and see a [No 'Access-Control-Allow-Origin' header is present](https://github.com/lmachens/meteor-apm-server/issues/14) console error in your Meteor app, this is due to incorrect nginx proxy configuration. To confirm the issue, ssh into your server (`npx mup ssh`) and run `docker exec mup-nginx-proxy cat /etc/nginx/conf.d/default.conf`. Look for the upstream block for `apm-engine.YOUR_DOMAIN.com`, the entry should look like 
 ```
 upstream apm-engine.YOUR_DOMAIN.com {
     # YOUR_APP
