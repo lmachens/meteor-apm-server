@@ -6,8 +6,9 @@ Most of the original features are working (like Slack alerts), but there is stil
 
 ## Get up and running with MUP
 
-The easiest way to get this server up and running is to use the recommended configuration with [MUP](https://github.com/zodern/meteor-up).
+The easiest way to get this server up and running is to use the recommended configuration with [MUP](https://github.com/zodern/meteor-up), see below.
 
+### Setup steps using Docker
 You can also use docker to spin up an instance pretty quick:
 
 ```
@@ -24,7 +25,9 @@ docker run -d --name meteor-apm-server \
 
 This can be useful for running an instance quickly in your own environment with orchestration.
 
-### Setup steps
+### Setup steps using MUP
+
+Keep in mind when using MUP: [your user account on the server must be sudoer without password](http://meteor-up.com/docs.html#ssh-based-authentication-with-sudo)
 
 1) Clone this repo and run `meteor npm install`.
 
