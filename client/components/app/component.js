@@ -23,7 +23,8 @@ var component = FlowComponents.define('app', function() {
   });
 });
 
-component.state.apmEngineUrl = Meteor.settings.public.apmEngineUrl;
+component.state.apmEngineUrl =
+  Meteor.settings.public.apmEngineUrl || 'https://apm-engine.YOUR_DOMAIN.com';
 
 component.state.navs = function() {
   var section = FlowRouter.getParam('section');

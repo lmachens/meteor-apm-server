@@ -1,5 +1,5 @@
 <template name="noData">
-  <div class="jumbotron"  id="no-data-wrapper">
+  <div class="jumbotron" id="no-data-wrapper">
 
     <h2>{{i18n 'app.configure_your_app'}}</h2>
 
@@ -26,7 +26,8 @@
       <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="via-code">
           <p>add following code to `server/kadira.js`</p>
-          <pre><code>Kadira.connect('{{state$appId}}', '{{state$secret}}', { endpoint: '{{state$apmEngineUrl}}' });</code></pre></div>
+          <pre><code>Kadira.connect('{{state$appId}}', '{{state$secret}}', { endpoint: '{{state$apmEngineUrl}}' });</code></pre>
+        </div>
         <div role="tabpanel" class="tab-pane" id="via-meteor-settings">
           <p>add following into your `settings.json` file</p>
           <pre><code>"kadira": { <br/>  "appId": "{{state$appId}}", <br/>  "appSecret": "{{state$secret}}", <br/>    "options": { <br/>      "endpoint": "{{state$apmEngineUrl}}" <br/>    }<br/>  }</code></pre>
@@ -44,14 +45,12 @@
     <p>{{i18n 'app.config_other_way'}}</p>
     <br>
     <div class="input-group input-large">
-     <label class="pull-left">{{i18n 'app.app_id'}} </label>
-      <input class="form-control" type="text" placeholder="" name="" autocomplete="off"  value="{{state$appId}}" readonly="readonly">
-      {{>render component="clipboardButton" text=state$appId label="App ID"}}
+      <label class="pull-left">{{i18n 'app.app_id'}} </label>
+      <input class="form-control" type="text" placeholder="" name="" autocomplete="off" value="{{state$appId}}" readonly="readonly"> {{>render component="clipboardButton" text=state$appId label="App ID"}}
     </div>
     <div class="input-group input-large">
-    <label class="pull-left">{{i18n 'app.app_secret'}} </label>
-      <input class="form-control" type="text" placeholder="" name="" autocomplete="off" value="{{state$secret}}"  readonly="readonly">
-      {{>render component="clipboardButton" text=state$secret label="App Secret"}}
+      <label class="pull-left">{{i18n 'app.app_secret'}} </label>
+      <input class="form-control" type="text" placeholder="" name="" autocomplete="off" value="{{state$secret}}" readonly="readonly"> {{>render component="clipboardButton" text=state$secret label="App Secret"}}
     </div>
   </div>
 </template>
