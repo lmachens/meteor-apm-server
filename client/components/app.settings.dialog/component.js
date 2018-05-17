@@ -1,5 +1,8 @@
 var component = FlowComponents.define('app.settings.dialog', function() {});
 
+component.state.apmEngineUrl =
+  Meteor.settings.public.apmEngineUrl || 'https://apm-engine.YOUR_DOMAIN.com';
+
 component.state.currentAppName = function() {
   var appId = FlowRouter.getParam('appId');
   var app = Apps.findOne({ _id: appId }, { fields: { name: 1 } });

@@ -28,13 +28,15 @@
           <p>add following code to `server/kadira.js`</p>
           <pre><code>Kadira.connect('{{state$appId}}', '{{state$secret}}', { endpoint: '{{state$apmEngineUrl}}' });</code></pre>
         </div>
+
         <div role="tabpanel" class="tab-pane" id="via-meteor-settings">
           <p>add following into your `settings.json` file</p>
-          <pre><code>"kadira": { <br/>  "appId": "{{state$appId}}", <br/>  "appSecret": "{{state$secret}}", <br/>    "options": { <br/>      "endpoint": "{{state$apmEngineUrl}}" <br/>    }<br/>  }</code></pre>
+          <pre><code>"kadira": {<br/>  "appId": "{{state$appId}}",<br/>  "appSecret": "{{state$secret}}",<br/>  "options": {<br/>    "endpoint": "{{state$apmEngineUrl}}"<br/>  }<br />}</code></pre>
         </div>
+
         <div role="tabpanel" class="tab-pane" id="via-env">
           <p>export following environmental variable before running your app.</p>
-          <pre><code>export KADIRA_APP_ID={{state$appId}} <br/>export KADIRA_APP_SECRET={{state$secret}} <br/>export KADIRA_OPTIONS_ENDPOINT={{state$apmEngineUrl}}</code></pre>
+          <pre><code>export KADIRA_APP_ID={{state$appId}}<br />export KADIRA_APP_SECRET={{state$secret}}<br />export KADIRA_OPTIONS_ENDPOINT={{state$apmEngineUrl}}</code></pre>
         </div>
       </div>
     </div>
