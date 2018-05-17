@@ -23,6 +23,8 @@ var component = FlowComponents.define('app', function() {
   });
 });
 
+component.state.apmEngineUrl = Meteor.settings.public.apmEngineUrl;
+
 component.state.navs = function() {
   var section = FlowRouter.getParam('section');
   var appId = FlowRouter.getParam('appId');

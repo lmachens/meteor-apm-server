@@ -1,7 +1,7 @@
 var component = FlowComponents.define('apps.switcher', function() {});
 
 component.state.apps = function() {
-  return Apps.find({}, { fields: { _id: 1, name: 1, owner: 1 } });
+  return Apps.find({}, { fields: { _id: 1, name: 1, owner: 1 }, sort: { name: 1 } });
 };
 
 component.action.switchTheApp = function(app) {

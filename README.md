@@ -47,7 +47,7 @@ Keep in mind when using MUP: [your user account on the server must be sudoer wit
 
 6) Visit your APM UI page at `https://apm.YOUR_DOMAIN.com`. Login with username `admin@admin.com`, password `admin`. **CHANGE YOUR PASSWORD FROM THIS DEFAULT**.
 
-7) In the APM web UI, create a new app and pass the settings to your Meteor app:
+7) In the APM web UI, create a new app and pass the settings to your Meteor app (you can copy paste from the UI):
 
 `settings.json`
 ```
@@ -73,6 +73,8 @@ The custom nginx proxy configuration does not persist through a server restart. 
 [`metricsLifetime`](settings.json) sets the maximum lifetime of the metrics. Old metrics are removed after each aggregation. The default value is 604800000 (1000 * 60 * 60 * 24 * 7 ^= 7 days).
 
 As a baseline, a current Meteor application with ~500 DAL uses 0.7 GB for 7 days of APM data.
+
+[`public.apmEngineUrl`](settings.json) refers to the endpoint URL of your application (this allows to display good hints when creating the application)
 
 ## Configuration details:
 

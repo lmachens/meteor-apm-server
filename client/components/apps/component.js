@@ -1,7 +1,7 @@
 var component = FlowComponents.define('apps', function() {});
 
 component.state.apps = function() {
-  return Apps.find({});
+  return Apps.find({}, { sort: { name: 1 } });
 };
 
 component.state.haveApps = function() {
