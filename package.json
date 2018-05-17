@@ -1,6 +1,6 @@
 {
   "name": "meteor-apm-server",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Get meteor-apm-server up and running with a stable configuration using MUP",
   "directories": {
     "test": "tests"
@@ -69,6 +69,7 @@
     "zeroclipboard": "^2.3.0"
   },
   "devDependencies": {
-    "mup": "1.4.4"
+    "mup": "1.4.4",
+    "prettier": "^1.12.1"
   }
 }

@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.2.0] - 2018-05-17
+- Added `Meteor.settings.public.apmEngineUrl` to help client configuration [#35](https://github.com/lmachens/meteor-apm-server/pull/35) Thx @vparpoil
+
 ## [1.1.0] - 2018-04-07
 - Update Meteor to 1.6.1.1
 - Remove 'signin with email' [#27](https://github.com/lmachens/meteor-apm-server/pull/27) Thx @ramezrafla
