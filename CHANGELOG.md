@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
 
+## [1.3.0] - 2018-10-20
+- Added missing dependencies, fixed MethodTraces collection name and allow CORS [#41](https://github.com/lmachens/meteor-apm-server/pull/41) Thx @KoenLav
+- Removed kadira.io links [#36](https://github.com/lmachens/meteor-apm-server/pull/36) Thx @msteinmn 
+
 ## [1.2.0] - 2018-05-17
 - Added `Meteor.settings.public.apmEngineUrl` to help client configuration [#35](https://github.com/lmachens/meteor-apm-server/pull/35) Thx @vparpoil
 
