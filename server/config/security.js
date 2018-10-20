@@ -13,3 +13,9 @@ WebApp.connectHandlers.use(helmet.xssFilter());
 
 // stop clickjacking
 WebApp.connectHandlers.use(helmet.frameguard());
+
+WebApp.rawConnectHandlers.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  return next();
+});

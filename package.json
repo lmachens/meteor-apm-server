@@ -66,10 +66,11 @@
     "react-addons-update": "^15.6.2",
     "react-dom": "^15.6.2",
     "ua-parser-js": "^0.7.17",
+    "uuid": "^3.3.2",
     "zeroclipboard": "^2.3.0"
   },
   "devDependencies": {
-    "mup": "1.4.4",
+    "mup": "^1.4.5",
     "prettier": "^1.12.1"
   }
 }
