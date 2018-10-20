@@ -3,7 +3,6 @@
     {{#if state$selectedTime}}
       <div>
         <div class="pull-left"><b>Response Time Distribution</b> at {{state$prettifiedTraceDate}}</div>
-        <div class="pull-right learn-more"><a href="https://kadira.io/academy/meteor-performance-101/content/debugging-meteor-response-time-bottlenecks" target="_blank">LEARN MORE</a></div>
         <div class="clearfix"></div>
       </div>
       {{#render component="loading" isLoadingFn=stateFn$isHistogramLoading}}

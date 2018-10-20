@@ -4,8 +4,7 @@ var helpData = {
   'timeseries-pubsubResTime': {
     title: 'About Average Response Time',
     message:
-      'This chart shows the average response time for sending the initial data set for subscriptions.',
-    url: 'http://support.kadira.io/knowledgebase/articles/322463-average-response-time',
+      'This chart shows the average response time for sending the initial data set for subscriptions. We calculate this metric when we detect this.ready() for a publication. This chart shows you whether your subscriptions are slow to process initially. ﻿',
     options: {
       placement: 'bottom'
     }
@@ -13,8 +12,8 @@ var helpData = {
   'timeseries-memory': {
     title: 'About Memory Usage / Host',
     message:
-      'This charts shows the average memory usage across all the hosts in the given time range.',
-    url: 'http://support.kadira.io/knowledgebase/articles/372875-memory-usage-host-mb',
+      'This charts shows the average memory usage across all the hosts in the given time range. We use RSS as the memory usage.',﻿
+    url: 'https://en.wikipedia.org/wiki/Resident_set_size',
     options: {
       placement: 'bottom'
     }
@@ -22,15 +21,13 @@ var helpData = {
   'timeseries-sessions': {
     title: 'About Total Sessions',
     message: 'This chart shows the total number of sessions in the given time range.',
-    url: 'http://support.kadira.io/knowledgebase/articles/372877-sessions-host',
     options: {
       placement: 'bottom'
     }
   },
   'timeseries-methodResTime': {
     title: 'About Average Response Time',
-    message: 'This chart shows response time for method calls for the selected date range ',
-    url: 'http://support.kadira.io/knowledgebase/articles/306865-average-response-time',
+    message: 'This chart shows response time for method calls for the selected date range. The X-axis contains the date and the Y-axis contains the response time in milliseconds. ',
     options: {
       placement: 'bottom'
     }
@@ -38,16 +35,15 @@ var helpData = {
   'timeseries-pcpu': {
     title: 'About CPU Usage',
     message:
-      'This charts shows the CPU usage in percentage of your app. CPU usage can take very low values under cloud hosting. ',
-    url: 'http://support.kadira.io/knowledgebase/articles/378890',
+      'This charts shows the CPU usage in percent of your app. We are using the usage npm module to track the correct CPU usage. ',
+    url: 'https://github.com/arunoda/node-usage',
     options: {
       placement: 'bottom'
     }
   },
   'timeseries-createdObservers': {
     title: 'About Created Observers',
-    message: 'This chart shows total number of new Observers created in the given time range.',
-    url: 'http://support.kadira.io/knowledgebase/articles/378992-new-observers',
+    message: 'This chart shows total number of new Observers created in the given time range. Even though there are e.g. 1000 observers, actual number of observers will be less than 1000 because of  observer reuse. If there are identical cursors then existing observers are reused. New observers reflects the actual number of observers initiated.',
     options: {
       placement: 'bottom'
     }
@@ -55,7 +51,6 @@ var helpData = {
   'summary-dashboardOverview': {
     title: 'About Dashboard Summary',
     message: 'Dashboard Summary is a set of important performance metrics for your application.',
-    url: 'http://support.kadira.io/knowledgebase/articles/372874-dashboard-summary',
     options: {
       placement: 'bottom'
     }
